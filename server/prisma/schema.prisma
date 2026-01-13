@@ -1,14 +1,289 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
   provider = "postgresql"
+  // url      = env("DATABASE_URL") // Managed via prisma.config.ts in Prisma 7
+}
+
+
+//////////////////////
+// ENUMS (LOCKED)
+//////////////////////
+
+enum UserRole {
+  ADMIN
+  BUYER
+}
+
+enum RelationshipLevel {
+  SELF
+  FAMILY
+  FRIEND
+  REFERRED
+}
+
+enum BatchStatus {
+  DRAFT
+  OPEN
+  CLOSED
+  COLLECTED
+  DELIVERED
+  SETTLED
+}
+
+enum OrderStatus {
+  PLACED              // order created
+  COMMITMENT_PAID     // 10% paid
+  FULLY_PAID          // ready for pickup/delivery
+  CANCELLED
+}
+
+enum FulfillmentType {
+  PICKUP
+  DELIVERY
+}
+
+enum PaymentStage {
+  COMMITMENT
+  FINAL
+}
+
+enum PaymentMethod {
+  UPI
+  CASH
+}
+
+enum DeliveryProvider {
+  DUNZO
+  PORTER
+  OTHER
+}
+
+enum DeliveryStatus {
+  REQUESTED
+  BOOKED
+  PICKED_UP
+  DELIVERED
+  FAILED
+}
+
+//////////////////////
+// USERS (ADMIN + BUYERS)
+//////////////////////
+
+model User {
+  id        String   @id @default(uuid())
+  role      UserRole
+  name      String
+  phone     String   @unique
+  email     String?  @unique
+  isActive  Boolean  @default(true)
+
+  orders    Order[]
+
+  createdAt DateTime @default(now())
+}
+
+//////////////////////
+// FARMERS (NO LOGIN)
+//////////////////////
+
+model Farmer {
+  id                String             @id @default(uuid())
+  name              String
+  location          String
+  description       String?
+  relationshipLevel RelationshipLevel
+  isActive          Boolean            @default(true)
+
+  products          Product[]
+  payouts           FarmerPayout[]
+
+  createdAt         DateTime           @default(now())
+}
+
+//////////////////////
+// PRODUCTS (ALWAYS FARMER-BOUND)
+//////////////////////
+
+model Product {
+  id          String   @id @default(uuid())
+  farmerId    String
+  name        String
+  unit        String   // KG, LITRE, DOZEN, BAG (kept string for flexibility)
+  description String?
+  seasonStart DateTime?
+  seasonEnd   DateTime?
+  isActive    Boolean  @default(true)
+
+  farmer      Farmer   @relation(fields: [farmerId], references: [id])
+  batchItems  BatchProduct[]
+
+  createdAt   DateTime @default(now())
+}
+
+//////////////////////
+// HUBS (PHYSICAL POINTS)
+//////////////////////
+
+model Hub {
+  id        String   @id @default(uuid())
+  name      String
+  address   String
+  isActive  Boolean  @default(true)
+
+  batches   Batch[]
+}
+
+//////////////////////
+// BATCHES (THE CORE ENTITY)
+//////////////////////
+
+model Batch {
+  id           String      @id @default(uuid())
+  hubId        String
+  name         String
+  status       BatchStatus @default(DRAFT)
+  openAt       DateTime?
+  cutoffAt     DateTime
+  deliveryDate DateTime
+
+  hub          Hub         @relation(fields: [hubId], references: [id])
+  products     BatchProduct[]
+  orders       Order[]
+  payouts      FarmerPayout[]
+
+  createdAt    DateTime    @default(now())
+}
+
+//////////////////////
+// BATCH-SCOPED PRODUCTS & PRICING
+//////////////////////
+
+model BatchProduct {
+  id                   String   @id @default(uuid())
+  batchId              String
+  productId            String
+  pricePerUnit         Float
+  facilitationPercent  Float
+  minOrderQty          Float
+  maxOrderQty          Float?
+  isActive             Boolean  @default(true)
+
+  batch                Batch    @relation(fields: [batchId], references: [id])
+  product              Product  @relation(fields: [productId], references: [id])
+  orderItems           OrderItem[]
+
+  @@unique([batchId, productId])
+}
+
+//////////////////////
+// ORDERS (ONE PER BUYER PER BATCH)
+//////////////////////
+
+model Order {
+  id                String          @id @default(uuid())
+  batchId           String
+  buyerId           String
+  status            OrderStatus     @default(PLACED)
+
+  estimatedTotal    Float
+  facilitationAmt   Float
+  finalTotal        Float?
+
+  fulfillmentType   FulfillmentType @default(PICKUP)
+  deliveryFee       Float           @default(0)
+
+  batch             Batch           @relation(fields: [batchId], references: [id])
+  buyer             User            @relation(fields: [buyerId], references: [id])
+  items             OrderItem[]
+  payments          Payment[]
+  delivery          Delivery?
+
+  createdAt         DateTime        @default(now())
+
+  @@unique([batchId, buyerId])
+}
+
+//////////////////////
+// ORDER LINE ITEMS
+//////////////////////
+
+model OrderItem {
+  id              String   @id @default(uuid())
+  orderId         String
+  batchProductId  String
+
+  orderedQty      Float
+  finalQty        Float?
+  unitPrice       Float
+  lineTotal       Float
+
+  order           Order        @relation(fields: [orderId], references: [id])
+  batchProduct    BatchProduct @relation(fields: [batchProductId], references: [id])
+}
+
+//////////////////////
+// PAYMENTS (TWO STAGE)
+//////////////////////
+
+model Payment {
+  id           String        @id @default(uuid())
+  orderId      String
+  stage        PaymentStage
+  amount       Float
+  method       PaymentMethod
+  referenceId  String?
+  paidAt       DateTime
+
+  order        Order         @relation(fields: [orderId], references: [id])
+}
+
+//////////////////////
+// DELIVERY (OPTIONAL)
+//////////////////////
+
+model Delivery {
+  id              String           @id @default(uuid())
+  orderId         String           @unique
+  provider        DeliveryProvider
+  estimatedCost   Float
+  finalCost       Float?
+  trackingRef     String?
+  status          DeliveryStatus   @default(REQUESTED)
+
+  order           Order            @relation(fields: [orderId], references: [id])
+  createdAt       DateTime         @default(now())
+}
+
+//////////////////////
+// FARMER PAYOUTS (MANUAL)
+//////////////////////
+
+model FarmerPayout {
+  id            String   @id @default(uuid())
+  farmerId      String
+  batchId       String
+  amount        Float
+  upiReference  String
+  paidAt        DateTime
+
+  farmer        Farmer  @relation(fields: [farmerId], references: [id])
+  batch         Batch   @relation(fields: [batchId], references: [id])
+}
+
+//////////////////////
+// EVENT LOG (AUDIT)
+//////////////////////
+
+model EventLog {
+  id         String   @id @default(uuid())
+  entityType String   // BATCH, ORDER, PAYMENT
+  entityId   String
+  action     String
+  metadata   Json?
+  createdAt DateTime @default(now())
 }
