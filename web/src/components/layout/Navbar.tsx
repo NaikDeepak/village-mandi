@@ -1,7 +1,9 @@
 import { Menu, X, Wheat } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { useAuthStore } from '@/stores/auth';
+import { authApi } from '@/lib/api';
 
 interface NavbarProps {
     variant?: 'home' | 'internal';
@@ -11,6 +13,8 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
+    const { isAuthenticated, user, logout } = useAuthStore();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -38,6 +42,19 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
             window.location.href = `/#${id}`;
         }
         setIsOpen(false);
+    };
+
+    const handleLogout = async () => {
+        await authApi.logout();
+        logout();
+        navigate('/');
+        setIsOpen(false);
+    };
+
+    const getDashboardLink = () => {
+        if (user?.role === 'ADMIN') return '/admin';
+        if (user?.role === 'BUYER') return '/shop';
+        return '/';
     };
 
     return (
@@ -89,12 +106,32 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
                     </div>
 
                     {/* CTA Button */}
-                    <div className="hidden md:flex items-center">
-                        <Link to="/login">
-                            <Button className="bg-white text-mandi-green hover:bg-mandi-cream focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-mandi-green">
-                                Join as Buyer
-                            </Button>
-                        </Link>
+                    <div className="hidden md:flex items-center gap-4">
+                        {isAuthenticated ? (
+                            <>
+                                <span className="text-white/80 text-sm">
+                                    {user?.name}
+                                </span>
+                                <Link to={getDashboardLink()}>
+                                    <Button className="bg-white/20 text-white hover:bg-white/30 border border-white/30">
+                                        Dashboard
+                                    </Button>
+                                </Link>
+                                <Button
+                                    onClick={handleLogout}
+                                    variant="ghost"
+                                    className="text-white hover:bg-white/10"
+                                >
+                                    Logout
+                                </Button>
+                            </>
+                        ) : (
+                            <Link to="/buyer-login">
+                                <Button className="bg-white text-mandi-green hover:bg-mandi-cream focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-mandi-green">
+                                    Join as Buyer
+                                </Button>
+                            </Link>
+                        )}
                     </div>
 
                     {/* Mobile Toggle */}
@@ -142,12 +179,29 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
                         >
                             Rules
                         </Link>
-                        <Link
-                            to="/login"
-                            className="block w-full text-center mt-4 px-5 py-3 rounded-lg bg-white text-mandi-green font-bold shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-mandi-green"
-                        >
-                            Join as Buyer
-                        </Link>
+                        {isAuthenticated ? (
+                            <>
+                                <Link
+                                    to={getDashboardLink()}
+                                    className="block w-full text-center mt-4 px-5 py-3 rounded-lg bg-white/20 text-white font-bold border border-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                                >
+                                    Dashboard
+                                </Link>
+                                <button
+                                    onClick={handleLogout}
+                                    className="block w-full text-center mt-2 px-5 py-3 rounded-lg text-white font-medium hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                                >
+                                    Logout
+                                </button>
+                            </>
+                        ) : (
+                            <Link
+                                to="/buyer-login"
+                                className="block w-full text-center mt-4 px-5 py-3 rounded-lg bg-white text-mandi-green font-bold shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-mandi-green"
+                            >
+                                Join as Buyer
+                            </Link>
+                        )}
                     </div>
                 </div>
             )}

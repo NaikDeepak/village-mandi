@@ -1,5 +1,14 @@
+import 'dotenv/config';
 import Fastify from 'fastify';
+import cors from '@fastify/cors';
 import { SYSTEM_RULES } from '../shared/constants';
+
+// Plugins
+import prismaPlugin from './src/plugins/prisma';
+import jwtPlugin from './src/plugins/jwt';
+
+// Routes
+import authRoutes from './src/routes/auth';
 
 const fastify = Fastify({
     logger: true
@@ -14,6 +23,22 @@ const fastify = Fastify({
  * 4. Linked to Farmer
  */
 
+// Register CORS
+fastify.register(cors, {
+    origin: process.env.NODE_ENV === 'production'
+        ? ['https://virtualmandi.com'] // Update with your production domain
+        : ['http://localhost:5173', 'http://localhost:3000'],
+    credentials: true,
+});
+
+// Register plugins
+fastify.register(prismaPlugin);
+fastify.register(jwtPlugin);
+
+// Register routes
+fastify.register(authRoutes);
+
+// Health check
 fastify.get('/health', async (request, reply) => {
     return {
         status: 'ok',

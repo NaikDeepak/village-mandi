@@ -8,79 +8,92 @@ import {
     PaymentStage,
     PaymentMethod,
 } from '@prisma/client';
+import { hashPassword } from '../src/utils/password';
 
 async function main() {
     console.log('🌱 Starting comprehensive seed...');
 
     // =====================
-    // 1. ADMIN USER
+    // 1. ADMIN USER (with hashed password)
     // =====================
+    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123456';
+    const adminPasswordHash = await hashPassword(adminPassword);
+
     const admin = await prisma.user.upsert({
         where: { phone: '9999999999' },
-        update: {},
+        update: {
+            passwordHash: adminPasswordHash,
+        },
         create: {
-            name: 'Super Admin',
+            name: 'Deepak Naik',
             phone: '9999999999',
-            email: 'admin@villagemandi.com',
+            email: 'admin@virtualmandi.com',
             role: UserRole.ADMIN,
+            passwordHash: adminPasswordHash,
+            isInvited: true, // Admin is always invited
         },
     });
-    console.log('✅ Admin:', admin.name);
+    console.log('✅ Admin:', admin.name, '(password:', adminPassword, ')');
 
     // =====================
-    // 2. BUYERS
+    // 2. BUYERS (with isInvited = true for testing)
     // =====================
     const buyers = await Promise.all([
         prisma.user.upsert({
             where: { phone: '9876543210' },
-            update: {},
+            update: { isInvited: true },
             create: {
                 name: 'Priya Sharma',
                 phone: '9876543210',
                 email: 'priya@example.com',
                 role: UserRole.BUYER,
+                isInvited: true,
             },
         }),
         prisma.user.upsert({
             where: { phone: '9876543211' },
-            update: {},
+            update: { isInvited: true },
             create: {
                 name: 'Amit Patel',
                 phone: '9876543211',
                 email: 'amit@example.com',
                 role: UserRole.BUYER,
+                isInvited: true,
             },
         }),
         prisma.user.upsert({
             where: { phone: '9876543212' },
-            update: {},
+            update: { isInvited: true },
             create: {
                 name: 'Sneha Reddy',
                 phone: '9876543212',
                 role: UserRole.BUYER,
+                isInvited: true,
             },
         }),
         prisma.user.upsert({
             where: { phone: '9876543213' },
-            update: {},
+            update: { isInvited: true },
             create: {
                 name: 'Rahul Verma',
                 phone: '9876543213',
                 role: UserRole.BUYER,
+                isInvited: true,
             },
         }),
         prisma.user.upsert({
             where: { phone: '9876543214' },
-            update: {},
+            update: { isInvited: true },
             create: {
                 name: 'Kavita Iyer',
                 phone: '9876543214',
                 email: 'kavita@example.com',
                 role: UserRole.BUYER,
+                isInvited: true,
             },
         }),
     ]);
-    console.log(`✅ Buyers: ${buyers.length} created`);
+    console.log(`✅ Buyers: ${buyers.length} created (all invited)`);
 
     // =====================
     // 3. HUBS

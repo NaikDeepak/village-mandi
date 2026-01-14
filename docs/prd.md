@@ -66,10 +66,11 @@ The following stack is selected to enforce rules, minimize ops load, and support
 - Strict environment variable handling.
 - Hardcoded system guardrails and constants reflecting non-negotiable rules.
 
-### 3.2 EPIC 1 — Branding & Static Pages
+### 3.2 EPIC 1 — Branding & Static Pages ✅ DONE
 - **Landing Page**: Explains the Virtual Mandi model, batch cycles, and facilitation fees.
 - **Rules Page**: Detailed breakdown of cutoff enforcement, 2-stage payments, and fulfilment.
 - **Visual Identity**: Minimalist, factual branding (Logo, Color Palette, Typography).
+- **Our Story**: Personal narrative explaining the "why" behind Virtual Mandi.
 
 ### 3.3 EPIC 2 — Authentication & Access
 - **Admin**: Email/Password authentication for system management.
