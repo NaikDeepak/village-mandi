@@ -1,16 +1,49 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { AuthProvider } from './components/auth/AuthProvider';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { AdminDashboardPage } from './pages/AdminDashboardPage';
+import { AdminLoginPage } from './pages/AdminLoginPage';
+import { BuyerDashboardPage } from './pages/BuyerDashboardPage';
+import { BuyerLoginPage } from './pages/BuyerLoginPage';
 import { LandingPage } from './pages/LandingPage';
+import { RulesPage } from './pages/RulesPage';
+import { VerifyOtpPage } from './pages/VerifyOtpPage';
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        {/* Placeholder for future routes */}
-        <Route path="/login" element={<div className="flex items-center justify-center h-screen">Login Page Coming Soon</div>} />
-      </Routes>
-    </Router>
-  )
+    <AuthProvider>
+      <Router>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/rules" element={<RulesPage />} />
+          <Route path="/login" element={<AdminLoginPage />} />
+          <Route path="/buyer-login" element={<BuyerLoginPage />} />
+          <Route path="/verify-otp" element={<VerifyOtpPage />} />
+
+          {/* Protected admin routes */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute allowedRoles={['ADMIN']}>
+                <AdminDashboardPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Protected buyer routes */}
+          <Route
+            path="/shop"
+            element={
+              <ProtectedRoute allowedRoles={['BUYER']}>
+                <BuyerDashboardPage />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </Router>
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;

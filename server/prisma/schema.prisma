@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  // url      = env("DATABASE_URL") // Managed via prisma.config.ts in Prisma 7
+  url      = env("DATABASE_URL")
 }
 
 
@@ -75,16 +75,23 @@ enum DeliveryStatus {
 //////////////////////
 
 model User {
-  id        String   @id @default(uuid())
-  role      UserRole
-  name      String
-  phone     String   @unique
-  email     String?  @unique
-  isActive  Boolean  @default(true)
+  id           String    @id @default(uuid())
+  role         UserRole
+  name         String
+  phone        String    @unique
+  email        String?   @unique
+  passwordHash String?   // Only for ADMIN users
+  isActive     Boolean   @default(true)
+  isInvited    Boolean   @default(false) // Buyer must be invited to access
 
-  orders    Order[]
+  // OTP fields for phone-based auth
+  otpCode      String?
+  otpExpiresAt DateTime?
 
-  createdAt DateTime @default(now())
+  orders       Order[]
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 }
 
 //////////////////////

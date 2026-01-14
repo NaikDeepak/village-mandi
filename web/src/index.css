@@ -1,37 +1,68 @@
 @import "tailwindcss";
 
 @theme {
-  --animate-fade-in-up: fadeInUp 0.8s ease-out forwards;
-  --animate-ping-slow: ping 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+  /* Virtual Mandi Brand Colors - Minimalist, Factual */
+  --color-mandi-green: #2d5a3d;
+  --color-mandi-green-light: #3d7a4d;
+  --color-mandi-earth: #8b6914;
+  --color-mandi-earth-light: #c4941c;
+  --color-mandi-cream: #f5f2eb;
+  --color-mandi-dark: #1a1a1a;
+  --color-mandi-muted: #6b7280;
 
-  @keyframes fadeInUp {
-    0% {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  --color-eco-teal: #78A898;
-  --color-eco-yellow: #F4C550;
-  --color-eco-dark: #2C4A42;
+  /* Legacy colors for backward compatibility */
+  --color-eco-teal: #2d5a3d;
+  --color-eco-yellow: #c4941c;
+  --color-eco-dark: #1a1a1a;
 }
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --background: 0 0% 100%;
+  --foreground: 0 0% 10%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 10%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 10%;
+  --primary: 142 32% 26%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 0 0% 96%;
+  --secondary-foreground: 0 0% 10%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 45%;
+  --accent: 0 0% 96%;
+  --accent-foreground: 0 0% 10%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 90%;
+  --input: 0 0% 90%;
+  --ring: 142 32% 26%;
+  --radius: 0.5rem;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+/* Focus visible styles for accessibility */
+:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
 }
