@@ -1,16 +1,17 @@
-import { useState } from 'react';
-import { useNavigate, Navigate, Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAuthStore } from '@/stores/auth';
 import { authApi } from '@/lib/api';
+import { useAuthStore } from '@/stores/auth';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { z } from 'zod';
 
 const phoneSchema = z.object({
-  phone: z.string()
+  phone: z
+    .string()
     .length(10, 'Phone number must be 10 digits')
     .regex(/^[6-9]\d{9}$/, 'Invalid Indian phone number'),
 });
@@ -51,7 +52,6 @@ export function BuyerLoginPage() {
 
     // In dev mode, show OTP in console (also logged on server)
     if (result.data?.devOtp) {
-      console.log('Dev OTP:', result.data.devOtp);
     }
 
     // Navigate to OTP verification page
@@ -93,11 +93,7 @@ export function BuyerLoginPage() {
               </div>
             </div>
 
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isSubmitting}
-            >
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? 'Sending OTP...' : 'Get OTP'}
             </Button>
           </form>

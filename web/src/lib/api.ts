@@ -6,10 +6,7 @@ interface ApiResponse<T> {
   message?: string;
 }
 
-async function request<T>(
-  endpoint: string,
-  options: RequestInit = {}
-): Promise<ApiResponse<T>> {
+async function request<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
   try {
     const response = await fetch(`${API_BASE}${endpoint}`, {
       ...options,
@@ -52,13 +49,10 @@ export const authApi = {
 
   // Buyer - Request OTP
   requestOtp: (phone: string) =>
-    request<{ success: boolean; message: string; devOtp?: string }>(
-      '/auth/request-otp',
-      {
-        method: 'POST',
-        body: JSON.stringify({ phone }),
-      }
-    ),
+    request<{ success: boolean; message: string; devOtp?: string }>('/auth/request-otp', {
+      method: 'POST',
+      body: JSON.stringify({ phone }),
+    }),
 
   // Buyer - Verify OTP
   verifyOtp: (phone: string, otp: string) =>

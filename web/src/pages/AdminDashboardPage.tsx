@@ -1,7 +1,7 @@
-import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { useAuthStore } from '@/stores/auth';
 import { authApi } from '@/lib/api';
+import { useAuthStore } from '@/stores/auth';
+import { useNavigate } from 'react-router-dom';
 
 export function AdminDashboardPage() {
   const navigate = useNavigate();
@@ -25,9 +25,7 @@ export function AdminDashboardPage() {
               </span>
             </div>
             <div className="flex items-center gap-4">
-              <span className="text-sm text-mandi-muted">
-                {user?.name}
-              </span>
+              <span className="text-sm text-mandi-muted">{user?.name}</span>
               <Button variant="outline" size="sm" onClick={handleLogout}>
                 Logout
               </Button>

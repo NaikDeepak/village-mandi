@@ -1,13 +1,13 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { AuthProvider } from './components/auth/AuthProvider';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { AdminDashboardPage } from './pages/AdminDashboardPage';
+import { AdminLoginPage } from './pages/AdminLoginPage';
+import { BuyerDashboardPage } from './pages/BuyerDashboardPage';
+import { BuyerLoginPage } from './pages/BuyerLoginPage';
 import { LandingPage } from './pages/LandingPage';
 import { RulesPage } from './pages/RulesPage';
-import { AdminLoginPage } from './pages/AdminLoginPage';
-import { AdminDashboardPage } from './pages/AdminDashboardPage';
-import { BuyerLoginPage } from './pages/BuyerLoginPage';
 import { VerifyOtpPage } from './pages/VerifyOtpPage';
-import { BuyerDashboardPage } from './pages/BuyerDashboardPage';
-import { ProtectedRoute } from './components/auth/ProtectedRoute';
-import { AuthProvider } from './components/auth/AuthProvider';
 
 function App() {
   return (
@@ -43,7 +43,7 @@ function App() {
         </Routes>
       </Router>
     </AuthProvider>
-  )
+  );
 }
 
-export default App
+export default App;

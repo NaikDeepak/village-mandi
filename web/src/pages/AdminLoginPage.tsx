@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import { useNavigate, Navigate, Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAuthStore } from '@/stores/auth';
 import { authApi } from '@/lib/api';
+import { useAuthStore } from '@/stores/auth';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { z } from 'zod';
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -99,11 +99,7 @@ export function AdminLoginPage() {
               />
             </div>
 
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isSubmitting}
-            >
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? 'Signing in...' : 'Sign In'}
             </Button>
           </form>

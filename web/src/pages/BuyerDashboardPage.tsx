@@ -1,7 +1,7 @@
-import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { useAuthStore } from '@/stores/auth';
 import { authApi } from '@/lib/api';
+import { useAuthStore } from '@/stores/auth';
+import { useNavigate } from 'react-router-dom';
 
 export function BuyerDashboardPage() {
   const navigate = useNavigate();
@@ -25,9 +25,7 @@ export function BuyerDashboardPage() {
               </span>
             </div>
             <div className="flex items-center gap-4">
-              <span className="text-sm text-mandi-muted">
-                {user?.name}
-              </span>
+              <span className="text-sm text-mandi-muted">{user?.name}</span>
               <Button variant="outline" size="sm" onClick={handleLogout}>
                 Logout
               </Button>
@@ -45,12 +43,8 @@ export function BuyerDashboardPage() {
 
           <div className="mt-8 p-6 bg-mandi-cream rounded-lg text-center">
             <h3 className="font-semibold text-mandi-dark mb-2">Current Batch</h3>
-            <p className="text-mandi-muted text-sm mb-4">
-              Week 3 - January 2025
-            </p>
-            <Button>
-              Browse Products
-            </Button>
+            <p className="text-mandi-muted text-sm mb-4">Week 3 - January 2025</p>
+            <Button>Browse Products</Button>
           </div>
         </div>
       </main>

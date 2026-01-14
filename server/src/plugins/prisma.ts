@@ -1,21 +1,21 @@
-import { FastifyPluginAsync } from 'fastify';
+import type { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 import { prisma } from '../../db';
 
 declare module 'fastify' {
-    interface FastifyInstance {
-        prisma: typeof prisma;
-    }
+  interface FastifyInstance {
+    prisma: typeof prisma;
+  }
 }
 
 const prismaPlugin: FastifyPluginAsync = async (fastify) => {
-    fastify.decorate('prisma', prisma);
+  fastify.decorate('prisma', prisma);
 
-    fastify.addHook('onClose', async () => {
-        await prisma.$disconnect();
-    });
+  fastify.addHook('onClose', async () => {
+    await prisma.$disconnect();
+  });
 };
 
 export default fp(prismaPlugin, {
-    name: 'prisma',
+  name: 'prisma',
 });

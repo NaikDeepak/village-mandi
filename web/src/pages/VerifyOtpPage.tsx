@@ -1,16 +1,17 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, useLocation, Navigate, Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAuthStore } from '@/stores/auth';
 import { authApi } from '@/lib/api';
+import { useAuthStore } from '@/stores/auth';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { z } from 'zod';
 
 const otpSchema = z.object({
-  otp: z.string()
+  otp: z
+    .string()
     .length(6, 'OTP must be 6 digits')
     .regex(/^\d{6}$/, 'OTP must be numeric'),
 });
@@ -93,7 +94,6 @@ export function VerifyOtpPage() {
     } else {
       setResendCooldown(30); // 30 second cooldown
       if (result.data?.devOtp) {
-        console.log('Dev OTP:', result.data.devOtp);
       }
     }
 
@@ -110,9 +110,7 @@ export function VerifyOtpPage() {
         <div className="bg-white rounded-lg shadow-md p-8">
           <div className="text-center mb-8">
             <h1 className="text-2xl font-bold text-mandi-dark">Verify OTP</h1>
-            <p className="text-mandi-muted mt-2">
-              Enter the 6-digit code sent to +91 {phone}
-            </p>
+            <p className="text-mandi-muted mt-2">Enter the 6-digit code sent to +91 {phone}</p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -136,11 +134,7 @@ export function VerifyOtpPage() {
               />
             </div>
 
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isLoading}
-            >
+            <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? 'Verifying...' : 'Verify & Login'}
             </Button>
           </form>
@@ -148,11 +142,10 @@ export function VerifyOtpPage() {
           <div className="mt-6 text-center space-y-4">
             <div>
               {resendCooldown > 0 ? (
-                <p className="text-sm text-mandi-muted">
-                  Resend OTP in {resendCooldown}s
-                </p>
+                <p className="text-sm text-mandi-muted">Resend OTP in {resendCooldown}s</p>
               ) : (
                 <button
+                  type="button"
                   onClick={handleResendOtp}
                   disabled={isResending}
                   className="text-sm text-mandi-green hover:underline disabled:opacity-50"

@@ -2,7 +2,7 @@ import Fastify from 'fastify';
 import { SYSTEM_RULES } from '../shared/constants';
 
 const fastify = Fastify({
-    logger: true
+  logger: true,
 });
 
 /**
@@ -15,30 +15,30 @@ const fastify = Fastify({
  */
 
 fastify.get('/health', async (request, reply) => {
-    return {
-        status: 'ok',
-        version: '1.0.0',
-        philosophy: 'Trust & Transparency',
-        rules: SYSTEM_RULES
-    };
+  return {
+    status: 'ok',
+    version: '1.0.0',
+    philosophy: 'Trust & Transparency',
+    rules: SYSTEM_RULES,
+  };
 });
 
 const start = async () => {
-    try {
-        // Only listen when running locally
-        if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
-            await fastify.listen({ port: 3000, host: '0.0.0.0' });
-            console.log('Server is running on http://localhost:3000');
-        }
-    } catch (err) {
-        fastify.log.error(err);
-        process.exit(1);
+  try {
+    // Only listen when running locally
+    if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+      await fastify.listen({ port: 3000, host: '0.0.0.0' });
+      console.log('Server is running on http://localhost:3000');
     }
+  } catch (err) {
+    fastify.log.error(err);
+    process.exit(1);
+  }
 };
 
 start();
 
 export default async (req: any, res: any) => {
-    await fastify.ready();
-    fastify.server.emit('request', req, res);
+  await fastify.ready();
+  fastify.server.emit('request', req, res);
 };
