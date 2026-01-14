@@ -228,6 +228,11 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
   // GET CURRENT USER
   // ==========================================
   fastify.get('/auth/me', { preHandler: [authenticate] }, async (request, reply) => {
+    // Prevent caching of this response so that logout is reflected immediately
+    reply.header('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    reply.header('Pragma', 'no-cache');
+    reply.header('Expires', '0');
+
     const { userId } = request.user;
 
     const user = await prisma.user.findUnique({
@@ -256,7 +261,8 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
   // ==========================================
   // LOGOUT
   // ==========================================
-  fastify.post('/auth/logout', async (_request, reply) => {
+  fastify.post('/auth/logout', async (request, reply) => {
+    request.log.info('Logout request received');
     // Set cookie to expire immediately
     reply.setCookie('token', '', {
       path: '/',
@@ -264,7 +270,7 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: 0,
-      expires: new Date(0),
+      expires: new Date('Thu, 01 Jan 1970 00:00:00 GMT'),
     });
     return { success: true, message: 'Logged out successfully' };
   });

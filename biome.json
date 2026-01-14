@@ -18,7 +18,9 @@
       "server/db.ts",
       "server/generated",
       "api",
-      "**/tsconfig*.json"
+      "**/tsconfig*.json",
+      "coverage",
+      "**/coverage/**"
     ]
   },
   "formatter": {

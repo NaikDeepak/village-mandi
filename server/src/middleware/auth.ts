@@ -3,8 +3,11 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 // Authenticate any logged-in user
 export async function authenticate(request: FastifyRequest, reply: FastifyReply) {
   try {
+    request.log.info({ headers: request.headers }, 'Auth check headers'); // Debug log
     await request.jwtVerify();
+    request.log.info({ user: request.user }, 'Auth check successful');
   } catch (_err) {
+    request.log.info({ err: _err }, 'Auth check failed');
     return reply.status(401).send({ error: 'Unauthorized', message: 'Invalid or expired token' });
   }
 }

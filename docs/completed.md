@@ -75,12 +75,77 @@
 
 ---
 
+## EPIC-2 — Authentication & Access ✅
+
+**Completed: 2026-01-14**
+
+### Tasks Completed
+
+- [x] **Admin Authentication** — Email/Password login for system management
+  - [x] Backend: Auth routes (register, login, logout, me)
+  - [x] Backend: Password hashing (bcrypt)
+  - [x] Backend: JWT token generation and validation
+  - [x] Backend: httpOnly cookie handling
+  - [x] Frontend: Admin login page
+  - [x] Frontend: Auth context/state management (Zustand)
+  - [x] Frontend: Protected route wrapper
+
+- [x] **Buyer Authentication** — Phone + OTP login
+  - [x] Backend: OTP generation and storage
+  - [x] Backend: OTP verification endpoint
+  - [x] Backend: Phone number validation
+  - [x] Frontend: Phone input page
+  - [x] Frontend: OTP verification page
+  - [x] Integration: Mock OTP for dev (console logging)
+
+- [x] **Access Control** — Role-based route protection
+  - [x] Backend: Role middleware (ADMIN, BUYER)
+  - [x] Backend: Protected API routes
+  - [x] Frontend: Role-based navigation
+  - [x] Frontend: Unauthorized redirect handling
+  - [x] Invite-only flag enforcement for buyers
+
+- [x] **Session Management**
+  - [x] Token refresh mechanism
+  - [x] Logout and session invalidation
+  - [x] Persistent auth state (localStorage)
+
+- [x] **Developer Tooling**
+  - [x] Biome for linting and formatting
+  - [x] Husky + lint-staged for pre-commit hooks
+  - [x] GitHub Actions CI workflow
+  - [x] Root scripts for check/lint/format/typecheck
+
+### Artifacts
+
+- `/server/src/routes/auth.ts` — Auth API routes
+- `/server/src/middleware/auth.ts` — JWT verification middleware
+- `/server/src/plugins/jwt.ts` — JWT plugin
+- `/web/src/stores/auth.ts` — Zustand auth store
+- `/web/src/lib/api.ts` — API utilities
+- `/web/src/pages/AdminLoginPage.tsx` — Admin login
+- `/web/src/pages/BuyerLoginPage.tsx` — Buyer phone input
+- `/web/src/pages/VerifyOtpPage.tsx` — OTP verification
+- `/web/src/components/auth/ProtectedRoute.tsx` — Route guard
+- `/web/src/components/auth/AuthProvider.tsx` — Session check on load
+- `biome.json` — Linting configuration
+- `.husky/pre-commit` — Git pre-commit hook
+- `.github/workflows/ci.yml` — GitHub Actions CI
+
+### Notes
+
+- OTP is logged to console in dev mode (real SMS integration deferred)
+- Security TODOs: Rate limiting, max OTP attempts, OTP hashing (for production OTP integration)
+
+---
+
 ## Completed Epics Summary
 
 | Epic | Name | Status | Date Completed |
 |------|------|--------|----------------|
 | EPIC-0 | System Foundation | ✅ Complete | Prior to 2026-01-14 |
 | EPIC-1 | Branding & Static Pages | ✅ Complete | 2026-01-14 |
+| EPIC-2 | Authentication & Access | ✅ Complete | 2026-01-14 |
 
 ---
 
