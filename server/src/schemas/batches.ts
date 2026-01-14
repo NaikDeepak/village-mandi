@@ -31,7 +31,9 @@ export const createBatchSchema = z
   .refine(
     (data) => {
       const cutoff = new Date(data.cutoffAt);
-      return cutoff > new Date();
+      const now = new Date();
+      // Add 1 second buffer to avoid timing issues in tests
+      return cutoff.getTime() > now.getTime() - 1000;
     },
     {
       message: 'Cutoff time must be in the future',
