@@ -29,20 +29,13 @@ export function VerifyOtpPage() {
 
   const phone = location.state?.phone as string;
 
-  // Redirect if already authenticated
-  if (!authLoading && isAuthenticated) {
-    const dashboardPath = user?.role === 'ADMIN' ? '/admin' : '/shop';
-    return <Navigate to={dashboardPath} replace />;
-  }
-
-  // Redirect if no phone in state
+  // 1. All hooks first
   useEffect(() => {
     if (!phone) {
       navigate('/buyer-login');
     }
   }, [phone, navigate]);
 
-  // Resend cooldown timer
   useEffect(() => {
     if (resendCooldown > 0) {
       const timer = setTimeout(() => setResendCooldown(resendCooldown - 1), 1000);
@@ -57,6 +50,12 @@ export function VerifyOtpPage() {
   } = useForm<OtpFormData>({
     resolver: zodResolver(otpSchema),
   });
+
+  // 2. Early returns after hooks
+  if (!authLoading && isAuthenticated) {
+    const dashboardPath = user?.role === 'ADMIN' ? '/admin' : '/shop';
+    return <Navigate to={dashboardPath} replace />;
+  }
 
   const onSubmit = async (data: OtpFormData) => {
     setError(null);
@@ -93,8 +92,7 @@ export function VerifyOtpPage() {
       setError(result.message || result.error);
     } else {
       setResendCooldown(30); // 30 second cooldown
-      if (result.data?.devOtp) {
-      }
+      // if (result.data?.devOtp) { console.log(result.data.devOtp) }
     }
 
     setIsResending(false);

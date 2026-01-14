@@ -7,14 +7,17 @@ interface ApiResponse<T> {
 }
 
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
+  const headers = { ...options.headers } as Record<string, string>;
+
+  if (options.body && !headers['Content-Type']) {
+    headers['Content-Type'] = 'application/json';
+  }
+
   try {
     const response = await fetch(`${API_BASE}${endpoint}`, {
       ...options,
       credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
+      headers,
     });
 
     const data = await response.json();
@@ -74,5 +77,69 @@ export const authApi = {
   logout: () =>
     request<{ success: boolean }>('/auth/logout', {
       method: 'POST',
+      body: JSON.stringify({}),
+    }),
+};
+
+import type {
+  CreateFarmerInput,
+  CreateProductInput,
+  Farmer,
+  Product,
+  UpdateFarmerInput,
+  UpdateProductInput,
+} from '@/types';
+
+// Farmers API
+export const farmersApi = {
+  getAll: (includeInactive = false) =>
+    request<{ farmers: Farmer[] }>(`/farmers?includeInactive=${includeInactive}`),
+
+  getById: (id: string) => request<{ farmer: Farmer }>(`/farmers/${id}`),
+
+  create: (data: CreateFarmerInput) =>
+    request<{ farmer: Farmer }>('/farmers', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  update: (id: string, data: UpdateFarmerInput) =>
+    request<{ farmer: Farmer }>(`/farmers/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+
+  delete: (id: string) =>
+    request<{ success: boolean; message: string }>(`/farmers/${id}`, {
+      method: 'DELETE',
+    }),
+};
+
+// Products API
+export const productsApi = {
+  getAll: (params: { farmerId?: string; includeInactive?: boolean } = {}) => {
+    const query = new URLSearchParams();
+    if (params.farmerId) query.append('farmerId', params.farmerId);
+    if (params.includeInactive) query.append('includeInactive', 'true');
+    return request<{ products: Product[] }>(`/products?${query.toString()}`);
+  },
+
+  getById: (id: string) => request<{ product: Product }>(`/products/${id}`),
+
+  create: (data: CreateProductInput) =>
+    request<{ product: Product }>('/products', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  update: (id: string, data: UpdateProductInput) =>
+    request<{ product: Product }>(`/products/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+
+  delete: (id: string) =>
+    request<{ success: boolean; message: string }>(`/products/${id}`, {
+      method: 'DELETE',
     }),
 };

@@ -19,28 +19,33 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 - ✓ Shared system rules and constants — existing
 - ✓ Vercel deployment configuration — existing
 
+### Completed
+
+**EPIC 0: System Foundation** ✅
+- [x] Repository structure with clear frontend/backend separation
+- [x] Strict environment variable handling
+- [x] Hardcoded system guardrails and constants
+
+**EPIC 1: Branding & Static Pages** ✅
+- [x] Landing page explaining the batch model
+- [x] Rules page (cutoffs, payments, fulfilment)
+- [x] Visual identity (colors, typography)
+- [x] Our Story section
+
+**EPIC 2: Authentication & Access** ✅
+- [x] Admin email/password auth (JWT, httpOnly cookies)
+- [x] Buyer phone + OTP auth
+- [x] Invite-only access control
+- [x] Route protection by role
+- [x] Biome linting + GitHub Actions CI
+
+**EPIC 3: Farmers & Products** ✅
+- [x] Farmer management (name, location, relationship level)
+- [x] Product management (name, unit, season, farmer association)
+- [x] Farmer deactivation with historical preservation
+- [x] Farmer detail view with products
+
 ### Active
-
-**Phase 0: PRD Refinement**
-- [ ] Fill gaps in EPIC definitions
-- [ ] Clarify ambiguous requirements
-- [ ] Ensure each EPIC is execution-ready
-
-**EPIC 1: Branding & Static Pages**
-- [ ] Landing page explaining the batch model
-- [ ] Rules page (cutoffs, payments, fulfilment)
-- [ ] Visual identity (logo, colors, typography)
-
-**EPIC 2: Authentication & Access**
-- [ ] Admin email/password auth
-- [ ] Buyer phone + OTP auth
-- [ ] Invite-only access control
-- [ ] Route protection by role
-
-**EPIC 3: Farmers & Products**
-- [ ] Farmer management (name, location, relationship level)
-- [ ] Product management (name, unit, season, farmer association)
-- [ ] Farmer deactivation with historical preservation
 
 **EPIC 4: Batch Management**
 - [ ] Batch states: DRAFT → OPEN → CLOSED → COLLECTED → DELIVERED → SETTLED

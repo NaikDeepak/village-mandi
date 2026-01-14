@@ -4,38 +4,35 @@
 
 ---
 
-## Current Epic: EPIC-2 — Authentication & Access
+## Current Epic: EPIC-3 — Farmers & Products
 
 ### Tasks
 
-- [x] **Admin Authentication** — Email/Password login for system management
-  - [x] Backend: Auth routes (register, login, logout, me)
-  - [x] Backend: Password hashing (bcrypt/argon2)
-  - [x] Backend: JWT token generation and validation
-  - [x] Backend: httpOnly cookie handling
-  - [x] Frontend: Admin login page
-  - [x] Frontend: Auth context/state management
-  - [x] Frontend: Protected route wrapper
+- [x] **Farmer Management** — Admin CRUD for farmers
+  - [x] Backend: GET /farmers (list all farmers)
+  - [x] Backend: GET /farmers/:id (get single farmer)
+  - [x] Backend: POST /farmers (create farmer)
+  - [x] Backend: PUT /farmers/:id (update farmer)
+  - [x] Backend: DELETE /farmers/:id (soft delete - set isActive=false)
+  - [x] Frontend: Farmer list page (admin)
+  - [x] Frontend: Farmer create/edit form
+  - [ ] Frontend: Farmer detail view with products
 
-- [x] **Buyer Authentication** — Phone + OTP login
-  - [x] Backend: OTP generation and storage
-  - [x] Backend: OTP verification endpoint
-  - [x] Backend: Phone number validation
-  - [x] Frontend: Phone input page
-  - [x] Frontend: OTP verification page
-  - [x] Integration: SMS/WhatsApp OTP delivery (or mock for dev)
+- [x] **Product Management** — Admin CRUD for products (farmer-bound)
+  - [x] Backend: GET /products (list all products, filter by farmer)
+  - [x] Backend: GET /products/:id (get single product)
+  - [x] Backend: POST /products (create product with required farmerId)
+  - [x] Backend: PUT /products/:id (update product)
+  - [x] Backend: DELETE /products/:id (soft delete - set isActive=false)
+  - [x] Frontend: Product list page (admin)
+  - [x] Frontend: Product create/edit form
+  - [x] Frontend: Farmer dropdown for product assignment
 
-- [x] **Access Control** — Role-based route protection
-  - [x] Backend: Role middleware (ADMIN, BUYER)
-  - [x] Backend: Protected API routes
-  - [x] Frontend: Role-based navigation
-  - [x] Frontend: Unauthorized redirect handling
-  - [x] Invite-only flag enforcement for buyers
-
-- [x] **Session Management**
-  - [x] Token refresh mechanism
-  - [x] Logout and session invalidation
-  - [x] "Remember me" functionality (optional)
+- [x] **Data Validation & Business Rules**
+  - [x] Validate farmer fields (name required, location required, relationship level enum)
+  - [x] Validate product fields (name required, unit required, farmerId required)
+  - [x] Ensure products cannot be created without farmer association
+  - [x] Soft delete preserves historical data (isActive=false, not hard delete)
 
 ---
 
@@ -43,28 +40,52 @@
 
 | Category | Completed | Pending | Total |
 |----------|-----------|---------|-------|
-| Admin Authentication | 7 | 0 | 7 |
-| Buyer Authentication | 6 | 0 | 6 |
-| Access Control | 5 | 0 | 5 |
-| Session Management | 3 | 0 | 3 |
-| **Total** | **21** | **0** | **21** |
+| Farmer Management | 7 | 1 | 8 |
+| Product Management | 8 | 0 | 8 |
+| Data Validation | 4 | 0 | 4 |
+| **Total** | **19** | **1** | **20** |
+
+---
+
+## Senior Engineer UI Review (2026-01-14)
+
+### Architecture Strengths
+
+- **Clean separation of concerns**: Auth logic in Zustand stores, API layer abstracted in `lib/api.ts`, components well-organized
+- **Type safety**: Zod schemas for form validation (admin login, buyer phone, OTP), TypeScript throughout
+- **Accessibility**: ARIA labels on interactive elements, keyboard navigation, focus-visible rings, reduced motion support
+- **Security**: httpOnly cookies for JWT, invite-only buyer system, role-based route protection via `ProtectedRoute`
+- **Progressive enhancement**: Hero image fallback, smooth scrolling with preference detection
+
+### Edge Cases & Issues Identified
+
+| Area | Issue | Severity | Status |
+|------|-------|----------|--------|
+| `AuthProvider.tsx:30` | Missing `setLoading(false)` in finally block - if `authApi.me()` throws, loading state stays true forever | Medium | Open |
+| `AdminDashboardPage.tsx` | Duplicates `AdminLayout` header - redundant logout logic, inconsistent with nested route pattern | Low | Open |
+| `VerifyOtpPage.tsx:30` | Phone stored in `location.state` - lost on page refresh, user must restart flow | Medium | Open |
+| `FarmersPage.tsx:30` | Uses browser `confirm()` dialog - not accessible, poor UX on mobile | Low | Open |
+| `Stats.tsx:4` | Hardcoded stats values - should fetch from API in production | Low | Open |
+| `App.tsx:29-30` | Duplicate comment `{/* Protected admin routes */}` | Trivial | Open |
+
+### Production-Readiness Gaps
+
+1. **Rate limiting**: Not implemented for auth endpoints (OTP spam risk)
+2. **OTP security**: No max attempts enforcement, no hashing, no expiry countdown display
+3. **Error boundaries**: No React error boundaries around routes
+4. **Empty states**: No UI when farmer/product lists are empty
+5. **Loading states**: Some pages have minimal loading UI (just text)
 
 ---
 
 ## Notes
 
-- Per PRD: No farmer authentication or role-editing UI
-- Admin uses Email/Password, Buyer uses Phone/OTP
-- Auth implementation: Custom Fastify auth with JWT (httpOnly cookies)
-- Buyers are invite-only (requires flag in user record)
-
-### Security TODOs (for OTP integration)
-
-When integrating real SMS/WhatsApp OTP (e.g., MSG91), address these:
-
-- [ ] **Rate limiting on OTP requests** - Prevent spam by adding cooldown (e.g., 1 OTP per 60 seconds per phone)
-- [ ] **Max OTP attempts** - Lock account after 3-5 failed OTP attempts to prevent brute-force
-- [ ] **OTP hashing** - Consider hashing OTP in database (low priority due to 10-min expiry)
+- Database schema already exists (Farmer, Product models in Prisma)
+- Farmers have: name, location, description, relationshipLevel (SELF/FAMILY/FRIEND/REFERRED), isActive
+- Products have: name, unit, description, seasonStart, seasonEnd, isActive, farmerId (required)
+- Deactivating farmer should NOT auto-deactivate products (handled at batch level)
+- Admin-only routes (ADMIN role required)
+- Backend routes and tests added in `server/src/routes/farmers.ts` and `server/src/routes/products.ts`
 
 ---
 

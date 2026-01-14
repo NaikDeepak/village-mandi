@@ -8,6 +8,12 @@ import { BuyerLoginPage } from './pages/BuyerLoginPage';
 import { LandingPage } from './pages/LandingPage';
 import { RulesPage } from './pages/RulesPage';
 import { VerifyOtpPage } from './pages/VerifyOtpPage';
+import { AdminLayout } from './pages/admin/AdminLayout';
+import { FarmerDetailPage } from './pages/admin/FarmerDetailPage';
+import { FarmerFormPage } from './pages/admin/FarmerFormPage';
+import { FarmersPage } from './pages/admin/FarmersPage';
+import { ProductFormPage } from './pages/admin/ProductFormPage';
+import { ProductsPage } from './pages/admin/ProductsPage';
 
 function App() {
   return (
@@ -22,14 +28,24 @@ function App() {
           <Route path="/verify-otp" element={<VerifyOtpPage />} />
 
           {/* Protected admin routes */}
+          {/* Protected admin routes */}
           <Route
             path="/admin"
             element={
               <ProtectedRoute allowedRoles={['ADMIN']}>
-                <AdminDashboardPage />
+                <AdminLayout />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route index element={<AdminDashboardPage />} />
+            <Route path="farmers" element={<FarmersPage />} />
+            <Route path="farmers/new" element={<FarmerFormPage />} />
+            <Route path="farmers/:id" element={<FarmerDetailPage />} />
+            <Route path="farmers/:id/edit" element={<FarmerFormPage />} />
+            <Route path="products" element={<ProductsPage />} />
+            <Route path="products/new" element={<ProductFormPage />} />
+            <Route path="products/:id/edit" element={<ProductFormPage />} />
+          </Route>
 
           {/* Protected buyer routes */}
           <Route

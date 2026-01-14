@@ -9,6 +9,8 @@ import prismaPlugin from './src/plugins/prisma';
 
 // Routes
 import authRoutes from './src/routes/auth';
+import farmerRoutes from './src/routes/farmers';
+import productRoutes from './src/routes/products';
 
 const fastify = Fastify({
   logger: true,
@@ -30,6 +32,7 @@ fastify.register(cors, {
       ? ['https://virtualmandi.com'] // Update with your production domain
       : ['http://localhost:5173', 'http://localhost:3000'],
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 });
 
 // Register plugins
@@ -38,6 +41,8 @@ fastify.register(jwtPlugin);
 
 // Register routes
 fastify.register(authRoutes);
+fastify.register(farmerRoutes);
+fastify.register(productRoutes);
 
 // Health check
 fastify.get('/health', async (_request, _reply) => {
