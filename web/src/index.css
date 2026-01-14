@@ -1,6 +1,25 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --animate-fade-in-up: fadeInUp 0.8s ease-out forwards;
+  --animate-ping-slow: ping 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  --color-eco-teal: #78A898;
+  --color-eco-yellow: #F4C550;
+  --color-eco-dark: #2C4A42;
+}
 
 :root {
   --foreground-rgb: 0, 0, 0;
