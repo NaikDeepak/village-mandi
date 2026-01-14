@@ -1,7 +1,9 @@
 import { Navbar } from '../components/layout/Navbar';
 import { Hero } from '../components/landing/Hero';
-import { Features } from '../components/landing/Features';
+import { Story } from '../components/landing/Story';
+import { Stats } from '../components/landing/Stats';
 import { Steps } from '../components/landing/Steps';
+import { Features } from '../components/landing/Features';
 import { Footer } from '../components/layout/Footer';
 
 export function LandingPage() {
@@ -10,8 +12,10 @@ export function LandingPage() {
             <Navbar />
             <main>
                 <Hero />
-                <Features />
+                <Story />
+                <Stats />
                 <Steps />
+                <Features />
             </main>
             <Footer />
         </div>
