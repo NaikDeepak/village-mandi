@@ -29,14 +29,14 @@ const steps = [
 
 export function Steps() {
     return (
-        <div id="how-it-works" className="py-24 bg-gray-50">
+        <div id="how-it-works" className="py-24 bg-mandi-cream">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="lg:text-center mb-16">
-                    <h2 className="text-base text-green-600 font-semibold tracking-wide uppercase">Batch Lifecycle</h2>
-                    <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                    <h2 className="text-base text-mandi-green font-semibold tracking-wide uppercase">Batch Lifecycle</h2>
+                    <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-mandi-dark sm:text-4xl">
                         How it Works
                     </p>
-                    <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+                    <p className="mt-4 max-w-2xl text-xl text-mandi-muted lg:mx-auto">
                         We operate in cycles called "Batches" to ensure freshness and efficiency.
                     </p>
                 </div>
@@ -47,8 +47,8 @@ export function Steps() {
 
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
                         {steps.map((step, index) => (
-                            <div key={step.id} className="relative bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all text-center group">
-                                <div className={`absolute -top-4 left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${index === 0 ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-600'} border-4 border-white`}>
+                            <div key={step.id} className="relative bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md text-center group">
+                                <div className={`absolute -top-4 left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${index === 0 ? 'bg-mandi-green text-white' : 'bg-gray-200 text-gray-600'} border-4 border-white`}>
                                     {step.id}
                                 </div>
 
@@ -56,7 +56,7 @@ export function Steps() {
                                     {step.title}
                                 </div>
 
-                                <p className="text-gray-600 font-medium">
+                                <p className="text-mandi-muted font-medium">
                                     {step.desc}
                                 </p>
                             </div>
