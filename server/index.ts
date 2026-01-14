@@ -10,6 +10,7 @@ import prismaPlugin from './src/plugins/prisma';
 // Routes
 import authRoutes from './src/routes/auth';
 import farmerRoutes from './src/routes/farmers';
+import hubRoutes from './src/routes/hubs';
 import productRoutes from './src/routes/products';
 
 const fastify = Fastify({
@@ -42,6 +43,7 @@ fastify.register(jwtPlugin);
 // Register routes
 fastify.register(authRoutes);
 fastify.register(farmerRoutes);
+fastify.register(hubRoutes);
 fastify.register(productRoutes);
 
 // Health check
