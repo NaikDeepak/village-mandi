@@ -8,3 +8,5 @@ build
 .turbo
 out
 .vercel
+test-results
+play

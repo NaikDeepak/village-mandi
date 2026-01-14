@@ -4,7 +4,6 @@ import { Button } from './button';
 
 describe('Button', () => {
   it('renders correctly', () => {
-    // biome-ignore lint/suspicious/noReactSpecificProps: test ID used for testing
     render(<Button data-testid="test-btn">Click me</Button>);
     const button = screen.getByTestId('test-btn');
     expect(button).toBeInTheDocument();
