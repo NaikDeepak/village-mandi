@@ -1,0 +1,25 @@
+{
+  "cookies": [
+    {
+      "name": "token",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0ODFhYTUwYi02NTEzLTQxMjAtYjZlOC1jYmMwZjcwY2ZkOTMiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3Njg0MTc3OTIsImV4cCI6MTc2OTAyMjU5Mn0.r34F0GjsQml-mvBcRAIE3kCKbv3B0Sj5zTncwawhkP0",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1769022592.412194,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "http://localhost:5173",
+      "localStorage": [
+        {
+          "name": "auth-storage",
+          "value": "{\"state\":{\"user\":{\"id\":\"481aa50b-6513-4120-b6e8-cbc0f70cfd93\",\"role\":\"ADMIN\",\"name\":\"Deepak Naik\",\"email\":\"admin@virtualmandi.com\"},\"isAuthenticated\":true},\"version\":0}"
+        }
+      ]
+    }
+  ]
+}
