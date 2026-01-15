@@ -1,9 +1,98 @@
 import type { FastifyPluginAsync } from 'fastify';
-import { authenticate } from '../middleware/auth';
+import { authenticate, requireAdmin } from '../middleware/auth';
 import { createOrderSchema } from '../schemas/orders';
 
 const orderRoutes: FastifyPluginAsync = async (fastify) => {
   const { prisma } = fastify;
+
+  // ==========================================
+  // GET ALL ORDERS (Admin Only)
+  // ==========================================
+  fastify.get('/orders', { preHandler: [requireAdmin] }, async (request, _reply) => {
+    const { batchId, status } = request.query as { batchId?: string; status?: string };
+
+    const orders = await prisma.order.findMany({
+      where: {
+        ...(batchId ? { batchId } : {}),
+        ...(status
+          ? { status: status as 'PLACED' | 'COMMITMENT_PAID' | 'FULLY_PAID' | 'CANCELLED' }
+          : {}),
+      },
+      include: {
+        batch: {
+          include: { hub: true },
+        },
+        buyer: {
+          select: {
+            id: true,
+            name: true,
+            phone: true,
+            email: true,
+          },
+        },
+        items: {
+          include: {
+            batchProduct: {
+              include: { product: true },
+            },
+          },
+        },
+        payments: true,
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return { orders };
+  });
+
+  // ==========================================
+  // GET SINGLE ORDER (Admin or Owner)
+  // ==========================================
+  fastify.get('/orders/:id', { preHandler: [authenticate] }, async (request, reply) => {
+    const { id } = request.params as { id: string };
+
+    const order = await prisma.order.findUnique({
+      where: { id },
+      include: {
+        batch: {
+          include: { hub: true },
+        },
+        buyer: {
+          select: {
+            id: true,
+            name: true,
+            phone: true,
+            email: true,
+          },
+        },
+        items: {
+          include: {
+            batchProduct: {
+              include: { product: true },
+            },
+          },
+        },
+        payments: true,
+      },
+    });
+
+    if (!order) {
+      return reply.status(404).send({
+        error: 'Not Found',
+        message: 'Order not found',
+      });
+    }
+
+    // Check ownership or admin
+    if (request.user.role !== 'ADMIN' && order.buyerId !== request.user.id) {
+      return reply.status(403).send({
+        error: 'Forbidden',
+        message: 'You do not have permission to view this order',
+      });
+    }
+
+    return { order };
+  });
 
   // ==========================================
   // PLACE NEW ORDER
@@ -135,8 +224,9 @@ const orderRoutes: FastifyPluginAsync = async (fastify) => {
       });
 
       return reply.status(201).send({ order });
-    } catch (error: any) {
-      if (error.code === 'P2002') {
+    } catch (error: unknown) {
+      const err = error as { code?: string; message?: string };
+      if (err.code === 'P2002') {
         return reply.status(400).send({
           error: 'Invalid Operation',
           message: 'You have already placed an order for this batch',
@@ -144,7 +234,7 @@ const orderRoutes: FastifyPluginAsync = async (fastify) => {
       }
       return reply.status(400).send({
         error: 'Error',
-        message: error.message || 'Failed to place order',
+        message: err.message || 'Failed to place order',
       });
     }
   });

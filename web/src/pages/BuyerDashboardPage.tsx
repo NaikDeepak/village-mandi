@@ -43,8 +43,10 @@ export function BuyerDashboardPage() {
 
           <div className="mt-8 p-6 bg-mandi-cream rounded-lg text-center">
             <h3 className="font-semibold text-mandi-dark mb-2">Current Batch</h3>
-            <p className="text-mandi-muted text-sm mb-4">Week 3 - January 2025</p>
-            <Button>Browse Products</Button>
+            <p className="text-mandi-muted text-sm mb-4">
+              Check out available produce for this week
+            </p>
+            <Button onClick={() => navigate('/shop')}>Browse Products</Button>
           </div>
         </div>
       </main>

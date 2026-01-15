@@ -110,3 +110,72 @@ export interface CreateBatchInput {
 }
 
 export interface UpdateBatchInput extends Partial<CreateBatchInput> {}
+
+export interface OrderItem {
+  id: string;
+  orderId: string;
+  batchProductId: string;
+  quantity: number;
+  pricePerUnit: number;
+  facilitationAmt: number;
+  subtotal: number;
+  batchProduct?: BatchProduct;
+}
+
+export interface Order {
+  id: string;
+  batchId: string;
+  buyerId: string;
+  status: 'PENDING' | 'COMMITMENT_PAID' | 'FULLY_PAID' | 'CANCELLED' | 'PLACED';
+  fulfillmentType: 'PICKUP' | 'DELIVERY';
+  estimatedTotal: number;
+  facilitationAmt: number;
+  createdAt: string;
+  updatedAt: string;
+  batch?: Batch;
+  items?: OrderItem[];
+}
+
+export interface CreateOrderInput {
+  batchId: string;
+  fulfillmentType: 'PICKUP' | 'DELIVERY';
+  items: {
+    batchProductId: string;
+    quantity: number;
+  }[];
+}
+
+export interface Payment {
+  id: string;
+  orderId: string;
+  stage: 'COMMITMENT' | 'FINAL';
+  amount: number;
+  method: 'UPI' | 'CASH';
+  referenceId?: string | null;
+  paidAt: string;
+}
+
+export interface LogPaymentInput {
+  amount: number;
+  method: 'UPI' | 'CASH';
+  stage: 'COMMITMENT' | 'FINAL';
+  referenceId?: string;
+  paidAt?: string;
+}
+
+export interface BatchAggregationFarmer {
+  farmerId: string;
+  farmerName: string;
+  farmerLocation: string;
+  products: {
+    batchProductId: string;
+    productId: string;
+    productName: string;
+    unit: string;
+    totalQuantity: number;
+  }[];
+}
+
+export interface BatchAggregation {
+  aggregation: BatchAggregationFarmer[];
+}

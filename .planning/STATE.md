@@ -7,14 +7,81 @@
 ## Current Position
 
 **Milestone:** 1 (MVP v1.0)
-**Phase:** 07 — Ordering
+**Phase:** 10 — Packing & Distribution
 **Plan:** 1 of 1 in current phase
-**Status:** In Progress
-**Last activity:** 2026-01-15 - Starting 07-01-PLAN.md
+**Status:** Pending
+**Last activity:** 2026-01-15 - Completed Phase 09: Aggregation & Procurement
 
-Progress: ████████░░ 80%
+Progress: ██████████ 100%
 
 ## Recent Progress
+
+### Phase 09 — Aggregation & Procurement (Completed 2026-01-15)
+
+**What shipped:**
+- Plan 09-01: Aggregation API & Procurement UI
+- Implemented `GET /batches/:id/aggregation` for procurement planning.
+- Logic groups confirmed orders (`COMMITMENT_PAID`, `FULLY_PAID`) by farmer and product.
+- Admin `BatchProcurementPage` with summary stats and detailed farmer lists.
+- "Copy for WhatsApp" feature for easy farmer communication.
+- Print-friendly layout for physical procurement checklists.
+- Automated tests for aggregation logic (4 tests).
+
+**Key files added:**
+- `server/src/routes/aggregation.test.ts` — Integration tests
+- `web/src/pages/admin/BatchProcurementPage.tsx` — Procurement UI
+
+### Phase 08 — Two-Stage Payments (Completed 2026-01-15)
+
+**What shipped:**
+- Plan 08-01: Payment Logging API & Admin UI
+- Implemented `POST /orders/:id/payments` for manual UPI/Cash payment verification.
+- Transactional integrity for payment logging, order status updates, and event logging.
+- Admin `OrdersPage` with batch and status filtering.
+- Admin `OrderDetailPage` with detailed items view and payment form.
+- Automated tests for payment status transitions (8 tests).
+- Updated frontend API client and shared types.
+
+**Key files added:**
+- `server/src/routes/payments.ts` — Payment API
+- `server/src/schemas/payments.ts` — Payment validation
+- `server/src/routes/payments.test.ts` — Payment integration tests
+- `web/src/pages/admin/OrdersPage.tsx` — Order list UI
+- `web/src/pages/admin/OrderDetailPage.tsx` — Order details & payment logging UI
+
+### Phase 07 — Ordering (Completed 2026-01-15)
+
+**What shipped:**
+- Plan 07-01: Order Placement & Access Control
+- Updated access control to allow BUYER role to view current batches and products.
+- Implemented `POST /orders` with strict validation (OPEN status, cutoff window, MOQ/MaxOQ).
+- Transactional order creation with `OrderItem` and `EventLog` audit trail.
+- Implemented `GET /orders/my` for buyer order history.
+- 86 passing tests total (including 8 new ordering tests).
+- Plan 07-02: Buyer Storefront
+- Built responsive Shop page for buyers to browse current batch.
+- Grouped products by farmer with custom `ProductCard` component.
+- Implemented quantity selection with MOQ/MaxOQ validation.
+- Connected storefront to backend `POST /orders` API.
+- Plan 07-03: Cart & Checkout Flow
+- Persistent `useCartStore` with Zustand and localStorage.
+- `CartDrawer` component for side-panel cart management.
+- `CheckoutPage` with fulfillment selection and order review.
+- `OrderSuccessPage` confirmation view.
+- Refactored `ShopPage` to integrate with Checkout flow.
+
+**Key files added:**
+- `server/src/routes/orders.ts` — Ordering API
+- `server/src/schemas/orders.ts` — Zod schemas for ordering
+- `server/src/routes/orders.test.ts` — Integration tests for ordering
+- `web/src/pages/buyer/ShopPage.tsx` — Buyer shop interface
+- `web/src/pages/buyer/CheckoutPage.tsx` — Checkout interface
+- `web/src/pages/buyer/OrderSuccessPage.tsx` — Confirmation view
+- `web/src/components/shop/ProductCard.tsx` — Product display component
+- `web/src/components/shop/CartDrawer.tsx` — Cart overlay component
+- `web/src/stores/cart.ts` — Persistent cart state
+- `web/src/components/ui/card.tsx`, `badge.tsx`, `separator.tsx` — UI components
+- `web/src/hooks/use-toast.ts` — Notification hook
 
 ### Phase 06 — Pricing & Scoping (Completed 2026-01-15)
 

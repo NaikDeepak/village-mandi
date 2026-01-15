@@ -14,14 +14,14 @@
 | 04 | Farmers & Products | ✅ Complete |
 | 05 | Batch Management | ✅ Complete |
 | 06 | Pricing & Scoping | ✅ Complete |
+| 07 | Ordering Flow | ✅ Complete |
+| 08 | Two-Stage Payments | ✅ Complete |
 
 ### Current Phase
 
 | Phase | Name | Status |
 |-------|------|--------|
-| 07 | Ordering Flow | 🔄 Next |
-| 08 | Two-Stage Payments | 10% commitment fee, final settlement tracking, manual UPI |
-| 09 | Aggregation & Procurement | Quantity aggregation, procurement lists, WhatsApp messages |
+| 09 | Aggregation & Procurement | 🔄 In Progress |
 | 10 | Packing & Distribution | Buyer-wise packing lists, pickup/delivery workflow |
 | 11 | Farmer Payouts | Farmer ledgers, manual payout logging with audit |
 | 12 | Order Status | Real-time buyer status tracking, order history |
@@ -180,8 +180,8 @@
 
 | Category | Completed | Remaining | Total |
 |----------|-----------|-----------|-------|
-| Phases | 4 | 9 | 13 |
-| MVP Progress | 31% | 69% | 100% |
+| Phases | 7 | 6 | 13 |
+| MVP Progress | 54% | 46% | 100% |
 
 ---
 

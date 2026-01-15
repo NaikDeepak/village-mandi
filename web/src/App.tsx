@@ -15,8 +15,13 @@ import { BatchesPage } from './pages/admin/BatchesPage';
 import { FarmerDetailPage } from './pages/admin/FarmerDetailPage';
 import { FarmerFormPage } from './pages/admin/FarmerFormPage';
 import { FarmersPage } from './pages/admin/FarmersPage';
+import { OrderDetailPage } from './pages/admin/OrderDetailPage';
+import { OrdersPage } from './pages/admin/OrdersPage';
 import { ProductFormPage } from './pages/admin/ProductFormPage';
 import { ProductsPage } from './pages/admin/ProductsPage';
+import { CheckoutPage } from './pages/buyer/CheckoutPage';
+import { OrderSuccessPage } from './pages/buyer/OrderSuccessPage';
+import { ShopPage } from './pages/buyer/ShopPage';
 
 function App() {
   return (
@@ -52,11 +57,37 @@ function App() {
             <Route path="products" element={<ProductsPage />} />
             <Route path="products/new" element={<ProductFormPage />} />
             <Route path="products/:id/edit" element={<ProductFormPage />} />
+            <Route path="orders" element={<OrdersPage />} />
+            <Route path="orders/:id" element={<OrderDetailPage />} />
           </Route>
 
           {/* Protected buyer routes */}
           <Route
             path="/shop"
+            element={
+              <ProtectedRoute allowedRoles={['BUYER']}>
+                <ShopPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/shop/checkout"
+            element={
+              <ProtectedRoute allowedRoles={['BUYER']}>
+                <CheckoutPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/shop/order-success"
+            element={
+              <ProtectedRoute allowedRoles={['BUYER']}>
+                <OrderSuccessPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/buyer-dashboard"
             element={
               <ProtectedRoute allowedRoles={['BUYER']}>
                 <BuyerDashboardPage />

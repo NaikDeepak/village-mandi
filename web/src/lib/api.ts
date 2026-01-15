@@ -98,9 +98,13 @@ import type {
   BatchProduct,
   CreateBatchInput,
   CreateFarmerInput,
+  CreateOrderInput,
   CreateProductInput,
   Farmer,
   Hub,
+  LogPaymentInput,
+  Order,
+  Payment,
   Product,
   UpdateBatchInput,
   UpdateBatchProductInput,
@@ -194,6 +198,8 @@ export const batchesApi = {
       method: 'POST',
       body: JSON.stringify({ targetStatus }),
     }),
+
+  getAggregation: (id: string) => request<BatchAggregation>(`/batches/${id}/aggregation`),
 };
 
 // Batch Products API
@@ -224,4 +230,43 @@ export const batchProductsApi = {
         method: 'DELETE',
       }
     ),
+};
+
+// Orders API
+export const ordersApi = {
+  getAll: (params: { batchId?: string; status?: string } = {}) => {
+    const query = new URLSearchParams();
+    if (params.batchId) query.append('batchId', params.batchId);
+    if (params.status) query.append('status', params.status);
+    return request<{
+      orders: (Order & { buyer: { name: string; phone: string }; batch: { name: string } })[];
+    }>(`/orders?${query.toString()}`);
+  },
+
+  getById: (id: string) =>
+    request<{
+      order: Order & {
+        buyer: { name: string; phone: string; email?: string };
+        batch: { name: string; hub: { name: string } };
+        payments: Payment[];
+        items: (OrderItem & { batchProduct: { product: { name: string; unit: string } } })[];
+      };
+    }>(`/orders/${id}`),
+
+  create: (data: CreateOrderInput) =>
+    request<{ order: Order }>('/orders', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  getMyOrders: () => request<{ orders: Order[] }>('/orders/my'),
+};
+
+// Payments API
+export const paymentsApi = {
+  logPayment: (orderId: string, data: LogPaymentInput) =>
+    request<{ payment: Payment }>(`/orders/${orderId}/payments`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
 };

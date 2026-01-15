@@ -9,6 +9,7 @@ import batchRoutes from '../routes/batches';
 import farmerRoutes from '../routes/farmers';
 import hubRoutes from '../routes/hubs';
 import orderRoutes from '../routes/orders';
+import paymentRoutes from '../routes/payments';
 import productRoutes from '../routes/products';
 
 // Mock Prisma client
@@ -51,6 +52,12 @@ export const mockPrisma = {
     delete: vi.fn(),
   },
   order: {
+    findMany: vi.fn(),
+    findUnique: vi.fn(),
+    create: vi.fn(),
+    update: vi.fn(),
+  },
+  payment: {
     findMany: vi.fn(),
     findUnique: vi.fn(),
     create: vi.fn(),
@@ -104,6 +111,7 @@ export async function buildTestApp(): Promise<FastifyInstance> {
   await app.register(batchRoutes);
   await app.register(batchProductRoutes);
   await app.register(orderRoutes);
+  await app.register(paymentRoutes);
 
   await app.ready();
   return app;

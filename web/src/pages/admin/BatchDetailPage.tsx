@@ -2,7 +2,7 @@ import { AddProductToBatchModal } from '@/components/admin/AddProductToBatchModa
 import { Button } from '@/components/ui/button';
 import { batchProductsApi, batchesApi } from '@/lib/api';
 import type { Batch, BatchProduct } from '@/types';
-import { Edit2, Plus, Trash2 } from 'lucide-react';
+import { Edit2, ListChecks, Plus, Trash2 } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
@@ -168,11 +168,20 @@ export function BatchDetailPage() {
                 </div>
                 {batch.hub && <p className="text-mandi-muted mt-1">Hub: {batch.hub.name}</p>}
               </div>
-              {isDraft && (
-                <Link to={`/admin/batches/${batch.id}/edit`}>
-                  <Button variant="outline">Edit Batch Info</Button>
-                </Link>
-              )}
+              <div className="flex gap-2">
+                {batch.status !== 'DRAFT' && (
+                  <Link to={`/admin/batches/${batch.id}/procurement`}>
+                    <Button variant="outline" className="flex items-center gap-2">
+                      <ListChecks size={16} /> Procurement List
+                    </Button>
+                  </Link>
+                )}
+                {isDraft && (
+                  <Link to={`/admin/batches/${batch.id}/edit`}>
+                    <Button variant="outline">Edit Batch Info</Button>
+                  </Link>
+                )}
+              </div>
             </div>
 
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-6">

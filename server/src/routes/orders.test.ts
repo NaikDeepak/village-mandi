@@ -10,13 +10,13 @@ import {
 
 describe('Order Routes', () => {
   let app: FastifyInstance;
-  let adminToken: string;
+  let _adminToken: string;
   let buyerToken: string;
   const buyerId = 'buyer-123';
 
   beforeAll(async () => {
     app = await buildTestApp();
-    adminToken = generateAdminToken(app);
+    _adminToken = generateAdminToken(app);
     // Overwrite buyer token to have a known ID for matching
     buyerToken = generateBuyerToken(app, { id: buyerId, role: 'BUYER' });
   });
@@ -209,9 +209,9 @@ describe('Order Routes', () => {
         },
       ]);
 
-      mockPrisma.$transaction.mockImplementation(async (fn) => {
-        const error = new Error('Unique constraint failed');
-        (error as any).code = 'P2002';
+      mockPrisma.$transaction.mockImplementation(async (_fn) => {
+        const error = new Error('Unique constraint failed') as Error & { code?: string };
+        error.code = 'P2002';
         throw error;
       });
 
