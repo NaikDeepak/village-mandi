@@ -25,5 +25,19 @@ export const updateOrderPackingSchema = z.object({
     .optional(),
 });
 
+export const editOrderSchema = z.object({
+  fulfillmentType: z.enum(['PICKUP', 'DELIVERY']).optional(),
+  items: z
+    .array(
+      z.object({
+        batchProductId: z.string().uuid('Batch Product ID must be a valid UUID'),
+        orderedQty: z.number().nonnegative('Quantity cannot be negative'),
+        // qty of 0 means remove item
+      })
+    )
+    .optional(),
+});
+
 export type CreateOrderInput = z.infer<typeof createOrderSchema>;
 export type UpdateOrderPackingInput = z.infer<typeof updateOrderPackingSchema>;
+export type EditOrderInput = z.infer<typeof editOrderSchema>;
