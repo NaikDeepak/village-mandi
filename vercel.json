@@ -4,7 +4,10 @@
   "cleanUrls": true,
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/index" },
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
+    {
+      "source": "/((?!api/|_next/|static/|favicon.ico|sw.js|.*\\..*).*)",
+      "destination": "/index.html"
+    }
   ],
   "functions": {
     "api/index.ts": {
