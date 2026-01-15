@@ -37,29 +37,15 @@ async function main() {
   // =====================
   // 2. INITIAL HUB
   // =====================
-  const hub = await prisma.hub
-    .upsert({
-      where: { id: 'default-hub-1' }, // Using a fixed ID for idempotency in seed if possible, or name check
-      update: {},
-      create: {
-        id: 'default-hub-1',
-        name: 'Main Hub',
-        address: 'Central Location',
-        isActive: true,
-      },
-    })
-    .catch(async () => {
-      // Fallback if ID-based upsert isn't preferred or fails due to uuid type
-      const existing = await prisma.hub.findFirst({ where: { name: 'Main Hub' } });
-      if (existing) return existing;
-      return prisma.hub.create({
-        data: {
-          name: 'Main Hub',
-          address: 'Central Location',
-          isActive: true,
-        },
-      });
-    });
+  const hub = await prisma.hub.upsert({
+    where: { name: 'Main Hub' }, // Assumes 'name' is a unique field
+    update: {}, // No updates needed if it already exists
+    create: {
+      name: 'Main Hub',
+      address: 'Central Location',
+      isActive: true,
+    },
+  });
   console.log('✅ Initial Hub ready:', hub.name);
 
   console.log('🎉 Production seeding completed successfully.');
