@@ -21,6 +21,7 @@ export function OrdersPage() {
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
+      setError('');
       const [ordersRes, batchesRes] = await Promise.all([
         ordersApi.getAll({ batchId, status }),
         batchesApi.getAll(),

@@ -21,6 +21,10 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
       headers,
     });
 
+    if (response.status === 204) {
+      return { data: {} as T };
+    }
+
     // Try to parse response body, but handle non-JSON responses gracefully
     let data: Record<string, unknown> | undefined;
     try {

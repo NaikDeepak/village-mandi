@@ -98,6 +98,14 @@ const orderRoutes: FastifyPluginAsync = async (fastify) => {
   // PLACE NEW ORDER
   // ==========================================
   fastify.post('/orders', { preHandler: [authenticate] }, async (request, reply) => {
+    // Explicitly enforce BUYER role
+    if (request.user.role !== 'BUYER') {
+      return reply.status(403).send({
+        error: 'Forbidden',
+        message: 'Only buyers can place orders',
+      });
+    }
+
     const parseResult = createOrderSchema.safeParse(request.body);
     if (!parseResult.success) {
       return reply.status(400).send({
@@ -145,6 +153,7 @@ const orderRoutes: FastifyPluginAsync = async (fastify) => {
           batchId: batchId,
           isActive: true,
         },
+        include: { product: true },
       });
 
       if (batchProducts.length !== items.length) {
@@ -157,20 +166,28 @@ const orderRoutes: FastifyPluginAsync = async (fastify) => {
       let estimatedTotal = 0;
       let facilitationAmt = 0;
 
-      const orderItemsData = items.map((item) => {
+      // Validate quantities first
+      for (const item of items) {
         const bp = batchProducts.find((p) => p.id === item.batchProductId)!;
 
         if (item.orderedQty < bp.minOrderQty) {
-          throw new Error(
-            `Quantity for product ${bp.id} is below minimum order quantity (${bp.minOrderQty})`
-          );
+          return reply.status(400).send({
+            error: 'Validation Error',
+            message: `Quantity for product ${bp.product.name} is below minimum order quantity (${bp.minOrderQty})`,
+          });
         }
 
         if (bp.maxOrderQty && item.orderedQty > bp.maxOrderQty) {
-          throw new Error(
-            `Quantity for product ${bp.id} exceeds maximum order quantity (${bp.maxOrderQty})`
-          );
+          return reply.status(400).send({
+            error: 'Validation Error',
+            message: `Quantity for product ${bp.product.name} exceeds maximum order quantity (${bp.maxOrderQty})`,
+          });
         }
+      }
+
+      // Map to order items
+      const orderItemsData = items.map((item) => {
+        const bp = batchProducts.find((p) => p.id === item.batchProductId)!;
 
         const lineTotal = bp.pricePerUnit * item.orderedQty;
         const facilitation = lineTotal * (bp.facilitationPercent / 100);

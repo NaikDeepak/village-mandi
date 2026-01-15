@@ -108,23 +108,37 @@ const batchProductRoutes: FastifyPluginAsync = async (fastify) => {
       });
     }
 
-    const batchProduct = await prisma.batchProduct.create({
-      data: {
-        batchId: id,
-        productId,
-        pricePerUnit,
-        facilitationPercent,
-        minOrderQty,
-        maxOrderQty,
-      },
-      include: {
-        product: {
-          include: {
-            farmer: true,
+    const [batchProduct] = await prisma.$transaction([
+      prisma.batchProduct.create({
+        data: {
+          batchId: id,
+          productId,
+          pricePerUnit,
+          facilitationPercent,
+          minOrderQty,
+          maxOrderQty,
+        },
+        include: {
+          product: {
+            include: {
+              farmer: true,
+            },
           },
         },
-      },
-    });
+      }),
+      prisma.eventLog.create({
+        data: {
+          entityType: 'BATCH',
+          entityId: id,
+          action: 'PRODUCT_ADDED',
+          metadata: {
+            productId,
+            productName: product.name,
+            pricePerUnit,
+          },
+        },
+      }),
+    ]);
 
     return reply.status(201).send({ batchProduct });
   });
@@ -204,17 +218,30 @@ const batchProductRoutes: FastifyPluginAsync = async (fastify) => {
       });
     }
 
-    const batchProduct = await prisma.batchProduct.update({
-      where: { id },
-      data: parseResult.data,
-      include: {
-        product: {
-          include: {
-            farmer: true,
+    const [batchProduct] = await prisma.$transaction([
+      prisma.batchProduct.update({
+        where: { id },
+        data: parseResult.data,
+        include: {
+          product: {
+            include: {
+              farmer: true,
+            },
           },
         },
-      },
-    });
+      }),
+      prisma.eventLog.create({
+        data: {
+          entityType: 'BATCH',
+          entityId: existing.batchId,
+          action: 'PRODUCT_UPDATED',
+          metadata: {
+            batchProductId: id,
+            updates: parseResult.data,
+          },
+        },
+      }),
+    ]);
 
     return { batchProduct };
   });
@@ -230,7 +257,7 @@ const batchProductRoutes: FastifyPluginAsync = async (fastify) => {
     // Verify exists
     const existing = await prisma.batchProduct.findUnique({
       where: { id },
-      include: { batch: true },
+      include: { batch: true, product: true },
     });
 
     if (!existing) {
@@ -249,21 +276,48 @@ const batchProductRoutes: FastifyPluginAsync = async (fastify) => {
     }
 
     if (isForceDelete) {
-      await prisma.batchProduct.delete({ where: { id } });
+      await prisma.$transaction([
+        prisma.batchProduct.delete({ where: { id } }),
+        prisma.eventLog.create({
+          data: {
+            entityType: 'BATCH',
+            entityId: existing.batchId,
+            action: 'PRODUCT_REMOVED',
+            metadata: {
+              batchProductId: id,
+              productName: existing.product?.name,
+              reason: 'Force delete',
+            },
+          },
+        }),
+      ]);
       return reply.status(204).send();
     }
 
-    const batchProduct = await prisma.batchProduct.update({
-      where: { id },
-      data: { isActive: false },
-      include: {
-        product: {
-          include: {
-            farmer: true,
+    const [batchProduct] = await prisma.$transaction([
+      prisma.batchProduct.update({
+        where: { id },
+        data: { isActive: false },
+        include: {
+          product: {
+            include: {
+              farmer: true,
+            },
           },
         },
-      },
-    });
+      }),
+      prisma.eventLog.create({
+        data: {
+          entityType: 'BATCH',
+          entityId: existing.batchId,
+          action: 'PRODUCT_DEACTIVATED',
+          metadata: {
+            batchProductId: id,
+            productName: existing.product?.name,
+          },
+        },
+      }),
+    ]);
     return { batchProduct };
   });
 };

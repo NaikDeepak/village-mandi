@@ -398,6 +398,7 @@ export function OrderDetailPage() {
                 <input
                   id="paymentAmount"
                   type="number"
+                  min="0"
                   required
                   value={paymentAmount}
                   onChange={(e) => setPaymentAmount(Number(e.target.value))}

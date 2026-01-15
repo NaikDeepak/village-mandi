@@ -299,7 +299,7 @@ export function ShopPage() {
               <Button
                 className="w-full md:w-64 h-12 text-lg font-bold gap-2"
                 disabled={!isCartValid()}
-                onClick={() => navigate('/shop/checkout')}
+                onClick={() => navigate('/shop/checkout', { state: { fulfillmentType } })}
               >
                 Checkout <ArrowRight className="h-5 w-5" />
               </Button>

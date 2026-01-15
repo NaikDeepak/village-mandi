@@ -44,13 +44,18 @@ export function BuyerDashboardPage() {
     window.open(link, '_blank');
 
     // Log the support request event
-    // Using a placeholder entityId since it's a general support request from a user
-    await logsApi.logCommunication({
-      entityType: 'ORDER', // Categorizing under ORDER for now as it's usually order related
-      entityId: user.id, // Using user ID as a fallback uuid
-      messageType: 'SUPPORT_REQUEST',
-      recipientPhone: 'HUB_MANAGER',
-    });
+    // Attach to the latest active order if available, otherwise latest history order
+    // If no orders exist, we skip logging to avoid FK constraint errors with invalid IDs
+    const associatedOrder = activeOrders[0] || historyOrders[0];
+
+    if (associatedOrder) {
+      await logsApi.logCommunication({
+        entityType: 'ORDER',
+        entityId: associatedOrder.id,
+        messageType: 'SUPPORT_REQUEST',
+        recipientPhone: 'HUB_MANAGER',
+      });
+    }
   };
 
   const handleLogout = async () => {

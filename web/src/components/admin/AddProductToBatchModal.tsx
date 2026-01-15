@@ -115,9 +115,9 @@ export function AddProductToBatchModal({
     try {
       setError('');
 
-      // Build payload, omitting maxOrderQty when null (backend expects omission, not null)
-      const { maxOrderQty, ...basePayload } = data;
-      const payload = maxOrderQty !== null ? { ...basePayload, maxOrderQty } : basePayload;
+      // Build payload
+      // We explicitly pass maxOrderQty (even if null) to ensure it gets updated/cleared in the backend
+      const payload = data;
 
       if (existingProduct) {
         const { productId: _, ...updateData } = payload;

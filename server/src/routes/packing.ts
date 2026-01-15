@@ -79,6 +79,25 @@ const packingRoutes: FastifyPluginAsync = async (fastify) => {
       });
     }
 
+    // Validate Status Transition
+    const currentStatus = order.status;
+    const allowedTransitions: Record<string, string[]> = {
+      // From -> [Allowed To]
+      FULLY_PAID: ['PACKED'],
+      PACKED: ['DISTRIBUTED', 'FULLY_PAID'], // Allow un-packing
+      DISTRIBUTED: ['PACKED'], // Allow un-distributing
+    };
+
+    if (currentStatus !== status) {
+      const allowed = allowedTransitions[currentStatus] || [];
+      if (!allowed.includes(status)) {
+        return reply.status(400).send({
+          error: 'Invalid State Transition',
+          message: `Cannot change order status from ${currentStatus} to ${status}`,
+        });
+      }
+    }
+
     const updatedOrder = await prisma.$transaction(async (tx) => {
       // 1. Update order status
       const updated = await tx.order.update({

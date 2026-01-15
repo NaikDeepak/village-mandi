@@ -16,7 +16,7 @@ import {
   Truck,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export function CheckoutPage() {
   const navigate = useNavigate();
@@ -27,7 +27,10 @@ export function CheckoutPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [currentBatch, setCurrentBatch] = useState<Batch | null>(null);
-  const [fulfillmentType, setFulfillmentType] = useState<'PICKUP' | 'DELIVERY'>('PICKUP');
+  const location = useLocation();
+  const [fulfillmentType, setFulfillmentType] = useState<'PICKUP' | 'DELIVERY'>(
+    (location.state as { fulfillmentType?: 'PICKUP' | 'DELIVERY' })?.fulfillmentType || 'PICKUP'
+  );
 
   useEffect(() => {
     const fetchBatch = async () => {

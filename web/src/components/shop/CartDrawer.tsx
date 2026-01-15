@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { useCartStore } from '@/stores/cart';
 import { ArrowRight, Minus, Plus, ShoppingCart, Trash2, X } from 'lucide-react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface CartDrawerProps {
@@ -11,6 +12,16 @@ interface CartDrawerProps {
 export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const navigate = useNavigate();
   const { items, updateQuantity, removeItem, getTotalAmount, getTotalItems } = useCartStore();
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (isOpen && e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -81,7 +92,9 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         variant="ghost"
                         size="icon"
                         className="h-7 w-7 rounded-none"
-                        onClick={() => updateQuantity(item.batchProductId, item.quantity - 1)}
+                        onClick={() =>
+                          updateQuantity(item.batchProductId, Math.max(0, item.quantity - 1))
+                        }
                       >
                         <Minus className="h-3 w-3" />
                       </Button>
