@@ -13,7 +13,7 @@
 **Next Phase:** -
 **Last activity:** 2026-01-15 — Completed Plan 16-01 (Production Config)
 
-Progress: ▓░░░░░░░░░ 10%
+Progress: ▓▓░░░░░░░░ 20%
 
 ## Recent Progress
 
@@ -26,6 +26,9 @@ Progress: ▓░░░░░░░░░ 10%
   - Created idempotent production seed script `server/scripts/seed.ts`.
   - Created `.env.production.example` for environment variable management.
   - Optimized `vercel.json` for SPA routing and monorepo deployment.
+- Plan 16-02: Production Deployment (Completed)
+  - Successfully deployed to Vercel: https://village-mandi.vercel.app/
+  - Verified landing page is live.
 
 **Upcoming:**
 - Phase 16: Deployment (Remaining plans)
