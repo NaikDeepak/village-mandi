@@ -5,7 +5,7 @@
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/index" },
     {
-      "source": "/((?!api/|_next/|static/|favicon.ico|sw.js|.*\\..*).*)",
+      "source": "/((?!api/|_next/|static/|favicon.ico|sw.js|.*\\..*).*$)",
       "destination": "/index.html"
     }
   ],
