@@ -6,16 +6,21 @@
 
 ## Current Position
 
-**Milestone:** 1 (MVP v1.0) — COMPLETE
-**Phase:** -
+**Milestone:** 2 (Production & Enhancements)
+**Phase:** 16 (Deployment)
 **Plan:** -
-**Status:** Archived
-**Next Phase:** Milestone 2 (Post-MVP Enhancements)
-**Last activity:** 2026-01-15 — Archived Milestone 1 (v1.0)
+**Status:** Planning
+**Next Phase:** -
+**Last activity:** 2026-01-15 — Added Phase 16 (Deployment)
 
-Progress: ██████████ 100%
+Progress: ░░░░░░░░░░ 0%
 
 ## Recent Progress
+
+### Milestone 2: Production & Enhancements
+
+**Upcoming:**
+- Phase 16: Deployment
 
 ### Milestone 1: MVP (Completed 2026-01-15)
 
@@ -319,6 +324,7 @@ Progress: ██████████ 100%
 
 | Date | Change |
 |------|--------|
+| 2026-01-15 | Phase 16 added: Deployment (Milestone 2 start) |
 | 2026-01-15 | Phase 15 added: End-to-End Workflow Guide |
 | 2026-01-15 | Phase 14 added: Order Editing (allow buyers to edit PLACED orders before cutoff) |
 

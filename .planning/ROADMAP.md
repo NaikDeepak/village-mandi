@@ -30,15 +30,34 @@
 |-------|------|--------|
 | - | Milestone 1 Complete | 🎉 Complete |
 
-### Next Milestone
+### Milestone 2: Production & Enhancements
 
 | Phase | Name | Status |
 |-------|------|--------|
-| - | Post-MVP Enhancements | ⏳ Pending |
+| 16 | Deployment | ⏳ Pending |
 
 ---
 
 ## Phase Details
+
+### Phase 16: Deployment
+
+**Goal:** Deploy the Village Mandi MVP to production environment.
+**Depends on:** Phase 15
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 16 to break down)
+
+**Details:**
+- Infrastructure setup
+- Database migration
+- CI/CD pipeline finalization
+- Domain configuration
+
+---
+
+### Completed Phases
 
 See `.planning/milestones/v1.0-ROADMAP.md` for details on completed Phases 01-15.
 
