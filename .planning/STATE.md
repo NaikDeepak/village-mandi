@@ -7,12 +7,33 @@
 ## Current Position
 
 **Milestone:** 1 (MVP v1.0)
-**Phase:** 05 — Batch Management (Next)
-**Status:** Ready to plan
+**Phase:** 05 — Batch Management (In Progress)
+**Plan:** 1 of 2 in current phase
+**Status:** In progress
+**Last activity:** 2026-01-15 - Completed 05-01-PLAN.md
 
----
+Progress: █████░░░░░ 50%
 
 ## Recent Progress
+
+### Phase 05 — Batch Management (In Progress 2026-01-15)
+
+**What shipped so far:**
+- Plan 05-01: Hub and Batch backend API
+- Hub CRUD with admin-only access
+- Batch API with strict state machine (DRAFT → OPEN → CLOSED → COLLECTED → DELIVERED → SETTLED)
+- State transition validation (no skipping, no backwards)
+- Cutoff enforcement (cannot open batch if cutoff passed)
+- EventLog audit trail for all batch state changes
+- 58 passing tests including comprehensive state machine tests
+
+**Key files added:**
+- `server/src/routes/hubs.ts` — Hub API
+- `server/src/routes/batches.ts` — Batch API with state machine
+- `server/src/schemas/hubs.ts` — Hub validation
+- `server/src/schemas/batches.ts` — Batch validation with VALID_TRANSITIONS
+- `server/src/routes/hubs.test.ts` — Hub tests (9 tests)
+- `server/src/routes/batches.test.ts` — Batch tests (22 tests)
 
 ### Phase 04 — Farmers & Products (Completed 2026-01-14)
 
@@ -72,6 +93,10 @@
 
 | Decision | Context | Outcome |
 |----------|---------|---------|
+| Strict state machine for batches | Business integrity depends on predictable batch lifecycle | VALID_TRANSITIONS constant defines allowed transitions, validation rejects invalid with 400 |
+| EventLog for batch transitions | Accountability and audit trail required | Every state change creates EventLog entry with from/to metadata |
+| Cutoff validation at DRAFT→OPEN | Prevent opening batches past their cutoff window | Check cutoffAt > now when transitioning to OPEN, reject if past |
+| Update restrictions on batches | Prevent changing rules mid-batch | Only DRAFT batches can update name, cutoffAt, deliveryDate |
 | Soft delete for farmers/products | Preserve historical data for past batches | isActive flag, not hard delete |
 | JWT in httpOnly cookies | Prevent XSS token theft | Secure, sameSite: lax |
 | OTP stored plaintext | MVP speed | **Tech debt** — needs hashing |
@@ -108,7 +133,8 @@
 - User (id, role, name, email, phone, passwordHash, otpCode, isActive, isInvited)
 - Farmer (id, name, location, description, relationshipLevel, isActive)
 - Product (id, farmerId, name, unit, description, seasonStart, seasonEnd, isActive)
-- Batch (id, name, cutoffTime, state, createdAt) — not yet implemented in API
+- Hub (id, name, address, isActive) — implemented in API
+- Batch (id, hubId, name, status, cutoffAt, deliveryDate) — implemented in API with state machine
 - Order, OrderItem, Payment — not yet implemented
 
 **Codebase map:** See `.planning/codebase/` for detailed analysis
@@ -117,17 +143,17 @@
 
 ## Session Continuity
 
-**Last session:** 2026-01-14
+**Last session:** 2026-01-15
 **Work completed:**
-- Completed Farmer detail view with products
-- Principal Engineer review of Epic-2 (Auth)
-- Created `docs/todo.md` with 19 tracked issues
-- Synced GSD planning structure
+- Completed 05-01-PLAN.md: Hub and Batch backend API
+- Hub CRUD with admin-only access
+- Batch API with strict state machine and audit logging
+- 58 passing tests including comprehensive state machine tests
+- All tasks committed atomically (56b6581, dd7e1fe, 44b5c55)
 
 **Next actions:**
-1. `/gsd:plan-phase 5` — Create detailed plan for Batch Management
-2. `/gsd:execute-plan` — Execute the plan
+1. `/gsd:execute-plan .planning/phases/05-batch-management/05-02-PLAN.md` — Execute next plan (Batch Pricing)
 
 ---
 
-*Last updated: 2026-01-14*
+*Last updated: 2026-01-15*

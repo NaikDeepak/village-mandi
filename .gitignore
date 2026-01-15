@@ -9,4 +9,5 @@ build
 out
 .vercel
 test-results
-play
+/playwright
+/playwright-report

@@ -4,7 +4,9 @@ import jwt from '@fastify/jwt';
 import Fastify, { type FastifyInstance } from 'fastify';
 import { vi } from 'vitest';
 
+import batchRoutes from '../routes/batches';
 import farmerRoutes from '../routes/farmers';
+import hubRoutes from '../routes/hubs';
 import productRoutes from '../routes/products';
 
 // Mock Prisma client
@@ -20,6 +22,22 @@ export const mockPrisma = {
     findUnique: vi.fn(),
     create: vi.fn(),
     update: vi.fn(),
+  },
+  hub: {
+    findMany: vi.fn(),
+    findUnique: vi.fn(),
+    create: vi.fn(),
+    update: vi.fn(),
+  },
+  batch: {
+    findMany: vi.fn(),
+    findFirst: vi.fn(),
+    findUnique: vi.fn(),
+    create: vi.fn(),
+    update: vi.fn(),
+  },
+  eventLog: {
+    create: vi.fn(),
   },
 };
 
@@ -61,6 +79,8 @@ export async function buildTestApp(): Promise<FastifyInstance> {
   // Register routes
   await app.register(farmerRoutes);
   await app.register(productRoutes);
+  await app.register(hubRoutes);
+  await app.register(batchRoutes);
 
   await app.ready();
   return app;
