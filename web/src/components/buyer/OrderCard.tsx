@@ -5,7 +5,8 @@ import { getWhatsAppLink, templates } from '@/lib/communication';
 import { useAuthStore } from '@/stores/auth';
 import type { Order } from '@/types';
 import { format } from 'date-fns';
-import { Calendar, MapPin, MessageCircle, ShoppingBag } from 'lucide-react';
+import { Calendar, MapPin, MessageCircle, Pencil, ShoppingBag } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { OrderStatusBar } from './OrderStatusBar';
 
 interface OrderCardProps {
@@ -15,6 +16,7 @@ interface OrderCardProps {
 
 export function OrderCard({ order, isActive = false }: OrderCardProps) {
   const { user } = useAuthStore();
+  const navigate = useNavigate();
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-IN', {
@@ -25,6 +27,11 @@ export function OrderCard({ order, isActive = false }: OrderCardProps) {
 
   const totalPaid = order.payments?.reduce((sum, p) => sum + p.amount, 0) || 0;
   const balance = order.estimatedTotal - totalPaid;
+
+  const isEditable =
+    order.status === 'PLACED' &&
+    order.batch?.status === 'OPEN' &&
+    new Date(order.batch.cutoffAt) > new Date();
 
   const handleSupport = async () => {
     if (!user) return;
@@ -69,13 +76,31 @@ export function OrderCard({ order, isActive = false }: OrderCardProps) {
               </div>
             </div>
           </div>
-          <div className="text-right">
-            <p className="text-xs text-mandi-muted uppercase tracking-wider font-semibold">
-              Total Amount
-            </p>
-            <p className="text-xl font-bold text-mandi-dark">
-              {formatCurrency(order.estimatedTotal)}
-            </p>
+          <div className="text-right flex flex-col items-end gap-2">
+            <div>
+              <p className="text-xs text-mandi-muted uppercase tracking-wider font-semibold">
+                Total Amount
+              </p>
+              <p className="text-xl font-bold text-mandi-dark">
+                {formatCurrency(order.estimatedTotal)}
+              </p>
+            </div>
+            {isEditable && (
+              <div className="flex flex-col items-end gap-1">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate(`/orders/${order.id}/edit`)}
+                  className="h-8 border-mandi-green text-mandi-green hover:bg-mandi-green/5 font-semibold"
+                >
+                  <Pencil size={14} className="mr-1.5" />
+                  Edit
+                </Button>
+                <p className="text-[10px] text-mandi-muted">
+                  Edit until {format(new Date(order.batch!.cutoffAt), 'h:mm a, d MMM')}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </CardHeader>
