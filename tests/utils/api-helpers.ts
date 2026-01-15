@@ -1,7 +1,7 @@
 import { type APIRequestContext, expect } from '@playwright/test';
 
 // Use backend base URL directly (no /api prefix) as per server/src/routes/farmers.ts
-const API_BASE = 'http://localhost:3000';
+const API_BASE = process.env.API_BASE_URL ?? 'http://localhost:3000';
 
 interface FarmerData {
   name: string;

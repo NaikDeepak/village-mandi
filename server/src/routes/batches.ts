@@ -136,10 +136,38 @@ const batchRoutes: FastifyPluginAsync = async (fastify) => {
     }
 
     const { name, cutoffAt, deliveryDate } = parseResult.data;
+
+    const nextCutoffAt = cutoffAt ? new Date(cutoffAt) : new Date(existing.cutoffAt);
+    const nextDeliveryDate = deliveryDate
+      ? new Date(deliveryDate)
+      : new Date(existing.deliveryDate);
+
+    if (Number.isNaN(nextCutoffAt.getTime()) || Number.isNaN(nextDeliveryDate.getTime())) {
+      return reply.status(400).send({
+        error: 'Validation Error',
+        message: 'Invalid cutoff or delivery date',
+      });
+    }
+
+    // Keep invariants consistent with create
+    if (nextCutoffAt.getTime() <= Date.now()) {
+      return reply.status(400).send({
+        error: 'Validation Error',
+        message: 'Cutoff time must be in the future',
+      });
+    }
+
+    if (nextDeliveryDate <= nextCutoffAt) {
+      return reply.status(400).send({
+        error: 'Validation Error',
+        message: 'Delivery date must be after cutoff time',
+      });
+    }
+
     const updateData = {
-      ...(name && { name }),
-      ...(cutoffAt && { cutoffAt: new Date(cutoffAt) }),
-      ...(deliveryDate && { deliveryDate: new Date(deliveryDate) }),
+      ...(name !== undefined ? { name } : {}),
+      ...(cutoffAt !== undefined ? { cutoffAt: nextCutoffAt } : {}),
+      ...(deliveryDate !== undefined ? { deliveryDate: nextDeliveryDate } : {}),
     };
 
     const batch = await prisma.batch.update({
