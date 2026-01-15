@@ -8,13 +8,32 @@
 
 **Milestone:** 1 (MVP v1.0)
 **Phase:** 14 — Order Editing
-**Plan:** Not yet planned
-**Status:** Pending
-**Last activity:** 2026-01-15 - Added Phase 14: Order Editing
+**Plan:** 14-01 (Complete)
+**Status:** Complete
+**Last activity:** 2026-01-15 - Completed Plan 14-01: Order Editing API
 
-Progress: █████████░ 93%
+Progress: ██████████ 100%
 
 ## Recent Progress
+
+### Phase 14 — Order Editing (Completed 2026-01-15)
+
+**What shipped:**
+- Plan 14-01: Order Editing API
+- Implemented `PATCH /orders/:id` for buyers to edit placed orders before cutoff.
+- Comprehensive validation: authentication, ownership, order status (PLACED only), batch status (OPEN), and cutoff time.
+- Support for updating fulfillment type (PICKUP/DELIVERY).
+- Items replacement with MOQ/MaxOQ validation and automatic total recalculation.
+- Auto-cancel when all items removed (qty=0 or empty array).
+- Transactional integrity for all mutations.
+- Audit logging for `ORDER_EDITED` and `ORDER_CANCELLED` events.
+- 13 new comprehensive test cases (121 total tests passing).
+
+**Key files added/modified:**
+- `server/src/schemas/orders.ts` — Added `editOrderSchema` for validation
+- `server/src/routes/orders.ts` — Added PATCH endpoint with full validation
+- `server/src/routes/orders.test.ts` — Added 13 test cases for all scenarios
+- `server/src/tests/helpers.ts` — Added orderItem mock methods
 
 ### Phase 13 — Communication System (Completed 2026-01-15)
 
@@ -231,6 +250,8 @@ Progress: █████████░ 93%
 
 | Decision | Context | Outcome |
 |----------|---------|---------|
+| Items replacement strategy for order editing | Simplify API behavior and avoid complex merge logic | PATCH /orders/:id replaces all items, not partial update. qty=0 removes item, empty array cancels order |
+| Metadata typing for event logs | Prisma InputJsonValue type incompatible with Record<string, unknown> | Build metadata object dynamically with explicit optional properties matching existing patterns |
 | Strict state machine for batches | Business integrity depends on predictable batch lifecycle | VALID_TRANSITIONS constant defines allowed transitions, validation rejects invalid with 400 |
 | EventLog for batch transitions | Accountability and audit trail required | Every state change creates EventLog entry with from/to metadata |
 | Cutoff validation at DRAFT→OPEN | Prevent opening batches past their cutoff window | Check cutoffAt > now when transitioning to OPEN, reject if past |
@@ -291,18 +312,17 @@ Progress: █████████░ 93%
 
 **Last session:** 2026-01-15
 **Work completed:**
-- Completed 05-01-PLAN.md: Hub and Batch backend API
-- Hub CRUD with admin-only access
-- Batch API with strict state machine and audit logging
-- 58 passing tests including comprehensive state machine tests
-- Completed 05-02-PLAN.md: Batch Admin UI
-- BatchesPage with hero section for current batch
-- BatchFormPage for create/edit
-- Admin navigation link added
-- All tasks committed atomically (5bd325e, 1d6c728, d9a8e8d)
+- Completed 14-01-PLAN.md: Order Editing API
+- Implemented PATCH /orders/:id endpoint with comprehensive validation
+- Added editOrderSchema for order editing validation
+- Auto-cancel when all items removed
+- Audit logging for ORDER_EDITED and ORDER_CANCELLED events
+- 13 new test cases (121 total tests passing)
+- All tasks committed atomically (6f993ed, 5ea95f0, 76e2a65)
 
 **Next actions:**
-1. `/gsd:plan-phase 14` — Plan Phase 14: Order Editing
+1. Phase 14 complete - MVP v1.0 milestone achieved
+2. Consider next milestone or deployment preparation
 
 ---
 
