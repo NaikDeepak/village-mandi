@@ -268,6 +268,17 @@ export const ordersApi = {
     }),
 
   getMyOrders: () => request<{ orders: Order[] }>('/orders/my'),
+  editOrder: (
+    orderId: string,
+    data: {
+      fulfillmentType?: 'PICKUP' | 'DELIVERY';
+      items?: Array<{ batchProductId: string; orderedQty: number }>;
+    }
+  ) =>
+    request<{ order: Order }>(`/orders/${orderId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    }),
 };
 
 // Packing API
