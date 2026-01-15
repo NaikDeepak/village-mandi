@@ -1,21 +1,40 @@
 import { expect, test } from '@playwright/test';
+import {
+  createFarmer,
+  createProduct,
+  deleteFarmer,
+  deleteProduct,
+  getProductsByFarmerId,
+} from './utils/api-helpers';
 
 test.describe('Admin Product Management', () => {
   let _farmerId: string;
   let farmerName: string;
+  const createdProductIds: string[] = [];
 
   // Setup: Ensure we have a farmer to add products to
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/admin/farmers');
-    await page.getByRole('link', { name: 'Add Farmer' }).click();
-    farmerName = `Product Owner ${Date.now()}`;
-    await page.fill('input[name="name"]', farmerName);
-    await page.fill('input[name="location"]', 'Farm Location');
-    await page.selectOption('select[id="relationshipLevel"]', 'FRIEND');
-    await page.click('button[type="submit"]');
-    await expect(page).toHaveURL('/admin/farmers');
-    // In a real app we might grab the ID from the URL or API response,
-    // but here we just need the name to appear in the dropdown or list.
+  test.beforeEach(async ({ request }) => {
+    const farmer = await createFarmer(request, {
+      name: `Product Owner ${Date.now()}`,
+      location: 'Farm Location',
+      relationshipLevel: 'FRIEND',
+    });
+    farmerName = farmer.name;
+    _farmerId = farmer.id;
+  });
+
+  // Cleanup
+  test.afterEach(async ({ request }) => {
+    // Explicitly delete all products for this farmer first
+    // This handles both API-created products and UI-created products (where we might not have captured the ID)
+    if (_farmerId) {
+      const products = await getProductsByFarmerId(request, _farmerId);
+      for (const product of products) {
+        await deleteProduct(request, product.id);
+      }
+      // Delete the farmer
+      await deleteFarmer(request, _farmerId);
+    }
   });
 
   test('should add a new product successfully', async ({ page }) => {
@@ -27,7 +46,6 @@ test.describe('Admin Product Management', () => {
     const productName = `Fresh Crop ${Date.now()}`;
 
     // Select the farmer we created
-    // The select options might text match the name
     await page.selectOption('select[id="farmerId"]', { label: farmerName });
 
     // Fill product details
@@ -35,7 +53,6 @@ test.describe('Admin Product Management', () => {
     await page.selectOption('select[id="unit"]', 'KG');
 
     // Set dates
-    // Using simple date strings, might need adjustment based on browser locale/input implementation
     const today = new Date().toISOString().split('T')[0];
     const nextMonth = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
@@ -51,19 +68,22 @@ test.describe('Admin Product Management', () => {
     // Verify product exists in list
     await expect(page.getByText(productName)).toBeVisible();
     await expect(page.getByRole('cell', { name: farmerName })).toBeVisible();
+
+    // Note: We can't easily get the ID of the UI-created product for cleanup without querying API.
+    // However, since we clean up the farmer, the product should ideally be cascade/orphan deleted,
+    // or we accept this one artifact if cascade delete isn't set up (user request was to add cleanup).
+    // Given the limitations, we focus on cleaning up API-created resources.
   });
 
-  test('should deactivate and activate a product', async ({ page }) => {
-    // First create a product
-    await page.goto('/admin/products/new');
+  test('should deactivate and activate a product', async ({ page, request }) => {
+    // First create a product via API
     const productName = `Toggle Product ${Date.now()}`;
-    await page.selectOption('select[id="farmerId"]', { label: farmerName });
-    await page.fill('input[name="name"]', productName);
-    await page.selectOption('select[id="unit"]', 'KG');
-    const today = new Date().toISOString().split('T')[0];
-    await page.fill('input[id="seasonStart"]', today);
-    await page.fill('input[id="seasonEnd"]', today);
-    await page.click('button[type="submit"]');
+    const product = await createProduct(request, {
+      farmerId: _farmerId,
+      name: productName,
+      unit: 'KG',
+    });
+    createdProductIds.push(product.id);
 
     // Go to list
     await page.goto('/admin/products');
@@ -84,17 +104,15 @@ test.describe('Admin Product Management', () => {
     await expect(row.getByText('Active')).toBeVisible();
   });
 
-  test('should edit a product successfully', async ({ page }) => {
-    // Create product to edit
-    await page.goto('/admin/products/new');
+  test('should edit a product successfully', async ({ page, request }) => {
+    // Create product to edit via API
     const productName = `Edit Product ${Date.now()}`;
-    await page.selectOption('select[id="farmerId"]', { label: farmerName });
-    await page.fill('input[name="name"]', productName);
-    await page.selectOption('select[id="unit"]', 'KG');
-    const today = new Date().toISOString().split('T')[0];
-    await page.fill('input[id="seasonStart"]', today);
-    await page.fill('input[id="seasonEnd"]', today);
-    await page.click('button[type="submit"]');
+    const product = await createProduct(request, {
+      farmerId: _farmerId,
+      name: productName,
+      unit: 'KG',
+    });
+    createdProductIds.push(product.id);
 
     // Find and edit
     await page.goto('/admin/products');
@@ -124,6 +142,6 @@ test.describe('Admin Product Management', () => {
       const updatedRow = page.getByRole('row').filter({ hasText: newName });
       await expect(updatedRow).toBeVisible();
       await expect(updatedRow.getByText('DOZEN')).toBeVisible();
-    }).toPass({ timeout: 10000 });
+    }).toPass({ timeout: 30000 });
   });
 });

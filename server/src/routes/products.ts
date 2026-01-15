@@ -174,6 +174,7 @@ const productRoutes: FastifyPluginAsync = async (fastify) => {
   // ==========================================
   fastify.delete('/products/:id', { preHandler: [requireAdmin] }, async (request, reply) => {
     const { id } = request.params as { id: string };
+    const { force } = request.query as { force?: string };
 
     // Check product exists
     const existing = await prisma.product.findUnique({ where: { id } });
@@ -182,6 +183,12 @@ const productRoutes: FastifyPluginAsync = async (fastify) => {
         error: 'Not Found',
         message: 'Product not found',
       });
+    }
+
+    if (force === 'true') {
+      // Hard delete
+      await prisma.product.delete({ where: { id } });
+      return { success: true, message: 'Product permanently deleted' };
     }
 
     // Soft delete - set isActive to false

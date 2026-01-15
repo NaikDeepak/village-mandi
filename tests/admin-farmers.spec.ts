@@ -1,7 +1,18 @@
 import { expect, test } from '@playwright/test';
+import { createFarmer, deleteFarmer, getFarmerByName } from './utils/api-helpers';
 
 test.describe('Admin Farmer Management', () => {
-  test('should add a new farmer successfully', async ({ page }) => {
+  // Track IDs for cleanup
+  const createdFarmerIds: string[] = [];
+
+  test.afterEach(async ({ request }) => {
+    for (const id of createdFarmerIds) {
+      await deleteFarmer(request, id);
+    }
+    createdFarmerIds.length = 0;
+  });
+
+  test('should add a new farmer successfully', async ({ page, request }) => {
     await page.goto('/admin/farmers');
 
     // Navigate to add farmer page
@@ -27,23 +38,25 @@ test.describe('Admin Farmer Management', () => {
     const row = page.getByRole('row').filter({ hasText: farmerName });
     await expect(row).toBeVisible();
     await expect(row.getByText('Test Village')).toBeVisible();
+
+    // Find ID for cleanup
+    const farmer = await getFarmerByName(request, farmerName);
+    if (farmer) {
+      createdFarmerIds.push(farmer.id);
+    }
   });
 
-  test('should deactivate and activate a farmer', async ({ page }) => {
-    await page.goto('/admin/farmers');
-
-    // We need at least one active farmer to test deactivation.
-    // Assuming the "add farmer" test ran first or there's seeded data.
-    // Let's create one just in case to be safe, or just find the first active one.
-
-    // For stability, let's create a specific one for this test
-    await page.getByRole('link', { name: 'Add Farmer' }).click();
+  test('should deactivate and activate a farmer', async ({ page, request }) => {
+    // Create via API
     const farmerName = `Toggle Farmer ${Date.now()}`;
-    await page.fill('input[name="name"]', farmerName);
-    await page.fill('input[name="location"]', 'Toggle Village');
-    await page.selectOption('select[id="relationshipLevel"]', 'FAMILY');
-    await page.click('button[type="submit"]');
-    await expect(page.getByText(farmerName)).toBeVisible();
+    const farmer = await createFarmer(request, {
+      name: farmerName,
+      location: 'Toggle Village',
+      relationshipLevel: 'FAMILY',
+    });
+    createdFarmerIds.push(farmer.id);
+
+    await page.goto('/admin/farmers');
 
     // Find the row with our farmer
     const row = page.getByRole('row').filter({ hasText: farmerName });
@@ -66,16 +79,17 @@ test.describe('Admin Farmer Management', () => {
     await expect(row.getByText('Active')).toBeVisible();
   });
 
-  test('should edit a farmer successfully', async ({ page }) => {
-    await page.goto('/admin/farmers');
-
-    // Create a farmer to edit
-    await page.getByRole('link', { name: 'Add Farmer' }).click();
+  test('should edit a farmer successfully', async ({ page, request }) => {
+    // Create a farmer to edit via API
     const farmerName = `Edit Farmer ${Date.now()}`;
-    await page.fill('input[name="name"]', farmerName);
-    await page.fill('input[name="location"]', 'Original Location');
-    await page.selectOption('select[id="relationshipLevel"]', 'SELF');
-    await page.click('button[type="submit"]');
+    const farmer = await createFarmer(request, {
+      name: farmerName,
+      location: 'Original Location',
+      relationshipLevel: 'SELF',
+    });
+    createdFarmerIds.push(farmer.id);
+
+    await page.goto('/admin/farmers');
 
     // Find the farmer and click edit
     const row = page.getByRole('row').filter({ hasText: farmerName });
@@ -84,7 +98,7 @@ test.describe('Admin Farmer Management', () => {
     // Verify we are on the edit page
     await expect(page).toHaveURL(/\/admin\/farmers\/.*\/edit/);
 
-    // Wait for the form to be populated with original data to avoid race condition where fetch overwrites our fill
+    // Wait for the form to be populated with original data
     await expect(page.locator('input[name="name"]')).toHaveValue(farmerName);
 
     // Update details
@@ -97,7 +111,7 @@ test.describe('Admin Farmer Management', () => {
     await expect(page).toHaveURL('/admin/farmers');
     await expect(page.getByText('Loading...')).not.toBeVisible();
 
-    // Use toPass to retry reloading until the data appears (handles eventual consistency)
+    // Use toPass to retry reloading until the data appears
     await expect(async () => {
       await page.reload();
       await expect(page.getByText('Loading...')).not.toBeVisible();
@@ -106,5 +120,7 @@ test.describe('Admin Farmer Management', () => {
       await expect(updatedRow).toBeVisible();
       await expect(updatedRow.getByText('Updated Location')).toBeVisible();
     }).toPass({ timeout: 20000 });
+
+    // ID remains same, so cleanup will handle it via createdFarmerIds
   });
 });
