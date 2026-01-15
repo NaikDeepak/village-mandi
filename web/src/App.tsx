@@ -23,6 +23,7 @@ import { OrdersPage } from './pages/admin/OrdersPage';
 import { ProductFormPage } from './pages/admin/ProductFormPage';
 import { ProductsPage } from './pages/admin/ProductsPage';
 import { CheckoutPage } from './pages/buyer/CheckoutPage';
+import { EditOrderPage } from './pages/buyer/EditOrderPage';
 import { OrderSuccessPage } from './pages/buyer/OrderSuccessPage';
 import { ShopPage } from './pages/buyer/ShopPage';
 
@@ -89,6 +90,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['BUYER']}>
                 <OrderSuccessPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/orders/:orderId/edit"
+            element={
+              <ProtectedRoute allowedRoles={['BUYER']}>
+                <EditOrderPage />
               </ProtectedRoute>
             }
           />
