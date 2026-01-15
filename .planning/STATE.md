@@ -8,19 +8,27 @@
 
 **Milestone:** 2 (Production & Enhancements)
 **Phase:** 16 (Deployment)
-**Plan:** -
-**Status:** Planning
+**Plan:** 01
+**Status:** Completed
 **Next Phase:** -
-**Last activity:** 2026-01-15 — Added Phase 16 (Deployment)
+**Last activity:** 2026-01-15 — Completed Plan 16-01 (Production Config)
 
-Progress: ░░░░░░░░░░ 0%
+Progress: ▓░░░░░░░░░ 10%
 
 ## Recent Progress
 
 ### Milestone 2: Production & Enhancements
 
+#### Phase 16 — Deployment (In Progress)
+
+**What shipped:**
+- Plan 16-01: Production Configuration (Completed)
+  - Created idempotent production seed script `server/scripts/seed.ts`.
+  - Created `.env.production.example` for environment variable management.
+  - Optimized `vercel.json` for SPA routing and monorepo deployment.
+
 **Upcoming:**
-- Phase 16: Deployment
+- Phase 16: Deployment (Remaining plans)
 
 ### Milestone 1: MVP (Completed 2026-01-15)
 
