@@ -21,12 +21,25 @@ export const batchStatuses = [
   'SETTLED',
 ] as const;
 
+// Flexible datetime schema that accepts various formats and normalizes to ISO string
+const flexibleDatetime = (fieldName: string) =>
+  z
+    .string()
+    .refine(
+      (val) => {
+        const date = new Date(val);
+        return !Number.isNaN(date.getTime());
+      },
+      { message: `${fieldName} must be a valid date string` }
+    )
+    .transform((val) => new Date(val).toISOString());
+
 export const createBatchSchema = z
   .object({
     hubId: z.string().uuid('Hub ID must be a valid UUID'),
     name: z.string().min(2, 'Name must be at least 2 characters'),
-    cutoffAt: z.string().datetime('Cutoff time must be a valid ISO date string'),
-    deliveryDate: z.string().datetime('Delivery date must be a valid ISO date string'),
+    cutoffAt: flexibleDatetime('Cutoff time'),
+    deliveryDate: flexibleDatetime('Delivery date'),
   })
   .refine(
     (data) => {
@@ -54,8 +67,8 @@ export const createBatchSchema = z
 
 export const updateBatchSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').optional(),
-  cutoffAt: z.string().datetime('Cutoff time must be a valid ISO date string').optional(),
-  deliveryDate: z.string().datetime('Delivery date must be a valid ISO date string').optional(),
+  cutoffAt: flexibleDatetime('Cutoff time').optional(),
+  deliveryDate: flexibleDatetime('Delivery date').optional(),
 });
 
 export const transitionBatchSchema = z.object({

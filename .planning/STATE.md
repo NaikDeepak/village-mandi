@@ -7,18 +7,18 @@
 ## Current Position
 
 **Milestone:** 1 (MVP v1.0)
-**Phase:** 05 — Batch Management (In Progress)
-**Plan:** 1 of 2 in current phase
-**Status:** In progress
-**Last activity:** 2026-01-15 - Completed 05-01-PLAN.md
+**Phase:** 05 — Batch Management (Complete)
+**Plan:** 2 of 2 in current phase
+**Status:** Complete
+**Last activity:** 2026-01-15 - Completed 05-02-PLAN.md
 
-Progress: █████░░░░░ 50%
+Progress: ██████████ 100%
 
 ## Recent Progress
 
-### Phase 05 — Batch Management (In Progress 2026-01-15)
+### Phase 05 — Batch Management (Completed 2026-01-15)
 
-**What shipped so far:**
+**What shipped:**
 - Plan 05-01: Hub and Batch backend API
 - Hub CRUD with admin-only access
 - Batch API with strict state machine (DRAFT → OPEN → CLOSED → COLLECTED → DELIVERED → SETTLED)
@@ -26,6 +26,11 @@ Progress: █████░░░░░ 50%
 - Cutoff enforcement (cannot open batch if cutoff passed)
 - EventLog audit trail for all batch state changes
 - 58 passing tests including comprehensive state machine tests
+- Plan 05-02: Batch Admin UI
+- BatchesPage with hero section for current OPEN batch
+- Batch list with status badges and filter tabs
+- BatchFormPage for create/edit with validation
+- Admin navigation link to Batches
 
 **Key files added:**
 - `server/src/routes/hubs.ts` — Hub API
@@ -34,6 +39,8 @@ Progress: █████░░░░░ 50%
 - `server/src/schemas/batches.ts` — Batch validation with VALID_TRANSITIONS
 - `server/src/routes/hubs.test.ts` — Hub tests (9 tests)
 - `server/src/routes/batches.test.ts` — Batch tests (22 tests)
+- `web/src/pages/admin/BatchesPage.tsx` — Batch list with hero
+- `web/src/pages/admin/BatchFormPage.tsx` — Create/edit form
 
 ### Phase 04 — Farmers & Products (Completed 2026-01-14)
 
@@ -149,10 +156,14 @@ Progress: █████░░░░░ 50%
 - Hub CRUD with admin-only access
 - Batch API with strict state machine and audit logging
 - 58 passing tests including comprehensive state machine tests
-- All tasks committed atomically (56b6581, dd7e1fe, 44b5c55)
+- Completed 05-02-PLAN.md: Batch Admin UI
+- BatchesPage with hero section for current batch
+- BatchFormPage for create/edit
+- Admin navigation link added
+- All tasks committed atomically (5bd325e, 1d6c728, d9a8e8d)
 
 **Next actions:**
-1. `/gsd:execute-plan .planning/phases/05-batch-management/05-02-PLAN.md` — Execute next plan (Batch Pricing)
+1. `/gsd:execute-phase 06` — Execute Phase 06: Pricing & Scoping
 
 ---
 
