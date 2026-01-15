@@ -15,7 +15,7 @@
     "seed:prod": "ts-node scripts/seed.ts",
     "seed:dev": "ts-node prisma/seed.ts",
     "db:reset": "prisma db push --force-reset && npm run seed:dev",
-    "deploy": "prisma db push && npm run seed:prod"
+    "deploy": "prisma migrate deploy && npm run seed:prod"
   },
   "keywords": [],
   "author": "",
