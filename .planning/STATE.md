@@ -8,32 +8,30 @@
 
 **Milestone:** 1 (MVP v1.0)
 **Phase:** 14 — Order Editing
-**Plan:** 14-01 (Complete)
+**Plan:** 14-02
 **Status:** Complete
-**Last activity:** 2026-01-15 - Completed Plan 14-01: Order Editing API
+**Last activity:** 2026-01-15 - Completed Phase 14 Order Editing
 
 Progress: ██████████ 100%
 
 ## Recent Progress
 
-### Phase 14 — Order Editing (Completed 2026-01-15)
+### Phase 14 — Order Editing (Completed)
 
 **What shipped:**
-- Plan 14-01: Order Editing API
-- Implemented `PATCH /orders/:id` for buyers to edit placed orders before cutoff.
-- Comprehensive validation: authentication, ownership, order status (PLACED only), batch status (OPEN), and cutoff time.
-- Support for updating fulfillment type (PICKUP/DELIVERY).
-- Items replacement with MOQ/MaxOQ validation and automatic total recalculation.
-- Auto-cancel when all items removed (qty=0 or empty array).
-- Transactional integrity for all mutations.
-- Audit logging for `ORDER_EDITED` and `ORDER_CANCELLED` events.
-- 13 new comprehensive test cases (121 total tests passing).
+- Plan 14-01: Order Editing API (Completed)
+- Plan 14-02: Order Editing UI (Completed)
+  - Implemented `editOrder` method in `ordersApi`.
+  - Added "Edit" button to `OrderCard` with cutoff logic.
+  - Created `EditOrderPage` with item management and fulfillment selection.
+  - Integrated order cancellation flow with confirmation.
+  - Registered routing for the edit page.
 
 **Key files added/modified:**
-- `server/src/schemas/orders.ts` — Added `editOrderSchema` for validation
-- `server/src/routes/orders.ts` — Added PATCH endpoint with full validation
-- `server/src/routes/orders.test.ts` — Added 13 test cases for all scenarios
-- `server/src/tests/helpers.ts` — Added orderItem mock methods
+- `web/src/lib/api.ts` — Added `editOrder`
+- `web/src/components/buyer/OrderCard.tsx` — Added Edit button and cutoff logic
+- `web/src/pages/buyer/EditOrderPage.tsx` — New page for order management
+- `web/src/App.tsx` — Added route for `EditOrderPage`
 
 ### Phase 13 — Communication System (Completed 2026-01-15)
 

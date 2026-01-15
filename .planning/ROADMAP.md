@@ -26,7 +26,7 @@
 
 | Phase | Name | Status |
 |-------|------|--------|
-| 14 | Order Editing | ⏳ Pending |
+| 14 | Order Editing | ✅ Complete |
 
 ### Next Milestone
 
