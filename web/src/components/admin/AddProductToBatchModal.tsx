@@ -9,17 +9,31 @@ import { useEffect, useState } from 'react';
 import { type SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-const schema = z.object({
-  productId: z.string().min(1, 'Product is required'),
-  pricePerUnit: z.coerce.number().positive('Price must be positive'),
-  facilitationPercent: z.coerce.number().min(0, 'Min 0%').max(100, 'Max 100%'),
-  minOrderQty: z.coerce.number().positive('Min order quantity must be positive'),
-  maxOrderQty: z.coerce
-    .number()
-    .positive('Max order quantity must be positive')
-    .nullable()
-    .optional(),
-});
+const schema = z
+  .object({
+    productId: z.string().min(1, 'Product is required'),
+    pricePerUnit: z.coerce.number().positive('Price must be positive'),
+    facilitationPercent: z.coerce.number().min(0, 'Min 0%').max(100, 'Max 100%'),
+    minOrderQty: z.coerce.number().positive('Min order quantity must be positive'),
+    maxOrderQty: z.preprocess(
+      // Convert empty string to null, otherwise coerce to number
+      (val) => (val === '' || val === null || val === undefined ? null : Number(val)),
+      z.number().positive('Max order quantity must be positive').nullable()
+    ),
+  })
+  .refine(
+    (data) => {
+      // If maxOrderQty is set, it must be >= minOrderQty
+      if (data.maxOrderQty !== null && data.maxOrderQty < data.minOrderQty) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: 'Max order quantity cannot be less than min order quantity',
+      path: ['maxOrderQty'],
+    }
+  );
 
 type FormValues = z.infer<typeof schema>;
 
@@ -50,7 +64,8 @@ export function AddProductToBatchModal({
     reset,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
-    resolver: zodResolver(schema),
+    // biome-ignore lint/suspicious/noExplicitAny: Fix zodResolver type mismatch with react-hook-form
+    resolver: zodResolver(schema) as any,
     defaultValues: {
       productId: '',
       pricePerUnit: 0,
