@@ -110,12 +110,16 @@ export function BatchesPage() {
     window.open(whatsappLink, '_blank');
 
     // Log the event
-    await logsApi.logCommunication({
-      entityType: 'BATCH',
-      entityId: currentBatch.id,
-      messageType: 'BATCH_OPEN',
-      recipientPhone: 'BROADCAST',
-    });
+    try {
+      await logsApi.logCommunication({
+        entityType: 'BATCH',
+        entityId: currentBatch.id,
+        messageType: 'BATCH_OPEN',
+        recipientPhone: 'BROADCAST',
+      });
+    } catch (error) {
+      console.error('Failed to log communication:', error);
+    }
   };
 
   if (loading) return <div className="p-8">Loading...</div>;

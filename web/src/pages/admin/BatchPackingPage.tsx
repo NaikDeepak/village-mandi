@@ -53,13 +53,17 @@ export function BatchPackingPage() {
     window.open(link, '_blank');
 
     // Log communication
-    await logsApi.logCommunication({
-      entityType: 'ORDER',
-      entityId: order.id,
-      messageType: 'ORDER_PACKED',
-      recipientPhone: order.buyer.phone,
-      metadata: { batchId: batch.id, batchName: batch.name },
-    });
+    try {
+      await logsApi.logCommunication({
+        entityType: 'ORDER',
+        entityId: order.id,
+        messageType: 'ORDER_PACKED',
+        recipientPhone: order.buyer.phone,
+        metadata: { batchId: batch.id, batchName: batch.name },
+      });
+    } catch (error) {
+      console.error('Failed to log communication:', error);
+    }
   };
 
   const handleStatusUpdate = async (orderId: string, newStatus: Order['status']) => {

@@ -62,13 +62,17 @@ export function BatchProcurementPage() {
 
     // Log the event
     if (batch) {
-      await logsApi.logCommunication({
-        entityType: 'FARMER',
-        entityId: farmer.farmerId,
-        messageType: 'PROCUREMENT_LIST',
-        recipientPhone: 'OPEN_CHAT',
-        metadata: { batchId: batch.id, batchName: batch.name },
-      });
+      try {
+        await logsApi.logCommunication({
+          entityType: 'FARMER',
+          entityId: farmer.farmerId,
+          messageType: 'PROCUREMENT_LIST',
+          recipientPhone: 'OPEN_CHAT',
+          metadata: { batchId: batch.id, batchName: batch.name },
+        });
+      } catch (error) {
+        console.error('Failed to log communication:', error);
+      }
     }
   };
 

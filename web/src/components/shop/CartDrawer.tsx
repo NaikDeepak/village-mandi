@@ -98,7 +98,18 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       >
                         <Minus className="h-3 w-3" />
                       </Button>
-                      <span className="w-8 text-center text-xs font-medium">{item.quantity}</span>
+                      <input
+                        type="number"
+                        min="0"
+                        value={item.quantity}
+                        onChange={(e) => {
+                          const val = Number.parseInt(e.target.value, 10);
+                          if (!Number.isNaN(val) && val >= 0) {
+                            updateQuantity(item.batchProductId, val);
+                          }
+                        }}
+                        className="w-10 text-center text-xs font-medium bg-transparent border-none focus:ring-0 p-0"
+                      />
                       <Button
                         variant="ghost"
                         size="icon"

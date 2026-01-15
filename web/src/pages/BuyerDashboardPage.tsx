@@ -49,12 +49,16 @@ export function BuyerDashboardPage() {
     const associatedOrder = activeOrders[0] || historyOrders[0];
 
     if (associatedOrder) {
-      await logsApi.logCommunication({
-        entityType: 'ORDER',
-        entityId: associatedOrder.id,
-        messageType: 'SUPPORT_REQUEST',
-        recipientPhone: 'HUB_MANAGER',
-      });
+      try {
+        await logsApi.logCommunication({
+          entityType: 'ORDER',
+          entityId: associatedOrder.id,
+          messageType: 'SUPPORT_REQUEST',
+          recipientPhone: 'HUB_MANAGER',
+        });
+      } catch (error) {
+        console.error('Failed to log communication:', error);
+      }
     }
   };
 

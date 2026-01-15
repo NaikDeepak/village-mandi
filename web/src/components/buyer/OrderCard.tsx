@@ -42,13 +42,17 @@ export function OrderCard({ order, isActive = false }: OrderCardProps) {
     window.open(link, '_blank');
 
     // Log the support request
-    await logsApi.logCommunication({
-      entityType: 'ORDER',
-      entityId: order.id,
-      messageType: 'SUPPORT_REQUEST',
-      recipientPhone: 'HUB_MANAGER',
-      metadata: { orderId: order.id },
-    });
+    try {
+      await logsApi.logCommunication({
+        entityType: 'ORDER',
+        entityId: order.id,
+        messageType: 'SUPPORT_REQUEST',
+        recipientPhone: 'HUB_MANAGER',
+        metadata: { orderId: order.id },
+      });
+    } catch (error) {
+      console.error('Failed to log communication:', error);
+    }
   };
 
   return (

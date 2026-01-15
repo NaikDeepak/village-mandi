@@ -40,6 +40,7 @@ export function OrderDetailPage() {
   const [paymentStage, setPaymentStage] = useState<'COMMITMENT' | 'FINAL'>('COMMITMENT');
   const [referenceId, setReferenceId] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [paymentError, setPaymentError] = useState('');
 
   const fetchOrder = useCallback(async () => {
     if (!id) return;
@@ -79,17 +80,20 @@ export function OrderDetailPage() {
 
   const handleLogPayment = async (e: React.FormEvent) => {
     e.preventDefault();
+    setPaymentError('');
     if (!order) return;
 
     const totalPaid = order.payments?.reduce((sum, p) => sum + p.amount, 0) || 0;
     const balance = order.estimatedTotal - totalPaid;
 
     if (!Number.isFinite(paymentAmount) || paymentAmount <= 0) {
-      alert('Payment amount must be greater than 0.');
+      setPaymentError('Payment amount must be greater than 0.');
       return;
     }
     if (paymentAmount > balance) {
-      alert(`Payment amount cannot exceed remaining balance (${formatCurrency(balance)}).`);
+      setPaymentError(
+        `Payment amount cannot exceed remaining balance (${formatCurrency(balance)}).`
+      );
       return;
     }
 
@@ -109,7 +113,7 @@ export function OrderDetailPage() {
       setReferenceId('');
       fetchOrder(); // Refresh
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to log payment');
+      setPaymentError(err instanceof Error ? err.message : 'Failed to log payment');
     } finally {
       setSubmitting(false);
     }
@@ -390,6 +394,9 @@ export function OrderDetailPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
             <h2 className="text-xl font-bold mb-4">Log Payment</h2>
+            {paymentError && (
+              <div className="mb-4 bg-red-50 text-red-600 p-3 rounded text-sm">{paymentError}</div>
+            )}
             <form onSubmit={handleLogPayment} className="space-y-4">
               <div>
                 <label htmlFor="paymentStage" className="block text-sm font-medium text-gray-700">

@@ -232,7 +232,10 @@ export const batchProductsApi = {
       body: JSON.stringify(data),
     }),
 
-  remove: async (id: string, force = false) => {
+  remove: async (
+    id: string,
+    force = false
+  ): Promise<ApiResponse<{ batchProduct?: BatchProduct; success?: boolean }>> => {
     // Hard delete returns 204 (no JSON body), so don't go through JSON-parsing `request()`.
     if (force) {
       const res = await fetch(`${API_BASE}/batch-products/${id}?force=true`, {

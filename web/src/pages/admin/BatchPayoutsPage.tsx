@@ -57,13 +57,17 @@ export function BatchPayoutsPage() {
     window.open(link, '_blank');
 
     // Log communication
-    await logsApi.logCommunication({
-      entityType: 'FARMER',
-      entityId: payout.farmerId,
-      messageType: 'PAYOUT_CONFIRMATION',
-      recipientPhone: 'OPEN_CHAT',
-      metadata: { payoutId: payout.id, amount: payout.amount, batchId: id },
-    });
+    try {
+      await logsApi.logCommunication({
+        entityType: 'FARMER',
+        entityId: payout.farmerId,
+        messageType: 'PAYOUT_CONFIRMATION',
+        recipientPhone: 'OPEN_CHAT',
+        metadata: { payoutId: payout.id, amount: payout.amount, batchId: id },
+      });
+    } catch (error) {
+      console.error('Failed to log communication:', error);
+    }
   };
 
   const handleLogPayout = async (e: React.FormEvent) => {

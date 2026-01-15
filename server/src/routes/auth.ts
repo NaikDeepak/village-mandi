@@ -123,11 +123,8 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
 
     // In development, log OTP to console (Mock OTP)
     if (process.env.NODE_ENV !== 'production') {
+      console.info('OTP', otp);
     }
-
-    // TODO: In production, send OTP via MSG91
-    // await sendOTPViaMSG91(phone, otp);
-    console.log('OTP', otp);
 
     return {
       success: true,

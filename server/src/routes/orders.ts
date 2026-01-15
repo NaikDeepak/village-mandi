@@ -369,6 +369,8 @@ const orderRoutes: FastifyPluginAsync = async (fastify) => {
         // Handle cancellation
         if (shouldCancel) {
           updateData.status = 'CANCELLED';
+          updateData.estimatedTotal = 0;
+          updateData.facilitationAmt = 0;
 
           // Delete all items
           await tx.orderItem.deleteMany({
