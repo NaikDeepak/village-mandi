@@ -45,50 +45,52 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 - [x] Farmer deactivation with historical preservation
 - [x] Farmer detail view with products
 
+**EPIC 4: Batch Management** ✅
+- [x] Batch states: DRAFT → OPEN → CLOSED → COLLECTED → DELIVERED → SETTLED
+- [x] Automatic cutoff locking
+- [x] State transition audit logging
+
+**EPIC 5: Pricing & Scoping** ✅
+- [x] Batch-specific pricing and facilitation fees
+- [x] MOQ (minimum order quantity) enforcement
+- [x] Price locking when batch opens
+
+**EPIC 6-7: Ordering Flow** ✅
+- [x] Current batch visibility for buyers
+- [x] Products grouped by farmer with stories
+- [x] Cart with MOQ enforcement
+- [x] Fulfilment preference (pickup/delivery)
+
+**EPIC 8: Two-Stage Payments** ✅
+- [x] 10% commitment fee at order
+- [x] Final settlement after procurement
+- [x] Manual UPI tracking
+
+**EPIC 9: Aggregation & Procurement** ✅
+- [x] Quantity aggregation by batch/farmer/product
+- [x] Procurement lists
+- [x] WhatsApp-ready farmer messages
+
+**EPIC 10: Packing & Distribution** ✅
+- [x] Buyer-wise packing lists
+- [x] Pickup vs delivery workflow separation
+
+**EPIC 11: Farmer Payouts** ✅
+- [x] Farmer ledgers per batch
+- [x] Manual payout logging with audit
+
+**EPIC 12: Order Status** ✅
+- [x] Real-time buyer status tracking
+- [x] Order history access
+
+**EPIC 13: Communication System** ✅
+- [x] WhatsApp click-to-chat integration
+- [x] Event-driven message triggers
+- [x] Comprehensive event logging
+
 ### Active
 
-**EPIC 4: Batch Management**
-- [ ] Batch states: DRAFT → OPEN → CLOSED → COLLECTED → DELIVERED → SETTLED
-- [ ] Automatic cutoff locking
-- [ ] State transition audit logging
-
-**EPIC 5: Pricing & Scoping**
-- [ ] Batch-specific pricing and facilitation fees
-- [ ] MOQ (minimum order quantity) enforcement
-- [ ] Price locking when batch opens
-
-**EPIC 6-7: Ordering Flow**
-- [ ] Current batch visibility for buyers
-- [ ] Products grouped by farmer with stories
-- [ ] Cart with MOQ enforcement
-- [ ] Fulfilment preference (pickup/delivery)
-
-**EPIC 8: Two-Stage Payments**
-- [ ] 10% commitment fee at order
-- [ ] Final settlement after procurement
-- [ ] Manual UPI tracking
-
-**EPIC 9: Aggregation & Procurement**
-- [ ] Quantity aggregation by batch/farmer/product
-- [ ] Procurement lists
-- [ ] WhatsApp-ready farmer messages
-
-**EPIC 10: Packing & Distribution**
-- [ ] Buyer-wise packing lists
-- [ ] Pickup vs delivery workflow separation
-
-**EPIC 11: Farmer Payouts**
-- [ ] Farmer ledgers per batch
-- [ ] Manual payout logging with audit
-
-**EPIC 12: Order Status**
-- [ ] Real-time buyer status tracking
-- [ ] Order history access
-
-**EPIC 13: Communication System**
-- [ ] WhatsApp click-to-chat integration
-- [ ] Event-driven message triggers
-- [ ] Comprehensive event logging
+**(None - Milestone 1 Complete)**
 
 ### Out of Scope
 
@@ -119,10 +121,10 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 - Observability: Pino logging (configured, not integrated)
 
 **Current State**:
-- EPIC 0 (System Foundation) complete
-- Database schema defined with seed data
-- Landing page components exist (need refinement)
-- Auth not yet implemented
+- **Milestone 1 (MVP) Complete** (v1.0)
+- Core marketplace operational (Farmers, Batches, Ordering, Payments, Logistics)
+- E2E Verified: Setup → Batch → Order → Procurement → Fulfillment → Settlement
+- Ready for production deployment / pilot run
 
 ## Constraints
 
@@ -135,12 +137,12 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Batch-based model over open marketplace | Aggregation enables better farmer pricing, reduced logistics | — Pending |
-| Manual UPI over payment gateway | Full control, no integration complexity for V1 | — Pending |
-| Phone + OTP for buyers | Mobile-first audience, no password management | — Pending |
-| No farmer login | Farmers are managed, not self-service for V1 | — Pending |
-| Pickup as default fulfilment | Reduces delivery complexity, buyers come to collection point | — Pending |
-| Refine PRD before execution | Fill gaps in EPICs to ensure clear execution | — Pending |
+| Batch-based model over open marketplace | Aggregation enables better farmer pricing, reduced logistics | ✅ Validated in Phase 05 |
+| Manual UPI over payment gateway | Full control, no integration complexity for V1 | ✅ Implemented in Phase 08 |
+| Phone + OTP for buyers | Mobile-first audience, no password management | ✅ Implemented in Phase 03 |
+| No farmer login | Farmers are managed, not self-service for V1 | ✅ Maintained (Admin managed) |
+| Pickup as default fulfilment | Reduces delivery complexity, buyers come to collection point | ✅ Implemented in Phase 10 |
+| Refine PRD before execution | Fill gaps in EPICs to ensure clear execution | ✅ Completed |
 
 ---
-*Last updated: 2026-01-14 after initialization*
+*Last updated: 2026-01-15 (Milestone 1 Complete)*

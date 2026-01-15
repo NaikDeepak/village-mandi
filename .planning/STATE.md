@@ -6,16 +6,24 @@
 
 ## Current Position
 
-**Milestone:** 1 (MVP v1.0)
-**Phase:** 15 — End-to-End Workflow Guide
-**Plan:** 15-01
-**Status:** Complete
-**Next Phase:** Milestone 1 Complete
-**Last activity:** 2026-01-15 - Completed Phase 15 E2E Workflow Guide
+**Milestone:** 1 (MVP v1.0) — COMPLETE
+**Phase:** -
+**Plan:** -
+**Status:** Archived
+**Next Phase:** Milestone 2 (Post-MVP Enhancements)
+**Last activity:** 2026-01-15 — Archived Milestone 1 (v1.0)
 
 Progress: ██████████ 100%
 
 ## Recent Progress
+
+### Milestone 1: MVP (Completed 2026-01-15)
+
+**What shipped:**
+- Full batch-based agricultural marketplace.
+- 15 Phases completed and verified.
+- E2E Verified: Setup → Batch → Order → Procurement → Fulfillment → Settlement.
+- Tagged `v1.0` release.
 
 ### Phase 15 — End-to-End Workflow Guide (Completed 2026-01-15)
 
@@ -320,14 +328,14 @@ Progress: ██████████ 100%
 
 **Last session:** 2026-01-15 (Current)
 **Work completed:**
-- Verified end-to-end workflow using `server/scripts/verify-e2e.ts`.
-- Created `docs/WORKFLOW_GUIDE.md` and `SUMMARY.md` for Phase 15-01.
-- Validated all core system components (Setup, Planning, Ordering, Procurement, Fulfillment, Settlement).
-- Milestone 1 (MVP) 100% complete.
+- Completed Phase 15 (End-to-End Workflow Guide).
+- Archived Milestone 1 (MVP) artifacts.
+- Tagged release `v1.0`.
+- Updated project documentation (`PROJECT.md`, `ROADMAP.md`, `STATE.md`).
 
 **Next actions:**
-1. Final project review.
-2. Prepare for Milestone 2 or Production deployment.
+1. Deployment to Production environment.
+2. Initialize Milestone 2 planning.
 
 ---
 
