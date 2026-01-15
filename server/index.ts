@@ -40,7 +40,7 @@ fastify.register(cors, {
       ? ['https://virtualmandi.com'] // Update with your production domain
       : ['http://localhost:5173', 'http://localhost:3000'],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
 });
 
 // Register plugins
