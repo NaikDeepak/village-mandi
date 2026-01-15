@@ -1,5 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
-import { requireAdmin } from '../middleware/auth';
+import { authenticate, requireAdmin } from '../middleware/auth';
 import {
   type BatchStatus,
   VALID_TRANSITIONS,
@@ -37,7 +37,7 @@ const batchRoutes: FastifyPluginAsync = async (fastify) => {
   // ==========================================
   // GET CURRENT OPEN BATCH
   // ==========================================
-  fastify.get('/batches/current', { preHandler: [requireAdmin] }, async (_request, _reply) => {
+  fastify.get('/batches/current', { preHandler: [authenticate] }, async (_request, _reply) => {
     const batch = await prisma.batch.findFirst({
       where: { status: 'OPEN' },
       include: {

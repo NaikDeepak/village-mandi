@@ -1,6 +1,6 @@
 import type { Prisma } from '@prisma/client';
 import type { FastifyPluginAsync } from 'fastify';
-import { requireAdmin } from '../middleware/auth';
+import { authenticate, requireAdmin } from '../middleware/auth';
 import { addBatchProductSchema, updateBatchProductSchema } from '../schemas/batch-products';
 
 const batchProductRoutes: FastifyPluginAsync = async (fastify) => {
@@ -9,7 +9,7 @@ const batchProductRoutes: FastifyPluginAsync = async (fastify) => {
   // ==========================================
   // GET PRODUCTS FOR A BATCH
   // ==========================================
-  fastify.get('/batches/:id/products', { preHandler: [requireAdmin] }, async (request, reply) => {
+  fastify.get('/batches/:id/products', { preHandler: [authenticate] }, async (request, reply) => {
     const { id } = request.params as { id: string };
     const { isActive } = request.query as { isActive?: string };
 
