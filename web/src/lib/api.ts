@@ -92,7 +92,9 @@ export const authApi = {
 };
 
 import type {
+  AddBatchProductInput,
   Batch,
+  BatchProduct,
   CreateBatchInput,
   CreateFarmerInput,
   CreateProductInput,
@@ -100,6 +102,7 @@ import type {
   Hub,
   Product,
   UpdateBatchInput,
+  UpdateBatchProductInput,
   UpdateFarmerInput,
   UpdateProductInput,
 } from '@/types';
@@ -190,4 +193,34 @@ export const batchesApi = {
       method: 'POST',
       body: JSON.stringify({ targetStatus }),
     }),
+};
+
+// Batch Products API
+export const batchProductsApi = {
+  getByBatch: (batchId: string, isActive?: boolean) => {
+    const query = isActive !== undefined ? `?isActive=${isActive}` : '';
+    return request<{ products: BatchProduct[] }>(`/batches/${batchId}/products${query}`);
+  },
+
+  getById: (id: string) => request<{ batchProduct: BatchProduct }>(`/batch-products/${id}`),
+
+  add: (batchId: string, data: AddBatchProductInput) =>
+    request<{ batchProduct: BatchProduct }>(`/batches/${batchId}/products`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  update: (id: string, data: UpdateBatchProductInput) =>
+    request<{ batchProduct: BatchProduct }>(`/batch-products/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+
+  remove: (id: string, force = false) =>
+    request<{ success: boolean; batchProduct?: BatchProduct }>(
+      `/batch-products/${id}?force=${force}`,
+      {
+        method: 'DELETE',
+      }
+    ),
 };

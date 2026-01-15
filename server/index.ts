@@ -9,6 +9,7 @@ import prismaPlugin from './src/plugins/prisma';
 
 // Routes
 import authRoutes from './src/routes/auth';
+import batchProductRoutes from './src/routes/batch-products';
 import batchRoutes from './src/routes/batches';
 import farmerRoutes from './src/routes/farmers';
 import hubRoutes from './src/routes/hubs';
@@ -44,6 +45,7 @@ fastify.register(jwtPlugin);
 // Register routes
 fastify.register(authRoutes);
 fastify.register(batchRoutes);
+fastify.register(batchProductRoutes);
 fastify.register(farmerRoutes);
 fastify.register(hubRoutes);
 fastify.register(productRoutes);
@@ -62,7 +64,8 @@ const start = async () => {
   try {
     // Only listen when running locally
     if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
-      await fastify.listen({ port: 3000, host: '0.0.0.0' });
+      const port = Number.parseInt(process.env.PORT || '3000', 10);
+      await fastify.listen({ port, host: '0.0.0.0' });
     }
   } catch (err) {
     fastify.log.error(err);

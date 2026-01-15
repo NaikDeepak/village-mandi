@@ -32,6 +32,18 @@ export interface Product {
   };
 }
 
+export interface BatchProduct {
+  id: string;
+  batchId: string;
+  productId: string;
+  pricePerUnit: number;
+  facilitationPercent: number;
+  minOrderQty: number;
+  maxOrderQty?: number | null;
+  isActive: boolean;
+  product: Product;
+}
+
 export interface CreateFarmerInput {
   name: string;
   location: string;
@@ -53,6 +65,18 @@ export interface CreateProductInput {
 }
 
 export interface UpdateProductInput extends Partial<Omit<CreateProductInput, 'farmerId'>> {
+  isActive?: boolean;
+}
+
+export interface AddBatchProductInput {
+  productId: string;
+  pricePerUnit: number;
+  facilitationPercent: number;
+  minOrderQty: number;
+  maxOrderQty?: number | null;
+}
+
+export interface UpdateBatchProductInput extends Partial<Omit<AddBatchProductInput, 'productId'>> {
   isActive?: boolean;
 }
 
