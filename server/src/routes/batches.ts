@@ -29,6 +29,20 @@ const batchRoutes: FastifyPluginAsync = async (fastify) => {
   });
 
   // ==========================================
+  // GET CURRENT OPEN BATCH
+  // ==========================================
+  fastify.get('/batches/current', { preHandler: [requireAdmin] }, async (_request, _reply) => {
+    const batch = await prisma.batch.findFirst({
+      where: { status: 'OPEN' },
+      include: {
+        hub: true,
+      },
+    });
+
+    return { batch: batch || null };
+  });
+
+  // ==========================================
   // GET SINGLE BATCH
   // ==========================================
   fastify.get('/batches/:id', { preHandler: [requireAdmin] }, async (request, reply) => {
@@ -49,20 +63,6 @@ const batchRoutes: FastifyPluginAsync = async (fastify) => {
     }
 
     return { batch };
-  });
-
-  // ==========================================
-  // GET CURRENT OPEN BATCH
-  // ==========================================
-  fastify.get('/batches/current', { preHandler: [requireAdmin] }, async (_request, _reply) => {
-    const batch = await prisma.batch.findFirst({
-      where: { status: 'OPEN' },
-      include: {
-        hub: true,
-      },
-    });
-
-    return { batch: batch || null };
   });
 
   // ==========================================
