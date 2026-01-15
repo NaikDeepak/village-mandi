@@ -43,7 +43,7 @@ const logRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.get(
     '/logs/communication/:entityType/:entityId',
     { preHandler: [requireAdmin] },
-    async (request, reply) => {
+    async (request, _reply) => {
       const { entityType, entityId } = request.params as { entityType: string; entityId: string };
 
       const logs = await prisma.eventLog.findMany({

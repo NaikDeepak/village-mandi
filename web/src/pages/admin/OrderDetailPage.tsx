@@ -47,7 +47,7 @@ export function OrderDetailPage() {
       setLoading(true);
       const [orderRes, logsRes] = await Promise.all([
         ordersApi.getById(id),
-        logsApi.getCommunicationHistory('ORDER', id),
+        logsApi.getCommunicationHistory<CommunicationLog>('ORDER', id),
       ]);
 
       if (orderRes.error) throw new Error(orderRes.error);
@@ -148,7 +148,7 @@ export function OrderDetailPage() {
     });
 
     // Refresh logs
-    const logsRes = await logsApi.getCommunicationHistory('ORDER', order.id);
+    const logsRes = await logsApi.getCommunicationHistory<CommunicationLog>('ORDER', order.id);
     setCommLogs(logsRes.data?.logs || []);
   };
 

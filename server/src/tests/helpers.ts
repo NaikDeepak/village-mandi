@@ -80,8 +80,7 @@ export const mockPrisma = {
 declare module 'fastify' {
   interface FastifyRequest {
     user: {
-      id: string;
-      userId: string; // Keep for backward compatibility
+      userId: string;
       role: 'ADMIN' | 'BUYER';
     };
   }
@@ -129,20 +128,18 @@ export async function buildTestApp(): Promise<FastifyInstance> {
 
 // Helper to generate admin JWT token for testing
 export function generateAdminToken(app: FastifyInstance, payload?: { id?: string }): string {
-  const id = payload?.id || 'test-admin-id';
+  const userId = payload?.id || 'test-admin-id';
   return app.jwt.sign({
-    id,
-    userId: id,
+    userId,
     role: 'ADMIN',
   });
 }
 
 // Helper to generate buyer JWT token for testing
 export function generateBuyerToken(app: FastifyInstance, payload?: { id?: string }): string {
-  const id = payload?.id || 'test-buyer-id';
+  const userId = payload?.id || 'test-buyer-id';
   return app.jwt.sign({
-    id,
-    userId: id,
+    userId,
     role: 'BUYER',
   });
 }

@@ -315,13 +315,13 @@ export const logsApi = {
     messageType: string;
     recipientPhone: string;
     channel?: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   }) =>
-    request<{ log: any }>('/logs/communication', {
+    request<{ log: unknown }>('/logs/communication', {
       method: 'POST',
       body: JSON.stringify(data),
     }),
 
-  getCommunicationHistory: (entityType: string, entityId: string) =>
-    request<{ logs: any[] }>(`/logs/communication/${entityType}/${entityId}`),
+  getCommunicationHistory: <T = unknown>(entityType: string, entityId: string) =>
+    request<{ logs: T[] }>(`/logs/communication/${entityType}/${entityId}`),
 };

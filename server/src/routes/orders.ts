@@ -84,7 +84,7 @@ const orderRoutes: FastifyPluginAsync = async (fastify) => {
     }
 
     // Check ownership or admin
-    if (request.user.role !== 'ADMIN' && order.buyerId !== request.user.id) {
+    if (request.user.role !== 'ADMIN' && order.buyerId !== request.user.userId) {
       return reply.status(403).send({
         error: 'Forbidden',
         message: 'You do not have permission to view this order',
@@ -108,7 +108,7 @@ const orderRoutes: FastifyPluginAsync = async (fastify) => {
     }
 
     const { batchId, fulfillmentType, items } = parseResult.data;
-    const buyerId = request.user.id;
+    const buyerId = request.user.userId;
 
     try {
       // 1. Validate Batch
@@ -244,7 +244,7 @@ const orderRoutes: FastifyPluginAsync = async (fastify) => {
   // ==========================================
   fastify.get('/orders/my', { preHandler: [authenticate] }, async (request, _reply) => {
     const orders = await prisma.order.findMany({
-      where: { buyerId: request.user.id },
+      where: { buyerId: request.user.userId },
       include: {
         batch: {
           include: { hub: true },

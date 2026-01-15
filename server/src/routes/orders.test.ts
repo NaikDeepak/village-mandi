@@ -18,7 +18,7 @@ describe('Order Routes', () => {
     app = await buildTestApp();
     _adminToken = generateAdminToken(app);
     // Overwrite buyer token to have a known ID for matching
-    buyerToken = generateBuyerToken(app, { id: buyerId, role: 'BUYER' });
+    buyerToken = generateBuyerToken(app, { id: buyerId });
   });
 
   afterAll(async () => {

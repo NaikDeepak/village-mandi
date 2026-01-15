@@ -6,7 +6,7 @@ export const logCommunicationSchema = z.object({
   messageType: z.string(), // e.g., 'PAYMENT_REQUEST', 'BATCH_OPEN', 'PACKED_READY'
   recipientPhone: z.string(),
   channel: z.string().default('WHATSAPP'),
-  metadata: z.record(z.any()).optional(),
+  metadata: z.record(z.string(), z.any()).optional(),
 });
 
 export type LogCommunicationInput = z.infer<typeof logCommunicationSchema>;
