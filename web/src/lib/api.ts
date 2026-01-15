@@ -175,9 +175,9 @@ export const batchesApi = {
       body: JSON.stringify(data),
     }),
 
-  transition: (id: string, status: Batch['status']) =>
+  transition: (id: string, targetStatus: Batch['status']) =>
     request<{ batch: Batch }>(`/batches/${id}/transition`, {
       method: 'POST',
-      body: JSON.stringify({ status }),
+      body: JSON.stringify({ targetStatus }),
     }),
 };
