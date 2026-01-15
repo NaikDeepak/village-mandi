@@ -7,14 +7,23 @@
 ## Current Position
 
 **Milestone:** 1 (MVP v1.0)
-**Phase:** 14 — Order Editing
-**Plan:** 14-02
+**Phase:** 15 — End-to-End Workflow Guide
+**Plan:** 15-01
 **Status:** Complete
-**Last activity:** 2026-01-15 - Completed Phase 14 Order Editing
+**Next Phase:** Milestone 1 Complete
+**Last activity:** 2026-01-15 - Completed Phase 15 E2E Workflow Guide
 
 Progress: ██████████ 100%
 
 ## Recent Progress
+
+### Phase 15 — End-to-End Workflow Guide (Completed 2026-01-15)
+
+**What shipped:**
+- Plan 15-01: Workflow Documentation & Verification
+- Created `docs/WORKFLOW_GUIDE.md`: Comprehensive 5-phase operational guide.
+- Created `server/scripts/verify-e2e.ts`: Automated script verifying the full batch lifecycle.
+- Validated Happy Path: Setup → Batch → Order → Procurement → Fulfillment → Settlement.
 
 ### Phase 14 — Order Editing (Completed)
 
@@ -302,6 +311,7 @@ Progress: ██████████ 100%
 
 | Date | Change |
 |------|--------|
+| 2026-01-15 | Phase 15 added: End-to-End Workflow Guide |
 | 2026-01-15 | Phase 14 added: Order Editing (allow buyers to edit PLACED orders before cutoff) |
 
 ---

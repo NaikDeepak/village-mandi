@@ -208,12 +208,32 @@
 
 ---
 
+### Phase 15 — End-to-End Workflow Guide
+
+**Goal:** Create a comprehensive guide documenting the complete lifecycle of a batch from creation to settlement.
+
+**Scope:**
+- Create detailed step-by-step documentation for the entire batch lifecycle:
+  - Batch creation and setup
+  - Adding products to the batch
+  - Opening the batch
+  - Simulating customer orders (2-3 examples)
+  - Farmer ordering/procurement generation
+  - Packing and distribution workflow
+  - Logging payments and settlements
+- Verify the end-to-end flow works seamlessly
+
+**Dependencies:**
+- Requires: Phase 14 (Order Editing)
+
+---
+
 ## Progress Summary
 
 | Category | Completed | Remaining | Total |
 |----------|-----------|-----------|-------|
-| Phases | 13 | 1 | 14 |
-| MVP Progress | 93% | 7% | 100% |
+| Phases | 15 | 0 | 15 |
+| MVP Progress | 100% | 0% | 100% |
 
 ---
 
