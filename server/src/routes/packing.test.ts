@@ -98,9 +98,8 @@ describe('Packing Routes', () => {
 
       const validItemUuid = '123e4567-e89b-12d3-a456-426614174000';
 
-      mockPrisma.orderItem.update.mockResolvedValue({
-        id: validItemUuid,
-        finalQty: 5,
+      mockPrisma.orderItem.updateMany.mockResolvedValue({
+        count: 1,
       });
 
       mockPrisma.$transaction.mockImplementation(async (fn) => {
@@ -124,9 +123,12 @@ describe('Packing Routes', () => {
           data: { status: newStatus },
         })
       );
-      expect(mockPrisma.orderItem.update).toHaveBeenCalledWith(
+      expect(mockPrisma.orderItem.updateMany).toHaveBeenCalledWith(
         expect.objectContaining({
-          where: { id: validItemUuid },
+          where: {
+            id: validItemUuid,
+            orderId: orderId,
+          },
           data: { finalQty: 5 },
         })
       );

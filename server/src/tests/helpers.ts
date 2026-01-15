@@ -61,6 +61,7 @@ export const mockPrisma = {
   },
   orderItem: {
     update: vi.fn(),
+    updateMany: vi.fn(),
   },
   payment: {
     findMany: vi.fn(),

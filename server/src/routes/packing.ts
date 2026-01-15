@@ -96,10 +96,19 @@ const packingRoutes: FastifyPluginAsync = async (fastify) => {
       // 2. Update item final quantities if provided
       if (items && items.length > 0) {
         for (const item of items) {
-          await tx.orderItem.update({
-            where: { id: item.id },
+          // Use updateMany to ensure we only update if the item belongs to this order
+          // This prevents accidental/malicious updates to items in other orders
+          const result = await tx.orderItem.updateMany({
+            where: {
+              id: item.id,
+              orderId: id, // Scoped to current order
+            },
             data: { finalQty: item.finalQty },
           });
+
+          if (result.count === 0) {
+            throw new Error(`Item ${item.id} not found in order ${id}`);
+          }
         }
       }
 
