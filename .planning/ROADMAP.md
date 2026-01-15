@@ -21,12 +21,14 @@
 | 11 | Farmer Payouts | ✅ Complete |
 | 12 | Order Status | ✅ Complete |
 | 13 | Communication System | ✅ Complete |
+| 14 | Order Editing | ✅ Complete |
+| 15 | End-to-End Workflow Guide | ✅ Complete |
 
 ### Current Phase
 
 | Phase | Name | Status |
 |-------|------|--------|
-| 14 | Order Editing | ✅ Complete |
+| - | Milestone 1 Complete | 🎉 Complete |
 
 ### Next Milestone
 
