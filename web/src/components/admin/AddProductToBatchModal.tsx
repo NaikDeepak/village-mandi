@@ -114,12 +114,17 @@ export function AddProductToBatchModal({
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
       setError('');
+
+      // Build payload, omitting maxOrderQty when null (backend expects omission, not null)
+      const { maxOrderQty, ...basePayload } = data;
+      const payload = maxOrderQty !== null ? { ...basePayload, maxOrderQty } : basePayload;
+
       if (existingProduct) {
-        const { productId: _, ...updateData } = data;
+        const { productId: _, ...updateData } = payload;
         const res = await batchProductsApi.update(existingProduct.id, updateData);
         if (res.error) throw new Error(res.error);
       } else {
-        const res = await batchProductsApi.add(batchId, data as AddBatchProductInput);
+        const res = await batchProductsApi.add(batchId, payload as AddBatchProductInput);
         if (res.error) throw new Error(res.error);
       }
       onSuccess();

@@ -12,19 +12,14 @@
 | 02 | Branding & Static Pages | ✅ Complete |
 | 03 | Authentication & Access | ✅ Complete |
 | 04 | Farmers & Products | ✅ Complete |
+| 05 | Batch Management | ✅ Complete |
+| 06 | Pricing & Scoping | ✅ Complete |
 
 ### Current Phase
 
 | Phase | Name | Status |
 |-------|------|--------|
-| 05 | Batch Management | 🔄 Next |
-
-### Upcoming Phases
-
-| Phase | Name | Description |
-|-------|------|-------------|
-| 06 | Pricing & Scoping | Batch-specific pricing, facilitation fees, MOQ enforcement |
-| 07 | Ordering Flow | Product display by farmer, cart with MOQ, fulfilment preference |
+| 07 | Ordering Flow | 🔄 Next |
 | 08 | Two-Stage Payments | 10% commitment fee, final settlement tracking, manual UPI |
 | 09 | Aggregation & Procurement | Quantity aggregation, procurement lists, WhatsApp messages |
 | 10 | Packing & Distribution | Buyer-wise packing lists, pickup/delivery workflow |

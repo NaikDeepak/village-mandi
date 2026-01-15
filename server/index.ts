@@ -43,22 +43,27 @@ fastify.register(prismaPlugin);
 fastify.register(jwtPlugin);
 
 // Register routes
-fastify.register(authRoutes);
-fastify.register(batchRoutes);
-fastify.register(batchProductRoutes);
-fastify.register(farmerRoutes);
-fastify.register(hubRoutes);
-fastify.register(productRoutes);
+fastify.register(
+  async (api) => {
+    api.register(authRoutes);
+    api.register(batchRoutes);
+    api.register(batchProductRoutes);
+    api.register(farmerRoutes);
+    api.register(hubRoutes);
+    api.register(productRoutes);
 
-// Health check
-fastify.get('/health', async (_request, _reply) => {
-  return {
-    status: 'ok',
-    version: '1.0.0',
-    philosophy: 'Trust & Transparency',
-    rules: SYSTEM_RULES,
-  };
-});
+    // Health check
+    api.get('/health', async (_request, _reply) => {
+      return {
+        status: 'ok',
+        version: '1.0.0',
+        philosophy: 'Trust & Transparency',
+        rules: SYSTEM_RULES,
+      };
+    });
+  },
+  { prefix: '/api' }
+);
 
 const start = async () => {
   try {
