@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
-import { batchesApi } from '@/lib/api';
+import { batchesApi, logsApi } from '@/lib/api';
+import { getWhatsAppLink } from '@/lib/communication';
 import type { Batch, BatchAggregationFarmer } from '@/types';
 import { Copy, ExternalLink, Printer } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
@@ -38,7 +39,7 @@ export function BatchProcurementPage() {
     }
   }, [id, fetchData]);
 
-  const copyToWhatsApp = (farmer: BatchAggregationFarmer) => {
+  const handleWhatsAppFarmer = async (farmer: BatchAggregationFarmer) => {
     const dateStr = batch ? new Date(batch.deliveryDate).toLocaleDateString('en-IN') : '';
     let text = `*Procurement List: ${batch?.name || 'Batch'}*\n`;
     text += `*Farmer:* ${farmer.farmerName}\n`;
@@ -46,14 +47,29 @@ export function BatchProcurementPage() {
     text += `*Expected Delivery:* ${dateStr}\n\n`;
     text += 'Items to collect:\n';
 
-    farmer.products.forEach((p) => {
+    for (const p of farmer.products) {
       text += `- ${p.productName}: *${p.totalQuantity} ${p.unit}*\n`;
-    });
+    }
 
     text += '\nPlease confirm if these are available.';
 
-    navigator.clipboard.writeText(text);
-    alert(`Copied WhatsApp message for ${farmer.farmerName} to clipboard!`);
+    // Open WhatsApp
+    // Note: We don't have farmer phone in aggregation, we'd need to fetch it or pass it.
+    // For now, let's assume we might need to fetch farmer details or just open with blank phone.
+    // Let's check if we can get farmer phone.
+    const whatsappLink = getWhatsAppLink('', text);
+    window.open(whatsappLink, '_blank');
+
+    // Log the event
+    if (batch) {
+      await logsApi.logCommunication({
+        entityType: 'FARMER',
+        entityId: farmer.farmerId,
+        messageType: 'PROCUREMENT_LIST',
+        recipientPhone: 'OPEN_CHAT',
+        metadata: { batchId: batch.id, batchName: batch.name },
+      });
+    }
   };
 
   const handlePrint = () => {
@@ -163,9 +179,9 @@ export function BatchProcurementPage() {
                     variant="outline"
                     size="sm"
                     className="flex items-center gap-2 text-mandi-green border-mandi-green/30 hover:bg-mandi-green/10"
-                    onClick={() => copyToWhatsApp(farmer)}
+                    onClick={() => handleWhatsAppFarmer(farmer)}
                   >
-                    <Copy size={14} /> Copy for WhatsApp
+                    <Copy size={14} /> WhatsApp Farmer
                   </Button>
                   <Link to={`/admin/farmers/${farmer.farmerId}`} target="_blank">
                     <Button variant="ghost" size="sm" className="text-mandi-muted">

@@ -1,7 +1,8 @@
 import { Button } from '@/components/ui/button';
-import { batchesApi, packingApi } from '@/lib/api';
+import { batchesApi, logsApi, packingApi } from '@/lib/api';
+import { getWhatsAppLink, templates } from '@/lib/communication';
 import type { Batch, Order, OrderItem } from '@/types';
-import { CheckCircle2, Package, Printer, Truck } from 'lucide-react';
+import { CheckCircle2, MessageSquare, Package, Printer, Truck } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
@@ -43,6 +44,23 @@ export function BatchPackingPage() {
       fetchData(id);
     }
   }, [id, fetchData]);
+
+  const handleNotifyPacked = async (order: PackingOrder) => {
+    if (!batch) return;
+
+    const message = templates.orderPacked(batch.name);
+    const link = getWhatsAppLink(order.buyer.phone, message);
+    window.open(link, '_blank');
+
+    // Log communication
+    await logsApi.logCommunication({
+      entityType: 'ORDER',
+      entityId: order.id,
+      messageType: 'ORDER_PACKED',
+      recipientPhone: order.buyer.phone,
+      metadata: { batchId: batch.id, batchName: batch.name },
+    });
+  };
 
   const handleStatusUpdate = async (orderId: string, newStatus: Order['status']) => {
     try {
@@ -191,6 +209,14 @@ export function BatchPackingPage() {
                       <Button
                         size="sm"
                         variant="outline"
+                        onClick={() => handleNotifyPacked(order)}
+                        className="text-mandi-green border-mandi-green hover:bg-mandi-green hover:text-white"
+                      >
+                        <MessageSquare size={14} className="mr-1" /> Notify
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
                         onClick={() => handleStatusUpdate(order.id, 'FULLY_PAID')}
                         disabled={updatingId === order.id}
                         className="text-xs"
@@ -245,7 +271,7 @@ export function BatchPackingPage() {
                           {item.batchProduct?.product.name}
                         </td>
                         <td className="py-2 text-sm font-bold text-center">
-                          {item.quantity} {item.batchProduct?.product.unit}
+                          {item.orderedQty} {item.batchProduct?.product.unit}
                         </td>
                         <td className="py-2 text-right print:hidden">
                           <div className="h-4 w-4 rounded border border-gray-300 ml-auto" />

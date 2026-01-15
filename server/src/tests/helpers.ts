@@ -11,6 +11,7 @@ import hubRoutes from '../routes/hubs';
 import orderRoutes from '../routes/orders';
 import packingRoutes from '../routes/packing';
 import paymentRoutes from '../routes/payments';
+import payoutRoutes from '../routes/payouts';
 import productRoutes from '../routes/products';
 
 // Mock Prisma client
@@ -59,6 +60,12 @@ export const mockPrisma = {
     update: vi.fn(),
   },
   payment: {
+    findMany: vi.fn(),
+    findUnique: vi.fn(),
+    create: vi.fn(),
+    update: vi.fn(),
+  },
+  farmerPayout: {
     findMany: vi.fn(),
     findUnique: vi.fn(),
     create: vi.fn(),
@@ -114,6 +121,7 @@ export async function buildTestApp(): Promise<FastifyInstance> {
   await app.register(orderRoutes);
   await app.register(packingRoutes);
   await app.register(paymentRoutes);
+  await app.register(payoutRoutes);
 
   await app.ready();
   return app;

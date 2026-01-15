@@ -12,6 +12,7 @@ import { AdminLayout } from './pages/admin/AdminLayout';
 import { BatchDetailPage } from './pages/admin/BatchDetailPage';
 import { BatchFormPage } from './pages/admin/BatchFormPage';
 import { BatchPackingPage } from './pages/admin/BatchPackingPage';
+import { BatchPayoutsPage } from './pages/admin/BatchPayoutsPage';
 import { BatchProcurementPage } from './pages/admin/BatchProcurementPage';
 import { BatchesPage } from './pages/admin/BatchesPage';
 import { FarmerDetailPage } from './pages/admin/FarmerDetailPage';
@@ -54,6 +55,7 @@ function App() {
             <Route path="batches/:id/edit" element={<BatchFormPage />} />
             <Route path="batches/:id/procurement" element={<BatchProcurementPage />} />
             <Route path="batches/:id/packing" element={<BatchPackingPage />} />
+            <Route path="batches/:id/payouts" element={<BatchPayoutsPage />} />
             <Route path="farmers" element={<FarmersPage />} />
             <Route path="farmers/new" element={<FarmerFormPage />} />
             <Route path="farmers/:id" element={<FarmerDetailPage />} />

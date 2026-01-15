@@ -13,9 +13,11 @@ import batchProductRoutes from './src/routes/batch-products';
 import batchRoutes from './src/routes/batches';
 import farmerRoutes from './src/routes/farmers';
 import hubRoutes from './src/routes/hubs';
+import logRoutes from './src/routes/logs';
 import orderRoutes from './src/routes/orders';
 import packingRoutes from './src/routes/packing';
 import paymentRoutes from './src/routes/payments';
+import payoutRoutes from './src/routes/payouts';
 import productRoutes from './src/routes/products';
 
 const fastify = Fastify({
@@ -56,7 +58,9 @@ fastify.register(
     api.register(orderRoutes);
     api.register(packingRoutes);
     api.register(paymentRoutes);
+    api.register(payoutRoutes);
     api.register(productRoutes);
+    api.register(logRoutes);
 
     // Health check
     api.get('/health', async (_request, _reply) => {

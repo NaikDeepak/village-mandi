@@ -1,6 +1,8 @@
 import { Button } from '@/components/ui/button';
-import { batchesApi } from '@/lib/api';
+import { batchesApi, logsApi } from '@/lib/api';
+import { getWhatsAppLink, templates } from '@/lib/communication';
 import type { Batch } from '@/types';
+import { MessageSquare } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -97,6 +99,25 @@ export function BatchesPage() {
     return true; // all
   });
 
+  const handleNotifyBuyers = async () => {
+    if (!currentBatch) return;
+
+    const message = templates.batchOpen(currentBatch.name, formatDate(currentBatch.deliveryDate));
+
+    // In a real app, this might go to a broadcast list or multiple buyers.
+    // For now, we'll open it with a blank phone or a placeholder to let the admin choose.
+    const whatsappLink = getWhatsAppLink('', message);
+    window.open(whatsappLink, '_blank');
+
+    // Log the event
+    await logsApi.logCommunication({
+      entityType: 'BATCH',
+      entityId: currentBatch.id,
+      messageType: 'BATCH_OPEN',
+      recipientPhone: 'BROADCAST',
+    });
+  };
+
   if (loading) return <div className="p-8">Loading...</div>;
 
   return (
@@ -143,12 +164,23 @@ export function BatchesPage() {
                 </div>
               </div>
             </div>
-            <div>
+            <div className="flex flex-col gap-2">
               <Link to={`/admin/batches/${currentBatch.id}`}>
-                <Button variant="outline" className="bg-white text-mandi-green hover:bg-gray-100">
+                <Button
+                  variant="outline"
+                  className="w-full bg-white text-mandi-green hover:bg-gray-100"
+                >
                   View Details
                 </Button>
               </Link>
+              <Button
+                onClick={handleNotifyBuyers}
+                className="w-full bg-white text-mandi-green hover:bg-gray-100 border-white"
+                variant="outline"
+              >
+                <MessageSquare className="w-4 h-4 mr-2" />
+                Notify Buyers
+              </Button>
             </div>
           </div>
         </div>

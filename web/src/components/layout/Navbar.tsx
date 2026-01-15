@@ -54,7 +54,7 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
 
   const getDashboardLink = () => {
     if (user?.role === 'ADMIN') return '/admin';
-    if (user?.role === 'BUYER') return '/shop';
+    if (user?.role === 'BUYER') return '/buyer-dashboard';
     return '/';
   };
 

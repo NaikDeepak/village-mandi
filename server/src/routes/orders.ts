@@ -256,6 +256,7 @@ const orderRoutes: FastifyPluginAsync = async (fastify) => {
             },
           },
         },
+        payments: true,
       },
       orderBy: { createdAt: 'desc' },
     });

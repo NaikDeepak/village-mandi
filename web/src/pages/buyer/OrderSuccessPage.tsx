@@ -32,9 +32,9 @@ export function OrderSuccessPage() {
         <div className="space-y-3">
           <Button
             className="w-full h-12 text-md font-bold gap-2"
-            onClick={() => navigate('/shop/orders')}
+            onClick={() => navigate('/buyer-dashboard')}
           >
-            <ShoppingBag className="h-5 w-5" /> View Order History
+            <ShoppingBag className="h-5 w-5" /> View Order Status
           </Button>
           <div className="grid grid-cols-2 gap-3">
             <Button

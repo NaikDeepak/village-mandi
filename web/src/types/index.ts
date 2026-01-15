@@ -115,10 +115,10 @@ export interface OrderItem {
   id: string;
   orderId: string;
   batchProductId: string;
-  quantity: number;
-  pricePerUnit: number;
-  facilitationAmt: number;
-  subtotal: number;
+  orderedQty: number;
+  finalQty?: number | null;
+  unitPrice: number;
+  lineTotal: number;
   batchProduct?: BatchProduct;
 }
 
@@ -137,10 +137,12 @@ export interface Order {
   fulfillmentType: 'PICKUP' | 'DELIVERY';
   estimatedTotal: number;
   facilitationAmt: number;
+  finalTotal?: number | null;
   createdAt: string;
   updatedAt: string;
   batch?: Batch;
   items?: OrderItem[];
+  payments?: Payment[];
 }
 
 export interface CreateOrderInput {
@@ -148,7 +150,7 @@ export interface CreateOrderInput {
   fulfillmentType: 'PICKUP' | 'DELIVERY';
   items: {
     batchProductId: string;
-    quantity: number;
+    orderedQty: number;
   }[];
 }
 
@@ -185,4 +187,40 @@ export interface BatchAggregationFarmer {
 
 export interface BatchAggregation {
   aggregation: BatchAggregationFarmer[];
+}
+
+export interface FarmerPayout {
+  id: string;
+  batchId: string;
+  farmerId: string;
+  amount: number;
+  upiReference: string;
+  paidAt: string;
+  createdAt: string;
+  farmer: {
+    name: string;
+    location: string;
+  };
+}
+
+export interface FarmerPayoutSummary {
+  farmerId: string;
+  name: string;
+  location: string;
+  totalOwed: number;
+  totalPaid: number;
+  balance: number;
+}
+
+export interface BatchPayoutsResponse {
+  batchId: string;
+  farmers: FarmerPayoutSummary[];
+  payouts: FarmerPayout[];
+}
+
+export interface CreatePayoutInput {
+  farmerId: string;
+  amount: number;
+  upiReference: string;
+  paidAt: string;
 }

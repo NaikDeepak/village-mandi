@@ -96,12 +96,15 @@ import type {
   AddBatchProductInput,
   Batch,
   BatchAggregation,
+  BatchPayoutsResponse,
   BatchProduct,
   CreateBatchInput,
   CreateFarmerInput,
   CreateOrderInput,
+  CreatePayoutInput,
   CreateProductInput,
   Farmer,
+  FarmerPayout,
   Hub,
   LogPaymentInput,
   Order,
@@ -241,7 +244,10 @@ export const ordersApi = {
     if (params.batchId) query.append('batchId', params.batchId);
     if (params.status) query.append('status', params.status);
     return request<{
-      orders: (Order & { buyer: { name: string; phone: string }; batch: { name: string } })[];
+      orders: (Order & {
+        buyer: { id: string; name: string; phone: string };
+        batch: { name: string };
+      })[];
     }>(`/orders?${query.toString()}`);
   },
 
@@ -288,4 +294,34 @@ export const paymentsApi = {
       method: 'POST',
       body: JSON.stringify(data),
     }),
+};
+
+// Payouts API
+export const payoutsApi = {
+  getByBatch: (batchId: string) => request<BatchPayoutsResponse>(`/batches/${batchId}/payouts`),
+
+  logPayout: (batchId: string, data: CreatePayoutInput) =>
+    request<{ payout: FarmerPayout }>(`/batches/${batchId}/payouts`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+};
+
+// Logs API
+export const logsApi = {
+  logCommunication: (data: {
+    entityType: 'ORDER' | 'BATCH' | 'FARMER';
+    entityId: string;
+    messageType: string;
+    recipientPhone: string;
+    channel?: string;
+    metadata?: Record<string, any>;
+  }) =>
+    request<{ log: any }>('/logs/communication', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  getCommunicationHistory: (entityType: string, entityId: string) =>
+    request<{ logs: any[] }>(`/logs/communication/${entityType}/${entityId}`),
 };

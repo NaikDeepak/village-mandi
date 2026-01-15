@@ -2,7 +2,7 @@ import { AddProductToBatchModal } from '@/components/admin/AddProductToBatchModa
 import { Button } from '@/components/ui/button';
 import { batchProductsApi, batchesApi } from '@/lib/api';
 import type { Batch, BatchProduct } from '@/types';
-import { Edit2, ListChecks, Package, Plus, Trash2 } from 'lucide-react';
+import { Edit2, IndianRupee, ListChecks, Package, Plus, Trash2 } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
@@ -179,6 +179,11 @@ export function BatchDetailPage() {
                     <Link to={`/admin/batches/${batch.id}/packing`}>
                       <Button variant="outline" className="flex items-center gap-2">
                         <Package size={16} /> Packing List
+                      </Button>
+                    </Link>
+                    <Link to={`/admin/batches/${batch.id}/payouts`}>
+                      <Button variant="outline" className="flex items-center gap-2">
+                        <IndianRupee size={16} /> Farmer Payouts
                       </Button>
                     </Link>
                   </>

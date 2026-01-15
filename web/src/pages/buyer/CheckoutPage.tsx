@@ -63,7 +63,7 @@ export function CheckoutPage() {
         fulfillmentType,
         items: cartItems.map((item) => ({
           batchProductId: item.batchProductId,
-          quantity: item.quantity,
+          orderedQty: item.quantity,
         })),
       };
 

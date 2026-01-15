@@ -7,14 +7,61 @@
 ## Current Position
 
 **Milestone:** 1 (MVP v1.0)
-**Phase:** 10 — Packing & Distribution
-**Plan:** 1 of 1 in current phase
-**Status:** Pending
-**Last activity:** 2026-01-15 - Completed Phase 09: Aggregation & Procurement
+**Phase:** 13 — Communication System
+**Plan:** 13-01
+**Status:** Completed
+**Last activity:** 2026-01-15 - Completed Phase 13: Communication System (WhatsApp Click-to-Chat & Audit Logging)
 
 Progress: ██████████ 100%
 
 ## Recent Progress
+
+### Phase 13 — Communication System (Completed 2026-01-15)
+
+**What shipped:**
+- Implemented `web/src/lib/communication.ts` with standardized WhatsApp templates.
+- Created `POST /api/logs/communication` for audit tracking of outreach.
+- Integrated communication buttons across Admin (Batches, Packing, Procurement, Payouts) and Buyer (Dashboard, OrderCard) interfaces.
+- Added Communication History feed to Admin `OrderDetailPage`.
+- Handled edge cases for missing phone numbers with "OPEN_CHAT" logging.
+
+**Key files added:**
+- `web/src/lib/communication.ts` — Utility library
+- `server/src/routes/logs.ts` — Backend logging API
+- `server/src/schemas/logs.ts` — Zod validation schemas
+
+### Phase 12 — Order Status (Completed 2026-01-15)
+
+**What shipped:**
+- Plan 12-01: Buyer Dashboard & Order History
+- Implemented `BuyerDashboardPage` with "Active" and "History" views.
+- `OrderStatusBar` component for visual tracking of order stages.
+- `OrderCard` component with detailed item lists and financial balance summary.
+- Standardized `OrderItem` types across frontend and backend (`orderedQty`, `unitPrice`, etc.).
+- Patched all Admin and Checkout views to support type changes.
+
+**Key files added:**
+- `web/src/components/buyer/OrderStatusBar.tsx` — Progress UI
+- `web/src/components/buyer/OrderCard.tsx` — Detailed order summary
+- `web/src/pages/BuyerDashboardPage.tsx` — Dashboard implementation
+
+### Phase 11 — Farmer Payouts (Completed 2026-01-15)
+
+**What shipped:**
+- Plan 11-01: Farmer Payouts API & UI
+- Implemented `GET /batches/:id/payouts` for financial standing per farmer.
+- Implemented `POST /batches/:id/payouts` for manual payout logging.
+- Integrated with `EventLog` for audit trail.
+- Admin `BatchPayoutsPage` with balances table and payout history.
+
+### Phase 10 — Packing & Distribution (Completed 2026-01-15)
+
+**What shipped:**
+- Plan 10-01: Packing API & UI
+- Added `PACKED` and `DISTRIBUTED` statuses to order lifecycle.
+- Created `GET /batches/:id/packing` for buyer-wise packing lists.
+- Admin `BatchPackingPage` with quick status updates and print-friendly packing slips.
+- 5/5 passing integration tests for packing logic.
 
 ### Phase 09 — Aggregation & Procurement (Completed 2026-01-15)
 

@@ -1,7 +1,9 @@
 import { Button } from '@/components/ui/button';
-import { ordersApi, paymentsApi } from '@/lib/api';
+import { logsApi, ordersApi, paymentsApi } from '@/lib/api';
+import { getWhatsAppLink, templates } from '@/lib/communication';
 import type { Order, OrderItem, Payment } from '@/types';
-import { useEffect, useState } from 'react';
+import { AlertCircle, CheckCircle2, Clock, MessageSquare, Phone } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 type DetailedOrder = Order & {
@@ -11,13 +13,27 @@ type DetailedOrder = Order & {
   items: (OrderItem & { batchProduct: { product: { name: string; unit: string } } })[];
 };
 
+interface CommunicationLog {
+  id: string;
+  createdAt: string;
+  action: string;
+  metadata: {
+    messageType: string;
+    recipientPhone: string;
+    channel?: string;
+    amount?: number;
+    stage?: string;
+  };
+}
+
 export function OrderDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [order, setOrder] = useState<DetailedOrder | null>(null);
+  const [commLogs, setCommLogs] = useState<CommunicationLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Payment Form State
+  // ... rest of state
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [paymentAmount, setPaymentAmount] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState<'UPI' | 'CASH'>('UPI');
@@ -25,20 +41,22 @@ export function OrderDetailPage() {
   const [referenceId, setReferenceId] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
-    if (id) fetchOrder();
-  }, [id]);
-
-  const fetchOrder = async () => {
+  const fetchOrder = useCallback(async () => {
+    if (!id) return;
     try {
       setLoading(true);
-      const res = await ordersApi.getById(id!);
-      if (res.error) throw new Error(res.error);
-      setOrder(res.data?.order || null);
+      const [orderRes, logsRes] = await Promise.all([
+        ordersApi.getById(id),
+        logsApi.getCommunicationHistory('ORDER', id),
+      ]);
+
+      if (orderRes.error) throw new Error(orderRes.error);
+      setOrder(orderRes.data?.order || null);
+      setCommLogs(logsRes.data?.logs || []);
 
       // Auto-set suggested payment amount
-      if (res.data?.order) {
-        const o = res.data.order;
+      if (orderRes.data?.order) {
+        const o = orderRes.data.order;
         if (o.status === 'PLACED') {
           setPaymentAmount(Math.round(o.estimatedTotal * 0.1));
           setPaymentStage('COMMITMENT');
@@ -53,7 +71,11 @@ export function OrderDetailPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    fetchOrder();
+  }, [fetchOrder]);
 
   const handleLogPayment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -107,11 +129,47 @@ export function OrderDetailPage() {
     }).format(amount);
   };
 
+  const handleRequestPayment = async () => {
+    if (!order) return;
+
+    const amount = balance;
+    const stage = order.status === 'PLACED' ? 'advance' : 'final';
+    const message = templates.paymentRequest(amount, stage, order.batch.name);
+    const link = getWhatsAppLink(order.buyer.phone, message);
+    window.open(link, '_blank');
+
+    // Log communication
+    await logsApi.logCommunication({
+      entityType: 'ORDER',
+      entityId: order.id,
+      messageType: 'PAYMENT_REQUEST',
+      recipientPhone: order.buyer.phone,
+      metadata: { amount, stage },
+    });
+
+    // Refresh logs
+    const logsRes = await logsApi.getCommunicationHistory('ORDER', order.id);
+    setCommLogs(logsRes.data?.logs || []);
+  };
+
   if (loading) return <div className="p-8">Loading...</div>;
   if (!order) return <div className="p-8">Order not found.</div>;
 
   const totalPaid = order.payments?.reduce((sum, p) => sum + p.amount, 0) || 0;
   const balance = order.estimatedTotal - totalPaid;
+
+  const getMessageTypeLabel = (type: string) => {
+    switch (type) {
+      case 'PAYMENT_REQUEST':
+        return 'Payment Request';
+      case 'ORDER_PACKED':
+        return 'Packed Notification';
+      case 'SUPPORT_REQUEST':
+        return 'Support Query';
+      default:
+        return type.replace(/_/g, ' ');
+    }
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -132,9 +190,21 @@ export function OrderDetailPage() {
           >
             {order.status}
           </span>
-          {order.status !== 'FULLY_PAID' && order.status !== 'CANCELLED' && (
-            <Button onClick={() => setShowPaymentForm(true)}>Log Payment</Button>
-          )}
+          <div className="flex gap-2">
+            {balance > 0 && order.status !== 'CANCELLED' && (
+              <Button
+                variant="outline"
+                onClick={handleRequestPayment}
+                className="text-mandi-green border-mandi-green hover:bg-mandi-green hover:text-white"
+              >
+                <MessageSquare className="w-4 h-4 mr-2" />
+                Request Payment
+              </Button>
+            )}
+            {order.status !== 'FULLY_PAID' && order.status !== 'CANCELLED' && (
+              <Button onClick={() => setShowPaymentForm(true)}>Log Payment</Button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -151,14 +221,15 @@ export function OrderDetailPage() {
                   <div>
                     <p className="font-medium text-gray-900">{item.batchProduct?.product.name}</p>
                     <p className="text-sm text-gray-500">
-                      {item.quantity} {item.batchProduct?.product.unit} &times;{' '}
-                      {formatCurrency(item.pricePerUnit)}
+                      {item.orderedQty} {item.batchProduct?.product.unit} &times;{' '}
+                      {formatCurrency(item.unitPrice)}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="font-medium text-gray-900">{formatCurrency(item.subtotal)}</p>
+                    <p className="font-medium text-gray-900">{formatCurrency(item.lineTotal)}</p>
                     <p className="text-xs text-gray-500">
-                      Incl. facilitation: {formatCurrency(item.facilitationAmt)}
+                      Incl. facilitation:{' '}
+                      {formatCurrency(item.lineTotal - item.orderedQty * item.unitPrice)}
                     </p>
                   </div>
                 </div>
@@ -214,6 +285,49 @@ export function OrderDetailPage() {
               </div>
             ) : (
               <p className="text-gray-500 italic">No payments logged yet.</p>
+            )}
+          </div>
+
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-lg font-bold text-mandi-dark mb-4">Communication History</h2>
+            {commLogs.length > 0 ? (
+              <div className="space-y-4">
+                {commLogs.map((log) => (
+                  <div
+                    key={log.id}
+                    className="flex items-start gap-3 p-3 bg-gray-50 rounded border-l-4 border-mandi-green"
+                  >
+                    <div className="mt-1">
+                      {log.metadata.messageType === 'SUPPORT_REQUEST' ? (
+                        <AlertCircle className="text-yellow-600 w-4 h-4" />
+                      ) : (
+                        <CheckCircle2 className="text-mandi-green w-4 h-4" />
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex justify-between items-start">
+                        <p className="font-bold text-mandi-dark text-sm">
+                          {getMessageTypeLabel(log.metadata.messageType)}
+                        </p>
+                        <span className="text-[10px] text-mandi-muted flex items-center gap-1">
+                          <Clock size={10} />
+                          {new Date(log.createdAt).toLocaleString()}
+                        </span>
+                      </div>
+                      <p className="text-xs text-mandi-muted flex items-center gap-1 mt-0.5">
+                        <Phone size={10} /> {log.metadata.recipientPhone}
+                      </p>
+                      {log.metadata.amount && (
+                        <p className="text-xs font-semibold mt-1 text-mandi-dark">
+                          Requested: {formatCurrency(log.metadata.amount)} ({log.metadata.stage})
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-500 italic">No communication logs recorded.</p>
             )}
           </div>
         </div>
