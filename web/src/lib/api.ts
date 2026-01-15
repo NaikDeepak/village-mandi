@@ -82,10 +82,14 @@ export const authApi = {
 };
 
 import type {
+  Batch,
+  CreateBatchInput,
   CreateFarmerInput,
   CreateProductInput,
   Farmer,
+  Hub,
   Product,
+  UpdateBatchInput,
   UpdateFarmerInput,
   UpdateProductInput,
 } from '@/types';
@@ -141,5 +145,33 @@ export const productsApi = {
   delete: (id: string) =>
     request<{ success: boolean; message: string }>(`/products/${id}`, {
       method: 'DELETE',
+    }),
+};
+
+// Hubs API
+export const hubsApi = {
+  getAll: () => request<{ hubs: Hub[] }>('/hubs'),
+
+  getById: (id: string) => request<{ hub: Hub }>(`/hubs/${id}`),
+};
+
+// Batches API
+export const batchesApi = {
+  getAll: () => request<{ batches: Batch[] }>('/batches'),
+
+  getCurrent: () => request<{ batch: Batch | null }>('/batches/current'),
+
+  getById: (id: string) => request<{ batch: Batch }>(`/batches/${id}`),
+
+  create: (data: CreateBatchInput) =>
+    request<{ batch: Batch }>('/batches', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  update: (id: string, data: UpdateBatchInput) =>
+    request<{ batch: Batch }>(`/batches/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
     }),
 };
