@@ -11,104 +11,112 @@ const payoutRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.get('/batches/:id/payouts', { preHandler: [requireAdmin] }, async (request, reply) => {
     const { id: batchId } = request.params as { id: string };
 
-    const batch = await prisma.batch.findUnique({ where: { id: batchId } });
-    if (!batch) {
-      return reply.status(404).send({
-        error: 'Not Found',
-        message: 'Batch not found',
-      });
-    }
+    try {
+      const batch = await prisma.batch.findUnique({ where: { id: batchId } });
+      if (!batch) {
+        return reply.status(404).send({
+          error: 'Not Found',
+          message: 'Batch not found',
+        });
+      }
 
-    // 1. Fetch all non-cancelled, non-placed orders for this batch
-    const orders = await prisma.order.findMany({
-      where: {
-        batchId,
-        status: {
-          in: ['COMMITMENT_PAID', 'FULLY_PAID', 'PACKED', 'DISTRIBUTED'],
+      // 1. Fetch all non-cancelled, non-placed orders for this batch
+      const orders = await prisma.order.findMany({
+        where: {
+          batchId,
+          status: {
+            in: ['COMMITMENT_PAID', 'FULLY_PAID', 'PACKED', 'DISTRIBUTED'],
+          },
         },
-      },
-      include: {
-        items: {
-          include: {
-            batchProduct: {
-              include: {
-                product: {
-                  include: {
-                    farmer: true,
+        include: {
+          items: {
+            include: {
+              batchProduct: {
+                include: {
+                  product: {
+                    include: {
+                      farmer: true,
+                    },
                   },
                 },
               },
             },
           },
         },
-      },
-    });
+      });
 
-    // 2. Fetch all existing payouts for this batch
-    const payouts = await prisma.farmerPayout.findMany({
-      where: { batchId },
-      include: { farmer: true },
-      orderBy: { paidAt: 'desc' },
-    });
+      // 2. Fetch all existing payouts for this batch
+      const payouts = await prisma.farmerPayout.findMany({
+        where: { batchId },
+        include: { farmer: true },
+        orderBy: { paidAt: 'desc' },
+      });
 
-    // 3. Aggregate data by Farmer
-    const farmerDataMap = new Map<
-      string,
-      {
-        farmerId: string;
-        name: string;
-        location: string;
-        totalOwed: number;
-        totalPaid: number;
+      // 3. Aggregate data by Farmer
+      const farmerDataMap = new Map<
+        string,
+        {
+          farmerId: string;
+          name: string;
+          location: string;
+          totalOwed: number;
+          totalPaid: number;
+        }
+      >();
+
+      // Process Orders to calculate totalOwed
+      for (const order of orders) {
+        for (const item of order.items) {
+          const farmer = item.batchProduct.product.farmer;
+          if (!farmerDataMap.has(farmer.id)) {
+            farmerDataMap.set(farmer.id, {
+              farmerId: farmer.id,
+              name: farmer.name,
+              location: farmer.location,
+              totalOwed: 0,
+              totalPaid: 0,
+            });
+          }
+
+          const data = farmerDataMap.get(farmer.id)!;
+          const qty = item.finalQty ?? item.orderedQty;
+          data.totalOwed += qty * item.unitPrice;
+        }
       }
-    >();
 
-    // Process Orders to calculate totalOwed
-    for (const order of orders) {
-      for (const item of order.items) {
-        const farmer = item.batchProduct.product.farmer;
-        if (!farmerDataMap.has(farmer.id)) {
-          farmerDataMap.set(farmer.id, {
-            farmerId: farmer.id,
-            name: farmer.name,
-            location: farmer.location,
+      // Process Payouts to calculate totalPaid
+      for (const payout of payouts) {
+        if (!farmerDataMap.has(payout.farmerId)) {
+          // This case might happen if a payout was logged for a farmer who now has no orders (rare but possible)
+          farmerDataMap.set(payout.farmerId, {
+            farmerId: payout.farmerId,
+            name: payout.farmer.name,
+            location: payout.farmer.location,
             totalOwed: 0,
             totalPaid: 0,
           });
         }
-
-        const data = farmerDataMap.get(farmer.id)!;
-        const qty = item.finalQty ?? item.orderedQty;
-        data.totalOwed += qty * item.unitPrice;
+        const data = farmerDataMap.get(payout.farmerId)!;
+        data.totalPaid += payout.amount;
       }
+
+      const farmers = Array.from(farmerDataMap.values()).map((f) => ({
+        ...f,
+        balance: f.totalOwed - f.totalPaid,
+      }));
+
+      return {
+        batchId,
+        farmers,
+        payouts, // Full history
+      };
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({
+        error: 'Internal Server Error',
+        message: 'Failed to fetch payouts summary',
+      });
     }
-
-    // Process Payouts to calculate totalPaid
-    for (const payout of payouts) {
-      if (!farmerDataMap.has(payout.farmerId)) {
-        // This case might happen if a payout was logged for a farmer who now has no orders (rare but possible)
-        farmerDataMap.set(payout.farmerId, {
-          farmerId: payout.farmerId,
-          name: payout.farmer.name,
-          location: payout.farmer.location,
-          totalOwed: 0,
-          totalPaid: 0,
-        });
-      }
-      const data = farmerDataMap.get(payout.farmerId)!;
-      data.totalPaid += payout.amount;
-    }
-
-    const farmers = Array.from(farmerDataMap.values()).map((f) => ({
-      ...f,
-      balance: f.totalOwed - f.totalPaid,
-    }));
-
-    return {
-      batchId,
-      farmers,
-      payouts, // Full history
-    };
   });
 
   // ==========================================
@@ -150,7 +158,7 @@ const payoutRoutes: FastifyPluginAsync = async (fastify) => {
             farmerId,
             amount,
             upiReference,
-            paidAt: new Date(paidAt),
+            paidAt,
           },
         });
 
@@ -164,6 +172,7 @@ const payoutRoutes: FastifyPluginAsync = async (fastify) => {
               farmerId,
               amount,
               upiReference,
+              paidAt,
             },
           },
         });

@@ -96,14 +96,24 @@ describe('Packing Routes', () => {
         buyer: { name: 'Buyer 1' },
       });
 
-      mockPrisma.$transaction.mockImplementation(async (promises) => {
-        return await Promise.all(promises);
+      const validItemUuid = '123e4567-e89b-12d3-a456-426614174000';
+
+      mockPrisma.orderItem.update.mockResolvedValue({
+        id: validItemUuid,
+        finalQty: 5,
+      });
+
+      mockPrisma.$transaction.mockImplementation(async (fn) => {
+        return await fn(mockPrisma);
       });
 
       const response = await app.inject({
         method: 'PATCH',
         url: `/orders/${orderId}/status`,
-        payload: { status: newStatus },
+        payload: {
+          status: newStatus,
+          items: [{ id: validItemUuid, finalQty: 5 }],
+        },
         cookies: { token: adminToken },
       });
 
@@ -112,6 +122,12 @@ describe('Packing Routes', () => {
         expect.objectContaining({
           where: { id: orderId },
           data: { status: newStatus },
+        })
+      );
+      expect(mockPrisma.orderItem.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { id: validItemUuid },
+          data: { finalQty: 5 },
         })
       );
       expect(mockPrisma.eventLog.create).toHaveBeenCalled();

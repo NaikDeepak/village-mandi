@@ -13,4 +13,17 @@ export const createOrderSchema = z.object({
     .min(1, 'Order must contain at least one item'),
 });
 
+export const updateOrderPackingSchema = z.object({
+  status: z.enum(['PACKED', 'DISTRIBUTED', 'FULLY_PAID']),
+  items: z
+    .array(
+      z.object({
+        id: z.string().uuid('Item ID must be a valid UUID'),
+        finalQty: z.number().nonnegative('Final quantity cannot be negative'),
+      })
+    )
+    .optional(),
+});
+
 export type CreateOrderInput = z.infer<typeof createOrderSchema>;
+export type UpdateOrderPackingInput = z.infer<typeof updateOrderPackingSchema>;

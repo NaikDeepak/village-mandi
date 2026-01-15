@@ -1,6 +1,6 @@
-import type { OrderStatus } from '@prisma/client';
 import type { FastifyPluginAsync } from 'fastify';
 import { requireAdmin } from '../middleware/auth';
+import { updateOrderPackingSchema } from '../schemas/orders';
 
 const packingRoutes: FastifyPluginAsync = async (fastify) => {
   const { prisma } = fastify;
@@ -59,15 +59,17 @@ const packingRoutes: FastifyPluginAsync = async (fastify) => {
   // ==========================================
   fastify.patch('/orders/:id/status', { preHandler: [requireAdmin] }, async (request, reply) => {
     const { id } = request.params as { id: string };
-    const { status } = request.body as { status: OrderStatus };
+    const parseResult = updateOrderPackingSchema.safeParse(request.body);
 
-    const allowedStatuses: OrderStatus[] = ['PACKED', 'DISTRIBUTED', 'FULLY_PAID'];
-    if (!allowedStatuses.includes(status)) {
+    if (!parseResult.success) {
       return reply.status(400).send({
-        error: 'Invalid Request',
-        message: `Status must be one of: ${allowedStatuses.join(', ')}`,
+        error: 'Validation Error',
+        message: 'Validation failed',
+        details: parseResult.error.flatten().fieldErrors,
       });
     }
+
+    const { status, items } = parseResult.data;
 
     const order = await prisma.order.findUnique({ where: { id } });
     if (!order) {
@@ -77,8 +79,9 @@ const packingRoutes: FastifyPluginAsync = async (fastify) => {
       });
     }
 
-    const [updatedOrder] = await prisma.$transaction([
-      prisma.order.update({
+    const updatedOrder = await prisma.$transaction(async (tx) => {
+      // 1. Update order status
+      const updated = await tx.order.update({
         where: { id },
         data: { status },
         include: {
@@ -88,8 +91,20 @@ const packingRoutes: FastifyPluginAsync = async (fastify) => {
             },
           },
         },
-      }),
-      prisma.eventLog.create({
+      });
+
+      // 2. Update item final quantities if provided
+      if (items && items.length > 0) {
+        for (const item of items) {
+          await tx.orderItem.update({
+            where: { id: item.id },
+            data: { finalQty: item.finalQty },
+          });
+        }
+      }
+
+      // 3. Log event
+      await tx.eventLog.create({
         data: {
           entityType: 'ORDER',
           entityId: id,
@@ -97,10 +112,13 @@ const packingRoutes: FastifyPluginAsync = async (fastify) => {
           metadata: {
             from: order.status,
             to: status,
+            itemsUpdated: !!items?.length,
           },
         },
-      }),
-    ]);
+      });
+
+      return updated;
+    });
 
     return { order: updatedOrder };
   });
