@@ -232,13 +232,27 @@ export const batchProductsApi = {
       body: JSON.stringify(data),
     }),
 
-  remove: (id: string, force = false) =>
-    request<{ success: boolean; batchProduct?: BatchProduct }>(
-      `/batch-products/${id}?force=${force}`,
-      {
+  remove: async (id: string, force = false) => {
+    // Hard delete returns 204 (no JSON body), so don't go through JSON-parsing `request()`.
+    if (force) {
+      const res = await fetch(`${API_BASE}/batch-products/${id}?force=true`, {
         method: 'DELETE',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (!res.ok) {
+        // fall back to best-effort text; callers can map this into UI
+        const message = await res.text();
+        return { error: message || 'Failed to delete' };
       }
-    ),
+      return { data: { success: true } };
+    }
+
+    // Soft delete returns `{ batchProduct }`
+    return request<{ batchProduct: BatchProduct }>(`/batch-products/${id}?force=false`, {
+      method: 'DELETE',
+    });
+  },
 };
 
 // Orders API

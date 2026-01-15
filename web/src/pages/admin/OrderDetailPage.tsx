@@ -81,6 +81,18 @@ export function OrderDetailPage() {
     e.preventDefault();
     if (!order) return;
 
+    const totalPaid = order.payments?.reduce((sum, p) => sum + p.amount, 0) || 0;
+    const balance = order.estimatedTotal - totalPaid;
+
+    if (!Number.isFinite(paymentAmount) || paymentAmount <= 0) {
+      alert('Payment amount must be greater than 0.');
+      return;
+    }
+    if (paymentAmount > balance) {
+      alert(`Payment amount cannot exceed remaining balance (${formatCurrency(balance)}).`);
+      return;
+    }
+
     try {
       setSubmitting(true);
       const res = await paymentsApi.logPayment(order.id, {
@@ -132,24 +144,28 @@ export function OrderDetailPage() {
   const handleRequestPayment = async () => {
     if (!order) return;
 
-    const amount = balance;
-    const stage = order.status === 'PLACED' ? 'advance' : 'final';
+    const isCommitmentStage = order.status === 'PLACED';
+    const amount = isCommitmentStage ? Math.round(order.estimatedTotal * 0.1) : balance;
+    const stage = isCommitmentStage ? 'advance' : 'final';
+
     const message = templates.paymentRequest(amount, stage, order.batch.name);
     const link = getWhatsAppLink(order.buyer.phone, message);
     window.open(link, '_blank');
 
-    // Log communication
-    await logsApi.logCommunication({
-      entityType: 'ORDER',
-      entityId: order.id,
-      messageType: 'PAYMENT_REQUEST',
-      recipientPhone: order.buyer.phone,
-      metadata: { amount, stage },
-    });
+    try {
+      await logsApi.logCommunication({
+        entityType: 'ORDER',
+        entityId: order.id,
+        messageType: 'PAYMENT_REQUEST',
+        recipientPhone: order.buyer.phone,
+        metadata: { amount, stage },
+      });
 
-    // Refresh logs
-    const logsRes = await logsApi.getCommunicationHistory<CommunicationLog>('ORDER', order.id);
-    setCommLogs(logsRes.data?.logs || []);
+      const logsRes = await logsApi.getCommunicationHistory<CommunicationLog>('ORDER', order.id);
+      setCommLogs(logsRes.data?.logs || []);
+    } catch (err) {
+      console.error('Failed to log payment request:', err);
+    }
   };
 
   if (loading) return <div className="p-8">Loading...</div>;
