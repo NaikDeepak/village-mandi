@@ -15,6 +15,12 @@ async function main() {
 
   const adminPasswordHash = await hashPassword(adminPassword || 'admin123456');
 
+  if (!adminPassword && process.env.NODE_ENV !== 'production') {
+    console.warn(
+      '⚠️ ADMIN_PASSWORD not set. Using a default password for development. Set ADMIN_PASSWORD in your .env file for a secure setup.'
+    );
+  }
+
   const admin = await prisma.user.upsert({
     where: { phone: '9999999999' },
     update: {
