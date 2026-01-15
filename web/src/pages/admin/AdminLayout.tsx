@@ -48,6 +48,12 @@ export function AdminLayout() {
                 >
                   Products
                 </Link>
+                <Link
+                  to="/admin/batches"
+                  className="text-sm font-medium text-gray-700 hover:text-mandi-green"
+                >
+                  Batches
+                </Link>
               </nav>
             </div>
 
