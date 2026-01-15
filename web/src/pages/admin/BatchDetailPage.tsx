@@ -13,15 +13,6 @@ const STATUS_COLORS: Record<Batch['status'], string> = {
   SETTLED: 'bg-gray-600 text-white',
 };
 
-const VALID_TRANSITIONS: Record<Batch['status'], Batch['status'][]> = {
-  DRAFT: ['OPEN'],
-  OPEN: ['CLOSED'],
-  CLOSED: ['COLLECTED'],
-  COLLECTED: ['DELIVERED'],
-  DELIVERED: ['SETTLED'],
-  SETTLED: [],
-};
-
 export function BatchDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [batch, setBatch] = useState<Batch | null>(null);
@@ -114,7 +105,6 @@ export function BatchDetailPage() {
     );
   }
 
-  const nextStates = VALID_TRANSITIONS[batch.status];
   const cutoffStatus = getCutoffStatus(batch.cutoffAt);
 
   return (
@@ -169,14 +159,14 @@ export function BatchDetailPage() {
           </div>
         </div>
 
-        {nextStates.length > 0 && (
+        {batch.allowedTransitions.length > 0 && (
           <div className="p-6 bg-gray-50 border-t border-gray-200">
             <h3 className="text-sm font-medium text-gray-700 mb-3">State Transitions</h3>
             <div className="flex gap-3">
-              {nextStates.map((nextStatus) => (
+              {batch.allowedTransitions.map((nextStatus) => (
                 <Button
                   key={nextStatus}
-                  onClick={() => handleTransition(nextStatus)}
+                  onClick={() => handleTransition(nextStatus as Batch['status'])}
                   disabled={transitioning}
                   variant={nextStatus === 'OPEN' ? 'default' : 'outline'}
                 >

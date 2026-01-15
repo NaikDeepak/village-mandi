@@ -20,16 +20,26 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
       headers,
     });
 
-    const data = await response.json();
+    // Try to parse response body, but handle non-JSON responses gracefully
+    let data: Record<string, unknown> | undefined;
+    try {
+      data = await response.json();
+    } catch {
+      // Response body is not valid JSON (e.g., 502 Bad Gateway returning HTML)
+      if (!response.ok) {
+        return { error: response.statusText || 'Request failed' };
+      }
+      return { error: 'Invalid response format' };
+    }
 
     if (!response.ok) {
       return {
-        error: data.error || 'Request failed',
-        message: data.message,
+        error: (data?.error as string) || (data?.message as string) || response.statusText,
+        message: data?.message as string | undefined,
       };
     }
 
-    return { data };
+    return { data: data as T };
   } catch (error) {
     return {
       error: 'Network error',

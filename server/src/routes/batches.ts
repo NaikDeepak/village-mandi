@@ -8,6 +8,12 @@ import {
   updateBatchSchema,
 } from '../schemas/batches';
 
+// Helper to enrich batch with allowed transitions
+const withAllowedTransitions = <T extends { status: string }>(batch: T) => ({
+  ...batch,
+  allowedTransitions: VALID_TRANSITIONS[batch.status as BatchStatus] as readonly string[],
+});
+
 const batchRoutes: FastifyPluginAsync = async (fastify) => {
   const { prisma } = fastify;
 
@@ -25,7 +31,7 @@ const batchRoutes: FastifyPluginAsync = async (fastify) => {
       orderBy: { createdAt: 'desc' },
     });
 
-    return { batches };
+    return { batches: batches.map(withAllowedTransitions) };
   });
 
   // ==========================================
@@ -39,7 +45,7 @@ const batchRoutes: FastifyPluginAsync = async (fastify) => {
       },
     });
 
-    return { batch: batch || null };
+    return { batch: batch ? withAllowedTransitions(batch) : null };
   });
 
   // ==========================================
@@ -62,7 +68,7 @@ const batchRoutes: FastifyPluginAsync = async (fastify) => {
       });
     }
 
-    return { batch };
+    return { batch: withAllowedTransitions(batch) };
   });
 
   // ==========================================
@@ -101,7 +107,7 @@ const batchRoutes: FastifyPluginAsync = async (fastify) => {
       },
     });
 
-    return reply.status(201).send({ batch });
+    return reply.status(201).send({ batch: withAllowedTransitions(batch) });
   });
 
   // ==========================================
@@ -178,7 +184,7 @@ const batchRoutes: FastifyPluginAsync = async (fastify) => {
       },
     });
 
-    return { batch };
+    return { batch: withAllowedTransitions(batch) };
   });
 
   // ==========================================
@@ -250,7 +256,7 @@ const batchRoutes: FastifyPluginAsync = async (fastify) => {
         }),
       ]);
 
-      return { batch };
+      return { batch: withAllowedTransitions(batch) };
     }
   );
 };

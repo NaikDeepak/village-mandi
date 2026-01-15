@@ -75,6 +75,7 @@ export interface Batch {
   createdAt: string;
   updatedAt: string;
   hub?: Hub;
+  allowedTransitions: readonly string[];
 }
 
 export interface CreateBatchInput {
