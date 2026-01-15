@@ -21,38 +21,48 @@ async function main() {
     );
   }
 
-  const admin = await prisma.user.upsert({
+  // Check if admin exists
+  const existingAdmin = await prisma.user.findUnique({
     where: { phone: '9999999999' },
-    update: {
-      passwordHash: adminPasswordHash,
-      role: UserRole.ADMIN,
-      isActive: true,
-    },
-    create: {
-      name: 'System Admin',
-      phone: '9999999999',
-      email: 'admin@villagemandi.com',
-      role: UserRole.ADMIN,
-      passwordHash: adminPasswordHash,
-      isInvited: true,
-      isActive: true,
-    },
   });
-  console.log('✅ Admin user ready:', admin.phone);
+
+  if (!existingAdmin) {
+    const admin = await prisma.user.create({
+      data: {
+        name: 'System Admin',
+        phone: '9999999999',
+        email: 'admin@villagemandi.com',
+        role: UserRole.ADMIN,
+        passwordHash: adminPasswordHash,
+        isInvited: true,
+        isActive: true,
+      },
+    });
+    console.log('✅ Admin user created:', admin.phone);
+  } else {
+    console.log('ℹ️ Admin user already exists. Skipping creation to preserve password.');
+  }
 
   // =====================
   // 2. INITIAL HUB
   // =====================
-  const hub = await prisma.hub.upsert({
-    where: { name: 'Main Hub' }, // Assumes 'name' is a unique field
-    update: {}, // No updates needed if it already exists
-    create: {
-      name: 'Main Hub',
-      address: 'Central Location',
-      isActive: true,
-    },
+  // Check if hub exists
+  const existingHub = await prisma.hub.findFirst({
+    where: { name: 'Main Hub' },
   });
-  console.log('✅ Initial Hub ready:', hub.name);
+
+  if (!existingHub) {
+    const hub = await prisma.hub.create({
+      data: {
+        name: 'Main Hub',
+        address: 'Central Location',
+        isActive: true,
+      },
+    });
+    console.log('✅ Initial Hub created:', hub.name);
+  } else {
+    console.log('ℹ️ Hub already exists. Skipping creation.');
+  }
 
   console.log('🎉 Production seeding completed successfully.');
 }
