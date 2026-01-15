@@ -1,3 +1,4 @@
+import { OrderStatus } from '@prisma/client';
 import type { FastifyPluginAsync } from 'fastify';
 import { requireAdmin } from '../middleware/auth';
 import { updateOrderPackingSchema } from '../schemas/orders';
@@ -24,7 +25,9 @@ const packingRoutes: FastifyPluginAsync = async (fastify) => {
     const orders = await prisma.order.findMany({
       where: {
         batchId: id,
-        status: { in: ['FULLY_PAID', 'PACKED', 'DISTRIBUTED'] },
+        status: {
+          in: [OrderStatus.FULLY_PAID, OrderStatus.PACKED, OrderStatus.DISTRIBUTED],
+        },
       },
       include: {
         buyer: {

@@ -1,3 +1,4 @@
+import { OrderStatus } from '@prisma/client';
 import type { FastifyPluginAsync } from 'fastify';
 import { requireAdmin } from '../middleware/auth';
 import { createPayoutSchema } from '../schemas/payouts';
@@ -25,7 +26,12 @@ const payoutRoutes: FastifyPluginAsync = async (fastify) => {
         where: {
           batchId,
           status: {
-            in: ['COMMITMENT_PAID', 'FULLY_PAID', 'PACKED', 'DISTRIBUTED'],
+            in: [
+              OrderStatus.COMMITMENT_PAID,
+              OrderStatus.FULLY_PAID,
+              OrderStatus.PACKED,
+              OrderStatus.DISTRIBUTED,
+            ],
           },
         },
         include: {

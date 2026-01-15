@@ -1,3 +1,4 @@
+import { OrderStatus } from '@prisma/client';
 import type { FastifyPluginAsync } from 'fastify';
 import { authenticate, requireAdmin } from '../middleware/auth';
 import {
@@ -281,7 +282,7 @@ const batchRoutes: FastifyPluginAsync = async (fastify) => {
       const orders = await prisma.order.findMany({
         where: {
           batchId: id,
-          status: { in: ['COMMITMENT_PAID', 'FULLY_PAID'] },
+          status: { in: [OrderStatus.COMMITMENT_PAID, OrderStatus.FULLY_PAID] },
         },
         include: {
           items: {
