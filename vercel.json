@@ -1,7 +1,14 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "public",
-  "rewrites": [{ "source": "/api/(.*)", "destination": "/api/index" }],
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index" },
+    {
+      "source": "/((?!api/|_next/|static/|favicon.ico|sw.js|.*\\..*).*$)",
+      "destination": "/index.html"
+    }
+  ],
   "functions": {
     "api/index.ts": {
       "maxDuration": 10

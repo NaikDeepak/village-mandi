@@ -12,8 +12,9 @@
     "test:coverage": "vitest run --coverage",
     "prisma:generate": "prisma generate",
     "prisma:studio": "prisma studio",
-    "db:seed": "ts-node prisma/seed.ts",
-    "db:reset": "prisma db push --force-reset && npm run db:seed"
+    "seed:prod": "ts-node scripts/seed.ts",
+    "seed:dev": "ts-node prisma/seed.ts",
+    "db:reset": "prisma db push --force-reset && npm run seed:dev"
   },
   "keywords": [],
   "author": "",

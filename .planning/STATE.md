@@ -6,16 +6,37 @@
 
 ## Current Position
 
-**Milestone:** 1 (MVP v1.0)
-**Phase:** 15 — End-to-End Workflow Guide
-**Plan:** 15-01
-**Status:** Complete
-**Next Phase:** Milestone 1 Complete
-**Last activity:** 2026-01-15 - Completed Phase 15 E2E Workflow Guide
+**Milestone:** 2 (Production & Enhancements)
+**Phase:** 16 (Deployment)
+**Plan:** 01
+**Status:** Completed
+**Next Phase:** -
+**Last activity:** 2026-01-15 — Completed Plan 16-01 (Production Config)
 
-Progress: ██████████ 100%
+Progress: ▓░░░░░░░░░ 10%
 
 ## Recent Progress
+
+### Milestone 2: Production & Enhancements
+
+#### Phase 16 — Deployment (In Progress)
+
+**What shipped:**
+- Plan 16-01: Production Configuration (Completed)
+  - Created idempotent production seed script `server/scripts/seed.ts`.
+  - Created `.env.production.example` for environment variable management.
+  - Optimized `vercel.json` for SPA routing and monorepo deployment.
+
+**Upcoming:**
+- Phase 16: Deployment (Remaining plans)
+
+### Milestone 1: MVP (Completed 2026-01-15)
+
+**What shipped:**
+- Full batch-based agricultural marketplace.
+- 15 Phases completed and verified.
+- E2E Verified: Setup → Batch → Order → Procurement → Fulfillment → Settlement.
+- Tagged `v1.0` release.
 
 ### Phase 15 — End-to-End Workflow Guide (Completed 2026-01-15)
 
@@ -311,6 +332,7 @@ Progress: ██████████ 100%
 
 | Date | Change |
 |------|--------|
+| 2026-01-15 | Phase 16 added: Deployment (Milestone 2 start) |
 | 2026-01-15 | Phase 15 added: End-to-End Workflow Guide |
 | 2026-01-15 | Phase 14 added: Order Editing (allow buyers to edit PLACED orders before cutoff) |
 
@@ -318,19 +340,16 @@ Progress: ██████████ 100%
 
 ## Session Continuity
 
-**Last session:** 2026-01-15
+**Last session:** 2026-01-15 (Current)
 **Work completed:**
-- Completed 14-01-PLAN.md: Order Editing API
-- Implemented PATCH /orders/:id endpoint with comprehensive validation
-- Added editOrderSchema for order editing validation
-- Auto-cancel when all items removed
-- Audit logging for ORDER_EDITED and ORDER_CANCELLED events
-- 13 new test cases (121 total tests passing)
-- All tasks committed atomically (6f993ed, 5ea95f0, 76e2a65)
+- Completed Phase 15 (End-to-End Workflow Guide).
+- Archived Milestone 1 (MVP) artifacts.
+- Tagged release `v1.0`.
+- Updated project documentation (`PROJECT.md`, `ROADMAP.md`, `STATE.md`).
 
 **Next actions:**
-1. Phase 14 complete - MVP v1.0 milestone achieved
-2. Consider next milestone or deployment preparation
+1. Deployment to Production environment.
+2. Initialize Milestone 2 planning.
 
 ---
 

@@ -13,7 +13,7 @@ This project is configured as a monorepo for seamless deployment of both the Rea
    - **Framework Preset**: Vercel should automatically detect the Root and Vite. Ensure it stays as "Other" or "Vite" if it prompts.
    - **Root Directory**: Leave as `.` (the repository root).
    - **Build Command**: `npm run build` (This is defined in the root `package.json`).
-   - **Output Directory**: `web/dist`.
+   - **Output Directory**: `public` (The build script moves artifacts here).
 4. **Environment Variables**:
    Add the following variables in the Vercel project settings:
    - `DATABASE_URL`: Your PostgreSQL connection string (Required for Prisma).
