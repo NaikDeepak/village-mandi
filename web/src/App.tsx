@@ -9,6 +9,7 @@ import { LandingPage } from './pages/LandingPage';
 import { RulesPage } from './pages/RulesPage';
 import { VerifyOtpPage } from './pages/VerifyOtpPage';
 import { AdminLayout } from './pages/admin/AdminLayout';
+import { BatchDetailPage } from './pages/admin/BatchDetailPage';
 import { BatchFormPage } from './pages/admin/BatchFormPage';
 import { BatchesPage } from './pages/admin/BatchesPage';
 import { FarmerDetailPage } from './pages/admin/FarmerDetailPage';
@@ -42,6 +43,7 @@ function App() {
             <Route index element={<AdminDashboardPage />} />
             <Route path="batches" element={<BatchesPage />} />
             <Route path="batches/new" element={<BatchFormPage />} />
+            <Route path="batches/:id" element={<BatchDetailPage />} />
             <Route path="batches/:id/edit" element={<BatchFormPage />} />
             <Route path="farmers" element={<FarmersPage />} />
             <Route path="farmers/new" element={<FarmerFormPage />} />
