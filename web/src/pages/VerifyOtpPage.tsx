@@ -53,7 +53,7 @@ export function VerifyOtpPage() {
 
   // 2. Early returns after hooks
   if (!authLoading && isAuthenticated) {
-    const dashboardPath = user?.role === 'ADMIN' ? '/admin' : '/shop';
+    const dashboardPath = user?.role === 'ADMIN' ? '/admin' : '/buyer-dashboard';
     return <Navigate to={dashboardPath} replace />;
   }
 
@@ -76,7 +76,7 @@ export function VerifyOtpPage() {
         name: result.data.user.name,
         phone: result.data.user.phone,
       });
-      navigate('/shop');
+      navigate('/buyer-dashboard');
     }
 
     setIsLoading(false);

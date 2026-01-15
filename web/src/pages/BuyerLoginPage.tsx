@@ -34,7 +34,7 @@ export function BuyerLoginPage() {
 
   // Redirect if already authenticated
   if (!isLoading && isAuthenticated) {
-    const dashboardPath = user?.role === 'ADMIN' ? '/admin' : '/shop';
+    const dashboardPath = user?.role === 'ADMIN' ? '/admin' : '/buyer-dashboard';
     return <Navigate to={dashboardPath} replace />;
   }
 

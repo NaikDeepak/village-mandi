@@ -3,8 +3,8 @@ import { createFarmer, createProduct, deleteFarmer, deleteProduct } from './util
 
 test.describe('Admin Farmer Details', () => {
   test('should view farmer details and their products', async ({ page }) => {
-    let farmer: any;
-    let product: any;
+    let farmer: { id: string; name: string } | undefined;
+    let product: { id: string; name: string } | undefined;
 
     try {
       // 1. Create a farmer via API

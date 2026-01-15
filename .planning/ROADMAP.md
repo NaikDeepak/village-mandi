@@ -12,25 +12,27 @@
 | 02 | Branding & Static Pages | ✅ Complete |
 | 03 | Authentication & Access | ✅ Complete |
 | 04 | Farmers & Products | ✅ Complete |
+| 05 | Batch Management | ✅ Complete |
+| 06 | Pricing & Scoping | ✅ Complete |
+| 07 | Ordering Flow | ✅ Complete |
+| 08 | Two-Stage Payments | ✅ Complete |
+| 09 | Aggregation & Procurement | ✅ Complete |
+| 10 | Packing & Distribution | ✅ Complete |
+| 11 | Farmer Payouts | ✅ Complete |
+| 12 | Order Status | ✅ Complete |
+| 13 | Communication System | ✅ Complete |
 
 ### Current Phase
 
 | Phase | Name | Status |
 |-------|------|--------|
-| 05 | Batch Management | 🔄 Next |
+| 14 | Order Editing | ✅ Complete |
 
-### Upcoming Phases
+### Next Milestone
 
-| Phase | Name | Description |
-|-------|------|-------------|
-| 06 | Pricing & Scoping | Batch-specific pricing, facilitation fees, MOQ enforcement |
-| 07 | Ordering Flow | Product display by farmer, cart with MOQ, fulfilment preference |
-| 08 | Two-Stage Payments | 10% commitment fee, final settlement tracking, manual UPI |
-| 09 | Aggregation & Procurement | Quantity aggregation, procurement lists, WhatsApp messages |
-| 10 | Packing & Distribution | Buyer-wise packing lists, pickup/delivery workflow |
-| 11 | Farmer Payouts | Farmer ledgers, manual payout logging with audit |
-| 12 | Order Status | Real-time buyer status tracking, order history |
-| 13 | Communication System | WhatsApp click-to-chat, event-driven triggers, event logging |
+| Phase | Name | Status |
+|-------|------|--------|
+| - | Post-MVP Enhancements | ⏳ Pending |
 
 ---
 
@@ -181,13 +183,38 @@
 
 ---
 
+### Phase 14 — Order Editing
+
+**Goal:** Allow buyers to edit placed orders before cutoff.
+
+**Scope:**
+- `PATCH /api/orders/:id` endpoint for order editing
+- Editable only when: status = PLACED, batch = OPEN, before cutoff
+- Allowed edits: add/remove items, change quantities, change fulfillment type
+- Auto-cancel order if all items removed
+- Audit logging for all edits
+- Buyer UI for editing orders (reuse cart/shop components)
+- Clear messaging about edit window availability
+
+**Business Rules:**
+- Only `PLACED` orders can be edited
+- No edits after `COMMITMENT_PAID` (payment locks the order)
+- No edits after batch cutoff
+- Prices locked per batch (no changes during edit)
+- Empty order = auto-cancel
+
+**Dependencies:**
+- Requires: Ordering Flow (Phase 07), Order Status (Phase 12)
+
+---
+
 ## Progress Summary
 
 | Category | Completed | Remaining | Total |
 |----------|-----------|-----------|-------|
-| Phases | 4 | 9 | 13 |
-| MVP Progress | 31% | 69% | 100% |
+| Phases | 13 | 1 | 14 |
+| MVP Progress | 93% | 7% | 100% |
 
 ---
 
-*Last updated: 2026-01-14*
+*Last updated: 2026-01-15*

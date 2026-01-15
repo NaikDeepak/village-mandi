@@ -1,5 +1,6 @@
+import { OrderStatus } from '@prisma/client';
 import type { FastifyPluginAsync } from 'fastify';
-import { requireAdmin } from '../middleware/auth';
+import { authenticate, requireAdmin } from '../middleware/auth';
 import {
   type BatchStatus,
   VALID_TRANSITIONS,
@@ -37,7 +38,7 @@ const batchRoutes: FastifyPluginAsync = async (fastify) => {
   // ==========================================
   // GET CURRENT OPEN BATCH
   // ==========================================
-  fastify.get('/batches/current', { preHandler: [requireAdmin] }, async (_request, _reply) => {
+  fastify.get('/batches/current', { preHandler: [authenticate] }, async (_request, _reply) => {
     const batch = await prisma.batch.findFirst({
       where: { status: 'OPEN' },
       include: {
@@ -257,6 +258,105 @@ const batchRoutes: FastifyPluginAsync = async (fastify) => {
       ]);
 
       return { batch: withAllowedTransitions(batch) };
+    }
+  );
+
+  // ==========================================
+  // GET BATCH AGGREGATION (Procurement List)
+  // ==========================================
+  fastify.get(
+    '/batches/:id/aggregation',
+    { preHandler: [requireAdmin] },
+    async (request, reply) => {
+      const { id } = request.params as { id: string };
+
+      const batch = await prisma.batch.findUnique({ where: { id } });
+      if (!batch) {
+        return reply.status(404).send({
+          error: 'Not Found',
+          message: 'Batch not found',
+        });
+      }
+
+      // Find all confirmed orders
+      const orders = await prisma.order.findMany({
+        where: {
+          batchId: id,
+          status: { in: [OrderStatus.COMMITMENT_PAID, OrderStatus.FULLY_PAID] },
+        },
+        include: {
+          items: {
+            include: {
+              batchProduct: {
+                include: {
+                  product: {
+                    include: {
+                      farmer: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      // Aggregate by farmer and product
+      // Map structure: farmerId -> { farmerId, farmerName, products: Map<batchProductId, productData> }
+      interface AggregatedProduct {
+        batchProductId: string;
+        productId: string;
+        productName: string;
+        unit: string;
+        totalQuantity: number;
+      }
+
+      interface AggregatedFarmer {
+        farmerId: string;
+        farmerName: string;
+        farmerLocation: string;
+        products: Map<string, AggregatedProduct>;
+      }
+
+      const aggregationMap = new Map<string, AggregatedFarmer>();
+
+      for (const order of orders) {
+        for (const item of order.items) {
+          const bp = item.batchProduct;
+          const farmer = bp.product.farmer;
+
+          if (!aggregationMap.has(farmer.id)) {
+            aggregationMap.set(farmer.id, {
+              farmerId: farmer.id,
+              farmerName: farmer.name,
+              farmerLocation: farmer.location,
+              products: new Map<string, AggregatedProduct>(),
+            });
+          }
+
+          const farmerData = aggregationMap.get(farmer.id)!;
+          if (!farmerData.products.has(bp.id)) {
+            farmerData.products.set(bp.id, {
+              batchProductId: bp.id,
+              productId: bp.product.id,
+              productName: bp.product.name,
+              unit: bp.product.unit,
+              totalQuantity: 0,
+            });
+          }
+
+          const productData = farmerData.products.get(bp.id)!;
+          productData.totalQuantity += item.orderedQty;
+        }
+      }
+
+      // Convert Maps to Arrays for JSON response
+      const result = Array.from(aggregationMap.values()).map((farmer) => ({
+        ...farmer,
+        products: Array.from(farmer.products.values()),
+      }));
+
+      return { aggregation: result };
     }
   );
 };

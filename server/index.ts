@@ -9,9 +9,15 @@ import prismaPlugin from './src/plugins/prisma';
 
 // Routes
 import authRoutes from './src/routes/auth';
+import batchProductRoutes from './src/routes/batch-products';
 import batchRoutes from './src/routes/batches';
 import farmerRoutes from './src/routes/farmers';
 import hubRoutes from './src/routes/hubs';
+import logRoutes from './src/routes/logs';
+import orderRoutes from './src/routes/orders';
+import packingRoutes from './src/routes/packing';
+import paymentRoutes from './src/routes/payments';
+import payoutRoutes from './src/routes/payouts';
 import productRoutes from './src/routes/products';
 
 const fastify = Fastify({
@@ -34,7 +40,7 @@ fastify.register(cors, {
       ? ['https://virtualmandi.com'] // Update with your production domain
       : ['http://localhost:5173', 'http://localhost:3000'],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
 });
 
 // Register plugins
@@ -42,27 +48,39 @@ fastify.register(prismaPlugin);
 fastify.register(jwtPlugin);
 
 // Register routes
-fastify.register(authRoutes);
-fastify.register(batchRoutes);
-fastify.register(farmerRoutes);
-fastify.register(hubRoutes);
-fastify.register(productRoutes);
+fastify.register(
+  async (api) => {
+    api.register(authRoutes);
+    api.register(batchRoutes);
+    api.register(batchProductRoutes);
+    api.register(farmerRoutes);
+    api.register(hubRoutes);
+    api.register(orderRoutes);
+    api.register(packingRoutes);
+    api.register(paymentRoutes);
+    api.register(payoutRoutes);
+    api.register(productRoutes);
+    api.register(logRoutes);
 
-// Health check
-fastify.get('/health', async (_request, _reply) => {
-  return {
-    status: 'ok',
-    version: '1.0.0',
-    philosophy: 'Trust & Transparency',
-    rules: SYSTEM_RULES,
-  };
-});
+    // Health check
+    api.get('/health', async (_request, _reply) => {
+      return {
+        status: 'ok',
+        version: '1.0.0',
+        philosophy: 'Trust & Transparency',
+        rules: SYSTEM_RULES,
+      };
+    });
+  },
+  { prefix: '/api' }
+);
 
 const start = async () => {
   try {
     // Only listen when running locally
     if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
-      await fastify.listen({ port: 3000, host: '0.0.0.0' });
+      const port = Number.parseInt(process.env.PORT || '3000', 10);
+      await fastify.listen({ port, host: '0.0.0.0' });
     }
   } catch (err) {
     fastify.log.error(err);

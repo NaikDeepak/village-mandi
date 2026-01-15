@@ -81,7 +81,7 @@ export async function getFarmerByName(request: APIRequestContext, name: string) 
   const response = await request.get(`${API_BASE}/farmers`);
   expect(response.ok()).toBeTruthy();
   const { farmers } = await response.json();
-  return farmers.find((f: any) => f.name === name);
+  return farmers.find((f: { name: string }) => f.name === name);
 }
 
 export async function getProductsByFarmerId(request: APIRequestContext, farmerId: string) {
@@ -91,6 +91,5 @@ export async function getProductsByFarmerId(request: APIRequestContext, farmerId
   );
   expect(response.ok()).toBeTruthy();
   const { products } = await response.json();
-  console.log(`Debug: Fetched ${products.length} products for farmer ${farmerId}`);
   return products;
 }

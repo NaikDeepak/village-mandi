@@ -7,14 +7,162 @@
 ## Current Position
 
 **Milestone:** 1 (MVP v1.0)
-**Phase:** 05 — Batch Management (Complete)
-**Plan:** 2 of 2 in current phase
+**Phase:** 14 — Order Editing
+**Plan:** 14-02
 **Status:** Complete
-**Last activity:** 2026-01-15 - Completed 05-02-PLAN.md
+**Last activity:** 2026-01-15 - Completed Phase 14 Order Editing
 
 Progress: ██████████ 100%
 
 ## Recent Progress
+
+### Phase 14 — Order Editing (Completed)
+
+**What shipped:**
+- Plan 14-01: Order Editing API (Completed)
+- Plan 14-02: Order Editing UI (Completed)
+  - Implemented `editOrder` method in `ordersApi`.
+  - Added "Edit" button to `OrderCard` with cutoff logic.
+  - Created `EditOrderPage` with item management and fulfillment selection.
+  - Integrated order cancellation flow with confirmation.
+  - Registered routing for the edit page.
+
+**Key files added/modified:**
+- `web/src/lib/api.ts` — Added `editOrder`
+- `web/src/components/buyer/OrderCard.tsx` — Added Edit button and cutoff logic
+- `web/src/pages/buyer/EditOrderPage.tsx` — New page for order management
+- `web/src/App.tsx` — Added route for `EditOrderPage`
+
+### Phase 13 — Communication System (Completed 2026-01-15)
+
+**What shipped:**
+- Implemented `web/src/lib/communication.ts` with standardized WhatsApp templates.
+- Created `POST /api/logs/communication` for audit tracking of outreach.
+- Integrated communication buttons across Admin (Batches, Packing, Procurement, Payouts) and Buyer (Dashboard, OrderCard) interfaces.
+- Added Communication History feed to Admin `OrderDetailPage`.
+- Handled edge cases for missing phone numbers with "OPEN_CHAT" logging.
+
+**Key files added:**
+- `web/src/lib/communication.ts` — Utility library
+- `server/src/routes/logs.ts` — Backend logging API
+- `server/src/schemas/logs.ts` — Zod validation schemas
+
+### Phase 12 — Order Status (Completed 2026-01-15)
+
+**What shipped:**
+- Plan 12-01: Buyer Dashboard & Order History
+- Implemented `BuyerDashboardPage` with "Active" and "History" views.
+- `OrderStatusBar` component for visual tracking of order stages.
+- `OrderCard` component with detailed item lists and financial balance summary.
+- Standardized `OrderItem` types across frontend and backend (`orderedQty`, `unitPrice`, etc.).
+- Patched all Admin and Checkout views to support type changes.
+
+**Key files added:**
+- `web/src/components/buyer/OrderStatusBar.tsx` — Progress UI
+- `web/src/components/buyer/OrderCard.tsx` — Detailed order summary
+- `web/src/pages/BuyerDashboardPage.tsx` — Dashboard implementation
+
+### Phase 11 — Farmer Payouts (Completed 2026-01-15)
+
+**What shipped:**
+- Plan 11-01: Farmer Payouts API & UI
+- Implemented `GET /batches/:id/payouts` for financial standing per farmer.
+- Implemented `POST /batches/:id/payouts` for manual payout logging.
+- Integrated with `EventLog` for audit trail.
+- Admin `BatchPayoutsPage` with balances table and payout history.
+
+### Phase 10 — Packing & Distribution (Completed 2026-01-15)
+
+**What shipped:**
+- Plan 10-01: Packing API & UI
+- Added `PACKED` and `DISTRIBUTED` statuses to order lifecycle.
+- Created `GET /batches/:id/packing` for buyer-wise packing lists.
+- Admin `BatchPackingPage` with quick status updates and print-friendly packing slips.
+- 5/5 passing integration tests for packing logic.
+
+### Phase 09 — Aggregation & Procurement (Completed 2026-01-15)
+
+**What shipped:**
+- Plan 09-01: Aggregation API & Procurement UI
+- Implemented `GET /batches/:id/aggregation` for procurement planning.
+- Logic groups confirmed orders (`COMMITMENT_PAID`, `FULLY_PAID`) by farmer and product.
+- Admin `BatchProcurementPage` with summary stats and detailed farmer lists.
+- "Copy for WhatsApp" feature for easy farmer communication.
+- Print-friendly layout for physical procurement checklists.
+- Automated tests for aggregation logic (4 tests).
+
+**Key files added:**
+- `server/src/routes/aggregation.test.ts` — Integration tests
+- `web/src/pages/admin/BatchProcurementPage.tsx` — Procurement UI
+
+### Phase 08 — Two-Stage Payments (Completed 2026-01-15)
+
+**What shipped:**
+- Plan 08-01: Payment Logging API & Admin UI
+- Implemented `POST /orders/:id/payments` for manual UPI/Cash payment verification.
+- Transactional integrity for payment logging, order status updates, and event logging.
+- Admin `OrdersPage` with batch and status filtering.
+- Admin `OrderDetailPage` with detailed items view and payment form.
+- Automated tests for payment status transitions (8 tests).
+- Updated frontend API client and shared types.
+
+**Key files added:**
+- `server/src/routes/payments.ts` — Payment API
+- `server/src/schemas/payments.ts` — Payment validation
+- `server/src/routes/payments.test.ts` — Payment integration tests
+- `web/src/pages/admin/OrdersPage.tsx` — Order list UI
+- `web/src/pages/admin/OrderDetailPage.tsx` — Order details & payment logging UI
+
+### Phase 07 — Ordering (Completed 2026-01-15)
+
+**What shipped:**
+- Plan 07-01: Order Placement & Access Control
+- Updated access control to allow BUYER role to view current batches and products.
+- Implemented `POST /orders` with strict validation (OPEN status, cutoff window, MOQ/MaxOQ).
+- Transactional order creation with `OrderItem` and `EventLog` audit trail.
+- Implemented `GET /orders/my` for buyer order history.
+- 86 passing tests total (including 8 new ordering tests).
+- Plan 07-02: Buyer Storefront
+- Built responsive Shop page for buyers to browse current batch.
+- Grouped products by farmer with custom `ProductCard` component.
+- Implemented quantity selection with MOQ/MaxOQ validation.
+- Connected storefront to backend `POST /orders` API.
+- Plan 07-03: Cart & Checkout Flow
+- Persistent `useCartStore` with Zustand and localStorage.
+- `CartDrawer` component for side-panel cart management.
+- `CheckoutPage` with fulfillment selection and order review.
+- `OrderSuccessPage` confirmation view.
+- Refactored `ShopPage` to integrate with Checkout flow.
+
+**Key files added:**
+- `server/src/routes/orders.ts` — Ordering API
+- `server/src/schemas/orders.ts` — Zod schemas for ordering
+- `server/src/routes/orders.test.ts` — Integration tests for ordering
+- `web/src/pages/buyer/ShopPage.tsx` — Buyer shop interface
+- `web/src/pages/buyer/CheckoutPage.tsx` — Checkout interface
+- `web/src/pages/buyer/OrderSuccessPage.tsx` — Confirmation view
+- `web/src/components/shop/ProductCard.tsx` — Product display component
+- `web/src/components/shop/CartDrawer.tsx` — Cart overlay component
+- `web/src/stores/cart.ts` — Persistent cart state
+- `web/src/components/ui/card.tsx`, `badge.tsx`, `separator.tsx` — UI components
+- `web/src/hooks/use-toast.ts` — Notification hook
+
+### Phase 06 — Pricing & Scoping (Completed 2026-01-15)
+
+**What shipped:**
+- Plan 06-01: Batch Product Management
+- BatchProduct CRUD for DRAFT batches
+- Pricing (base price + facilitation %)
+- Order limits (minOrderQty, maxOrderQty)
+- Relationship validation (Product → Farmer)
+- 78 passing tests total
+
+**Key files added:**
+- `server/src/routes/batch-products.ts` — Batch Product API
+- `server/src/schemas/batch-products.ts` — Zod schemas
+- `server/src/routes/batch-products.test.ts` — Integration tests (20 tests)
+- `web/src/pages/admin/BatchProductsPage.tsx` — Management UI
+- `web/src/components/admin/AddProductToBatchDialog.tsx` — Dialog component
 
 ### Phase 05 — Batch Management (Completed 2026-01-15)
 
@@ -100,6 +248,8 @@ Progress: ██████████ 100%
 
 | Decision | Context | Outcome |
 |----------|---------|---------|
+| Items replacement strategy for order editing | Simplify API behavior and avoid complex merge logic | PATCH /orders/:id replaces all items, not partial update. qty=0 removes item, empty array cancels order |
+| Metadata typing for event logs | Prisma InputJsonValue type incompatible with Record<string, unknown> | Build metadata object dynamically with explicit optional properties matching existing patterns |
 | Strict state machine for batches | Business integrity depends on predictable batch lifecycle | VALID_TRANSITIONS constant defines allowed transitions, validation rejects invalid with 400 |
 | EventLog for batch transitions | Accountability and audit trail required | Every state change creates EventLog entry with from/to metadata |
 | Cutoff validation at DRAFT→OPEN | Prevent opening batches past their cutoff window | Check cutoffAt > now when transitioning to OPEN, reject if past |
@@ -148,22 +298,29 @@ Progress: ██████████ 100%
 
 ---
 
+## Roadmap Evolution
+
+| Date | Change |
+|------|--------|
+| 2026-01-15 | Phase 14 added: Order Editing (allow buyers to edit PLACED orders before cutoff) |
+
+---
+
 ## Session Continuity
 
 **Last session:** 2026-01-15
 **Work completed:**
-- Completed 05-01-PLAN.md: Hub and Batch backend API
-- Hub CRUD with admin-only access
-- Batch API with strict state machine and audit logging
-- 58 passing tests including comprehensive state machine tests
-- Completed 05-02-PLAN.md: Batch Admin UI
-- BatchesPage with hero section for current batch
-- BatchFormPage for create/edit
-- Admin navigation link added
-- All tasks committed atomically (5bd325e, 1d6c728, d9a8e8d)
+- Completed 14-01-PLAN.md: Order Editing API
+- Implemented PATCH /orders/:id endpoint with comprehensive validation
+- Added editOrderSchema for order editing validation
+- Auto-cancel when all items removed
+- Audit logging for ORDER_EDITED and ORDER_CANCELLED events
+- 13 new test cases (121 total tests passing)
+- All tasks committed atomically (6f993ed, 5ea95f0, 76e2a65)
 
 **Next actions:**
-1. `/gsd:execute-phase 06` — Execute Phase 06: Pricing & Scoping
+1. Phase 14 complete - MVP v1.0 milestone achieved
+2. Consider next milestone or deployment preparation
 
 ---
 

@@ -32,6 +32,18 @@ export interface Product {
   };
 }
 
+export interface BatchProduct {
+  id: string;
+  batchId: string;
+  productId: string;
+  pricePerUnit: number;
+  facilitationPercent: number;
+  minOrderQty: number;
+  maxOrderQty?: number | null;
+  isActive: boolean;
+  product: Product;
+}
+
 export interface CreateFarmerInput {
   name: string;
   location: string;
@@ -53,6 +65,18 @@ export interface CreateProductInput {
 }
 
 export interface UpdateProductInput extends Partial<Omit<CreateProductInput, 'farmerId'>> {
+  isActive?: boolean;
+}
+
+export interface AddBatchProductInput {
+  productId: string;
+  pricePerUnit: number;
+  facilitationPercent: number;
+  minOrderQty: number;
+  maxOrderQty?: number | null;
+}
+
+export interface UpdateBatchProductInput extends Partial<Omit<AddBatchProductInput, 'productId'>> {
   isActive?: boolean;
 }
 
@@ -86,3 +110,117 @@ export interface CreateBatchInput {
 }
 
 export interface UpdateBatchInput extends Partial<CreateBatchInput> {}
+
+export interface OrderItem {
+  id: string;
+  orderId: string;
+  batchProductId: string;
+  orderedQty: number;
+  finalQty?: number | null;
+  unitPrice: number;
+  lineTotal: number;
+  batchProduct?: BatchProduct;
+}
+
+export interface Order {
+  id: string;
+  batchId: string;
+  buyerId: string;
+  status:
+    | 'PENDING'
+    | 'COMMITMENT_PAID'
+    | 'FULLY_PAID'
+    | 'PACKED'
+    | 'DISTRIBUTED'
+    | 'CANCELLED'
+    | 'PLACED';
+  fulfillmentType: 'PICKUP' | 'DELIVERY';
+  estimatedTotal: number;
+  facilitationAmt: number;
+  finalTotal?: number | null;
+  createdAt: string;
+  updatedAt: string;
+  batch?: Batch;
+  items?: OrderItem[];
+  payments?: Payment[];
+}
+
+export interface CreateOrderInput {
+  batchId: string;
+  fulfillmentType: 'PICKUP' | 'DELIVERY';
+  items: {
+    batchProductId: string;
+    orderedQty: number;
+  }[];
+}
+
+export interface Payment {
+  id: string;
+  orderId: string;
+  stage: 'COMMITMENT' | 'FINAL';
+  amount: number;
+  method: 'UPI' | 'CASH';
+  referenceId?: string | null;
+  paidAt: string;
+}
+
+export interface LogPaymentInput {
+  amount: number;
+  method: 'UPI' | 'CASH';
+  stage: 'COMMITMENT' | 'FINAL';
+  referenceId?: string;
+  paidAt?: string;
+}
+
+export interface BatchAggregationFarmer {
+  farmerId: string;
+  farmerName: string;
+  farmerLocation: string;
+  products: {
+    batchProductId: string;
+    productId: string;
+    productName: string;
+    unit: string;
+    totalQuantity: number;
+  }[];
+}
+
+export interface BatchAggregation {
+  aggregation: BatchAggregationFarmer[];
+}
+
+export interface FarmerPayout {
+  id: string;
+  batchId: string;
+  farmerId: string;
+  amount: number;
+  upiReference: string;
+  paidAt: string;
+  createdAt: string;
+  farmer: {
+    name: string;
+    location: string;
+  };
+}
+
+export interface FarmerPayoutSummary {
+  farmerId: string;
+  name: string;
+  location: string;
+  totalOwed: number;
+  totalPaid: number;
+  balance: number;
+}
+
+export interface BatchPayoutsResponse {
+  batchId: string;
+  farmers: FarmerPayoutSummary[];
+  payouts: FarmerPayout[];
+}
+
+export interface CreatePayoutInput {
+  farmerId: string;
+  amount: number;
+  upiReference: string;
+  paidAt: string;
+}

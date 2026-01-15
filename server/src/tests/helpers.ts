@@ -4,13 +4,23 @@ import jwt from '@fastify/jwt';
 import Fastify, { type FastifyInstance } from 'fastify';
 import { vi } from 'vitest';
 
+import batchProductRoutes from '../routes/batch-products';
 import batchRoutes from '../routes/batches';
 import farmerRoutes from '../routes/farmers';
 import hubRoutes from '../routes/hubs';
+import orderRoutes from '../routes/orders';
+import packingRoutes from '../routes/packing';
+import paymentRoutes from '../routes/payments';
+import payoutRoutes from '../routes/payouts';
 import productRoutes from '../routes/products';
 
 // Mock Prisma client
 export const mockPrisma = {
+  $transaction: vi.fn(async (fn) => {
+    if (typeof fn === 'function') return await fn(mockPrisma);
+    if (Array.isArray(fn)) return await Promise.all(fn);
+    return fn;
+  }),
   farmer: {
     findMany: vi.fn(),
     findUnique: vi.fn(),
@@ -32,6 +42,38 @@ export const mockPrisma = {
   batch: {
     findMany: vi.fn(),
     findFirst: vi.fn(),
+    findUnique: vi.fn(),
+    create: vi.fn(),
+    update: vi.fn(),
+  },
+  batchProduct: {
+    findMany: vi.fn(),
+    findFirst: vi.fn(),
+    findUnique: vi.fn(),
+    create: vi.fn(),
+    update: vi.fn(),
+    delete: vi.fn(),
+  },
+  order: {
+    findMany: vi.fn(),
+    findUnique: vi.fn(),
+    create: vi.fn(),
+    update: vi.fn(),
+  },
+  orderItem: {
+    update: vi.fn(),
+    updateMany: vi.fn(),
+    deleteMany: vi.fn(),
+    createMany: vi.fn(),
+  },
+  payment: {
+    findMany: vi.fn(),
+    findUnique: vi.fn(),
+    create: vi.fn(),
+    update: vi.fn(),
+  },
+  farmerPayout: {
+    findMany: vi.fn(),
     findUnique: vi.fn(),
     create: vi.fn(),
     update: vi.fn(),
@@ -81,23 +123,30 @@ export async function buildTestApp(): Promise<FastifyInstance> {
   await app.register(productRoutes);
   await app.register(hubRoutes);
   await app.register(batchRoutes);
+  await app.register(batchProductRoutes);
+  await app.register(orderRoutes);
+  await app.register(packingRoutes);
+  await app.register(paymentRoutes);
+  await app.register(payoutRoutes);
 
   await app.ready();
   return app;
 }
 
 // Helper to generate admin JWT token for testing
-export function generateAdminToken(app: FastifyInstance): string {
+export function generateAdminToken(app: FastifyInstance, payload?: { id?: string }): string {
+  const userId = payload?.id || 'test-admin-id';
   return app.jwt.sign({
-    userId: 'test-admin-id',
+    userId,
     role: 'ADMIN',
   });
 }
 
 // Helper to generate buyer JWT token for testing
-export function generateBuyerToken(app: FastifyInstance): string {
+export function generateBuyerToken(app: FastifyInstance, payload?: { id?: string }): string {
+  const userId = payload?.id || 'test-buyer-id';
   return app.jwt.sign({
-    userId: 'test-buyer-id',
+    userId,
     role: 'BUYER',
   });
 }
