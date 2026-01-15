@@ -14,6 +14,7 @@ import batchRoutes from './src/routes/batches';
 import farmerRoutes from './src/routes/farmers';
 import hubRoutes from './src/routes/hubs';
 import orderRoutes from './src/routes/orders';
+import packingRoutes from './src/routes/packing';
 import paymentRoutes from './src/routes/payments';
 import productRoutes from './src/routes/products';
 
@@ -53,6 +54,7 @@ fastify.register(
     api.register(farmerRoutes);
     api.register(hubRoutes);
     api.register(orderRoutes);
+    api.register(packingRoutes);
     api.register(paymentRoutes);
     api.register(productRoutes);
 

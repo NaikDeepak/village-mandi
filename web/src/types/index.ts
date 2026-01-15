@@ -126,7 +126,14 @@ export interface Order {
   id: string;
   batchId: string;
   buyerId: string;
-  status: 'PENDING' | 'COMMITMENT_PAID' | 'FULLY_PAID' | 'CANCELLED' | 'PLACED';
+  status:
+    | 'PENDING'
+    | 'COMMITMENT_PAID'
+    | 'FULLY_PAID'
+    | 'PACKED'
+    | 'DISTRIBUTED'
+    | 'CANCELLED'
+    | 'PLACED';
   fulfillmentType: 'PICKUP' | 'DELIVERY';
   estimatedTotal: number;
   facilitationAmt: number;

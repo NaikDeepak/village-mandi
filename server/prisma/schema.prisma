@@ -38,6 +38,8 @@ enum OrderStatus {
   PLACED              // order created
   COMMITMENT_PAID     // 10% paid
   FULLY_PAID          // ready for pickup/delivery
+  PACKED              // sorted and packed for buyer
+  DISTRIBUTED         // picked up or delivered
   CANCELLED
 }
 

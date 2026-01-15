@@ -247,7 +247,7 @@ Progress: ██████████ 100%
 - All tasks committed atomically (5bd325e, 1d6c728, d9a8e8d)
 
 **Next actions:**
-1. `/gsd:execute-phase 06` — Execute Phase 06: Pricing & Scoping
+1. `/gsd:execute-phase 10` — Execute Phase 10: Packing & Distribution
 
 ---
 

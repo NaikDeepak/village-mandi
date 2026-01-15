@@ -50,6 +50,10 @@ export function OrdersPage() {
         return 'bg-yellow-100 text-yellow-800';
       case 'FULLY_PAID':
         return 'bg-green-100 text-green-800';
+      case 'PACKED':
+        return 'bg-blue-100 text-blue-800';
+      case 'DISTRIBUTED':
+        return 'bg-purple-100 text-purple-800';
       case 'CANCELLED':
         return 'bg-red-100 text-red-800';
       default:
@@ -101,6 +105,8 @@ export function OrdersPage() {
             <option value="PLACED">Placed</option>
             <option value="COMMITMENT_PAID">Commitment Paid</option>
             <option value="FULLY_PAID">Fully Paid</option>
+            <option value="PACKED">Packed</option>
+            <option value="DISTRIBUTED">Distributed</option>
             <option value="CANCELLED">Cancelled</option>
           </select>
         </div>

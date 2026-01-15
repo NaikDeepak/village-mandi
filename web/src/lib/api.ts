@@ -95,6 +95,7 @@ export const authApi = {
 import type {
   AddBatchProductInput,
   Batch,
+  BatchAggregation,
   BatchProduct,
   CreateBatchInput,
   CreateFarmerInput,
@@ -104,6 +105,7 @@ import type {
   Hub,
   LogPaymentInput,
   Order,
+  OrderItem,
   Payment,
   Product,
   UpdateBatchInput,
@@ -260,6 +262,23 @@ export const ordersApi = {
     }),
 
   getMyOrders: () => request<{ orders: Order[] }>('/orders/my'),
+};
+
+// Packing API
+export const packingApi = {
+  getPackingList: (batchId: string) =>
+    request<{
+      orders: (Order & {
+        buyer: { id: string; name: string; phone: string };
+        items: (OrderItem & { batchProduct: { product: { name: string; unit: string } } })[];
+      })[];
+    }>(`/batches/${batchId}/packing`),
+
+  updateOrderStatus: (orderId: string, status: Order['status']) =>
+    request<{ order: Order }>(`/orders/${orderId}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    }),
 };
 
 // Payments API

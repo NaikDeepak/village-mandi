@@ -21,8 +21,8 @@
 
 | Phase | Name | Status |
 |-------|------|--------|
-| 09 | Aggregation & Procurement | 🔄 In Progress |
-| 10 | Packing & Distribution | Buyer-wise packing lists, pickup/delivery workflow |
+| 09 | Aggregation & Procurement | ✅ Complete |
+| 10 | Packing & Distribution | 🔄 In Progress |
 | 11 | Farmer Payouts | Farmer ledgers, manual payout logging with audit |
 | 12 | Order Status | Real-time buyer status tracking, order history |
 | 13 | Communication System | WhatsApp click-to-chat, event-driven triggers, event logging |

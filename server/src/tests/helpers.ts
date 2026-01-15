@@ -9,6 +9,7 @@ import batchRoutes from '../routes/batches';
 import farmerRoutes from '../routes/farmers';
 import hubRoutes from '../routes/hubs';
 import orderRoutes from '../routes/orders';
+import packingRoutes from '../routes/packing';
 import paymentRoutes from '../routes/payments';
 import productRoutes from '../routes/products';
 
@@ -111,6 +112,7 @@ export async function buildTestApp(): Promise<FastifyInstance> {
   await app.register(batchRoutes);
   await app.register(batchProductRoutes);
   await app.register(orderRoutes);
+  await app.register(packingRoutes);
   await app.register(paymentRoutes);
 
   await app.ready();
