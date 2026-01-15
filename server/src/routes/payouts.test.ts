@@ -114,6 +114,7 @@ describe('Payout Routes', () => {
 
       mockPrisma.batch.findUnique.mockResolvedValue({ id: batchId });
       mockPrisma.farmer.findUnique.mockResolvedValue({ id: farmerId });
+      mockPrisma.batchProduct.findFirst.mockResolvedValue({ id: 'bp-1' });
 
       mockPrisma.farmerPayout.create.mockResolvedValue({
         id: 'payout-2',

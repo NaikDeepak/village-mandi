@@ -137,10 +137,16 @@ const payoutRoutes: FastifyPluginAsync = async (fastify) => {
     const { farmerId, amount, upiReference, paidAt } = parseResult.data;
 
     try {
-      // 1. Verify Batch and Farmer exist
-      const [batch, farmer] = await Promise.all([
+      // 1. Verify Batch, Farmer exist, and Farmer is part of the batch
+      const [batch, farmer, farmerInBatch] = await Promise.all([
         prisma.batch.findUnique({ where: { id: batchId } }),
         prisma.farmer.findUnique({ where: { id: farmerId } }),
+        prisma.batchProduct.findFirst({
+          where: {
+            batchId,
+            product: { farmerId },
+          },
+        }),
       ]);
 
       if (!batch) {
@@ -148,6 +154,12 @@ const payoutRoutes: FastifyPluginAsync = async (fastify) => {
       }
       if (!farmer) {
         return reply.status(404).send({ error: 'Not Found', message: 'Farmer not found' });
+      }
+      if (!farmerInBatch) {
+        return reply.status(400).send({
+          error: 'Bad Request',
+          message: 'Farmer has no products in this batch',
+        });
       }
 
       // 2. Create Payout and Log Event in Transaction
