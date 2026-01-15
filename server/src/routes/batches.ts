@@ -135,11 +135,12 @@ const batchRoutes: FastifyPluginAsync = async (fastify) => {
       });
     }
 
-    const updateData: Record<string, unknown> = {};
-    if (parseResult.data.name) updateData.name = parseResult.data.name;
-    if (parseResult.data.cutoffAt) updateData.cutoffAt = new Date(parseResult.data.cutoffAt);
-    if (parseResult.data.deliveryDate)
-      updateData.deliveryDate = new Date(parseResult.data.deliveryDate);
+    const { name, cutoffAt, deliveryDate } = parseResult.data;
+    const updateData = {
+      ...(name && { name }),
+      ...(cutoffAt && { cutoffAt: new Date(cutoffAt) }),
+      ...(deliveryDate && { deliveryDate: new Date(deliveryDate) }),
+    };
 
     const batch = await prisma.batch.update({
       where: { id },
@@ -199,27 +200,27 @@ const batchRoutes: FastifyPluginAsync = async (fastify) => {
         });
       }
 
-      // Perform transition
-      const batch = await prisma.batch.update({
-        where: { id },
-        data: { status: targetStatus },
-        include: {
-          hub: true,
-        },
-      });
-
-      // Log transition to EventLog
-      await prisma.eventLog.create({
-        data: {
-          entityType: 'BATCH',
-          entityId: id,
-          action: 'STATUS_CHANGE',
-          metadata: {
-            from: currentStatus,
-            to: targetStatus,
+      // Perform transition and log event in a single transaction
+      const [batch] = await prisma.$transaction([
+        prisma.batch.update({
+          where: { id },
+          data: { status: targetStatus },
+          include: {
+            hub: true,
           },
-        },
-      });
+        }),
+        prisma.eventLog.create({
+          data: {
+            entityType: 'BATCH',
+            entityId: id,
+            action: 'STATUS_CHANGE',
+            metadata: {
+              from: currentStatus,
+              to: targetStatus,
+            },
+          },
+        }),
+      ]);
 
       return { batch };
     }

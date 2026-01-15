@@ -2,125 +2,140 @@ import { expect, test } from '@playwright/test';
 import { createFarmer, deleteFarmer, getFarmerByName } from './utils/api-helpers';
 
 test.describe('Admin Farmer Management', () => {
-  // Track IDs for cleanup
-  const createdFarmerIds: string[] = [];
-
-  test.afterEach(async ({ request }) => {
-    for (const id of createdFarmerIds) {
-      await deleteFarmer(request, id);
-    }
-    createdFarmerIds.length = 0;
-  });
-
   test('should add a new farmer successfully', async ({ page, request }) => {
-    await page.goto('/admin/farmers');
+    const createdFarmerIds: string[] = [];
 
-    // Navigate to add farmer page
-    await page.getByRole('link', { name: 'Add Farmer' }).click();
-    await expect(page).toHaveURL(/\/admin\/farmers\/new/);
+    try {
+      await page.goto('/admin/farmers');
 
-    // Generate unique farmer name to avoid conflicts
-    const farmerName = `Test Farmer ${Date.now()}`;
+      // Navigate to add farmer page
+      await page.getByRole('link', { name: 'Add Farmer' }).click();
+      await expect(page).toHaveURL(/\/admin\/farmers\/new/);
 
-    // Fill the form
-    await page.fill('input[name="name"]', farmerName);
-    await page.fill('input[name="location"]', 'Test Village');
-    await page.selectOption('select[id="relationshipLevel"]', 'SELF');
-    await page.fill('textarea[id="description"]', 'This is a test farmer description');
+      // Generate unique farmer name to avoid conflicts
+      const farmerName = `Test Farmer ${Date.now()}`;
 
-    // Submit
-    await page.click('button[type="submit"]');
+      // Fill the form
+      await page.fill('input[name="name"]', farmerName);
+      await page.fill('input[name="location"]', 'Test Village');
+      await page.selectOption('select[id="relationshipLevel"]', 'SELF');
+      await page.fill('textarea[id="description"]', 'This is a test farmer description');
 
-    // Verify redirect back to farmers list
-    await expect(page).toHaveURL('/admin/farmers');
+      // Submit
+      await page.click('button[type="submit"]');
 
-    // Verify the new farmer is in the list
-    const row = page.getByRole('row').filter({ hasText: farmerName });
-    await expect(row).toBeVisible();
-    await expect(row.getByText('Test Village')).toBeVisible();
+      // Verify redirect back to farmers list
+      await expect(page).toHaveURL('/admin/farmers');
 
-    // Find ID for cleanup
-    const farmer = await getFarmerByName(request, farmerName);
-    if (farmer) {
-      createdFarmerIds.push(farmer.id);
+      // Verify the new farmer is in the list
+      const row = page.getByRole('row').filter({ hasText: farmerName });
+      await expect(row).toBeVisible();
+      await expect(row.getByText('Test Village')).toBeVisible();
+
+      // Find ID for cleanup
+      const farmer = await getFarmerByName(request, farmerName);
+      if (farmer) {
+        createdFarmerIds.push(farmer.id);
+      }
+    } finally {
+      // Cleanup is scoped to this specific test
+      for (const id of createdFarmerIds) {
+        await deleteFarmer(request, id);
+      }
     }
   });
 
   test('should deactivate and activate a farmer', async ({ page, request }) => {
-    // Create via API
-    const farmerName = `Toggle Farmer ${Date.now()}`;
-    const farmer = await createFarmer(request, {
-      name: farmerName,
-      location: 'Toggle Village',
-      relationshipLevel: 'FAMILY',
-    });
-    createdFarmerIds.push(farmer.id);
+    let farmerId: string | null = null;
 
-    await page.goto('/admin/farmers');
+    try {
+      // Create via API
+      const farmerName = `Toggle Farmer ${Date.now()}`;
+      const farmer = await createFarmer(request, {
+        name: farmerName,
+        location: 'Toggle Village',
+        relationshipLevel: 'FAMILY',
+      });
+      farmerId = farmer.id;
 
-    // Find the row with our farmer
-    const row = page.getByRole('row').filter({ hasText: farmerName });
+      await page.goto('/admin/farmers');
 
-    // Check initial state (should be Active)
-    await expect(row.getByText('Active')).toBeVisible();
+      // Find the row with our farmer
+      const row = page.getByRole('row').filter({ hasText: farmerName });
 
-    // Click Deactivate
-    page.once('dialog', (dialog) => dialog.accept()); // Handle confirmation dialog
-    await row.getByRole('button', { name: 'Deactivate' }).click();
+      // Check initial state (should be Active)
+      await expect(row.getByText('Active')).toBeVisible();
 
-    // Wait for status change
-    await expect(row.getByText('Inactive')).toBeVisible();
+      // Click Deactivate
+      page.once('dialog', (dialog) => dialog.accept()); // Handle confirmation dialog
+      await row.getByRole('button', { name: 'Deactivate' }).click();
 
-    // Click Activate
-    page.once('dialog', (dialog) => dialog.accept()); // Handle confirmation dialog
-    await row.getByRole('button', { name: 'Activate' }).click();
+      // Wait for status change
+      await expect(row.getByText('Inactive')).toBeVisible();
 
-    // Wait for status change back to Active
-    await expect(row.getByText('Active')).toBeVisible();
+      // Click Activate
+      page.once('dialog', (dialog) => dialog.accept()); // Handle confirmation dialog
+      await row.getByRole('button', { name: 'Activate' }).click();
+
+      // Wait for status change back to Active
+      await expect(row.getByText('Active')).toBeVisible();
+    } finally {
+      // Cleanup is scoped to this specific test
+      if (farmerId) {
+        await deleteFarmer(request, farmerId);
+      }
+    }
   });
 
   test('should edit a farmer successfully', async ({ page, request }) => {
-    // Create a farmer to edit via API
-    const farmerName = `Edit Farmer ${Date.now()}`;
-    const farmer = await createFarmer(request, {
-      name: farmerName,
-      location: 'Original Location',
-      relationshipLevel: 'SELF',
-    });
-    createdFarmerIds.push(farmer.id);
+    let farmerId: string | null = null;
 
-    await page.goto('/admin/farmers');
+    try {
+      // Create a farmer to edit via API
+      const farmerName = `Edit Farmer ${Date.now()}`;
+      const farmer = await createFarmer(request, {
+        name: farmerName,
+        location: 'Original Location',
+        relationshipLevel: 'SELF',
+      });
+      farmerId = farmer.id;
 
-    // Find the farmer and click edit
-    const row = page.getByRole('row').filter({ hasText: farmerName });
-    await row.getByRole('link', { name: 'Edit', exact: true }).click();
+      await page.goto('/admin/farmers');
 
-    // Verify we are on the edit page
-    await expect(page).toHaveURL(/\/admin\/farmers\/.*\/edit/);
+      // Find the farmer and click edit
+      const row = page.getByRole('row').filter({ hasText: farmerName });
+      await row.getByRole('link', { name: 'Edit', exact: true }).click();
 
-    // Wait for the form to be populated with original data
-    await expect(page.locator('input[name="name"]')).toHaveValue(farmerName);
+      // Verify we are on the edit page
+      await expect(page).toHaveURL(/\/admin\/farmers\/.*\/edit/);
 
-    // Update details
-    const newName = `${farmerName} Updated`;
-    await page.fill('input[name="name"]', newName);
-    await page.fill('input[name="location"]', 'Updated Location');
-    await page.click('button[type="submit"]');
+      // Wait for the form to be populated with original data
+      await expect(page.locator('input[name="name"]')).toHaveValue(farmerName);
 
-    // Verify redirect and updated info
-    await expect(page).toHaveURL('/admin/farmers');
-    await expect(page.getByText('Loading...')).not.toBeVisible();
+      // Update details
+      const newName = `${farmerName} Updated`;
+      await page.fill('input[name="name"]', newName);
+      await page.fill('input[name="location"]', 'Updated Location');
+      await page.click('button[type="submit"]');
 
-    // Use toPass to retry reloading until the data appears
-    await expect(async () => {
-      await page.reload();
+      // Verify redirect and updated info
+      await expect(page).toHaveURL('/admin/farmers');
       await expect(page.getByText('Loading...')).not.toBeVisible();
-      await expect(page.getByText(newName)).toBeVisible();
-      const updatedRow = page.getByRole('row').filter({ hasText: newName });
-      await expect(updatedRow).toBeVisible();
-      await expect(updatedRow.getByText('Updated Location')).toBeVisible();
-    }).toPass({ timeout: 20000 });
 
-    // ID remains same, so cleanup will handle it via createdFarmerIds
+      // Use toPass to retry reloading until the data appears
+      await expect(async () => {
+        await page.reload();
+        await expect(page.getByText('Loading...')).not.toBeVisible();
+        await expect(page.getByText(newName)).toBeVisible();
+        const updatedRow = page.getByRole('row').filter({ hasText: newName });
+        await expect(updatedRow).toBeVisible();
+        await expect(updatedRow.getByText('Updated Location')).toBeVisible();
+      }).toPass({ timeout: 20000 });
+    } finally {
+      // Cleanup is scoped to this specific test
+      if (farmerId) {
+        await deleteFarmer(request, farmerId);
+      }
+    }
   });
 });
