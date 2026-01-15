@@ -127,6 +127,7 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
 
     // TODO: In production, send OTP via MSG91
     // await sendOTPViaMSG91(phone, otp);
+    console.log('OTP', otp);
 
     return {
       success: true,

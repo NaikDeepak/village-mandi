@@ -7,12 +7,12 @@
 ## Current Position
 
 **Milestone:** 1 (MVP v1.0)
-**Phase:** 13 — Communication System
-**Plan:** 13-01
-**Status:** Completed
-**Last activity:** 2026-01-15 - Completed Phase 13: Communication System (WhatsApp Click-to-Chat & Audit Logging)
+**Phase:** 14 — Order Editing
+**Plan:** Not yet planned
+**Status:** Pending
+**Last activity:** 2026-01-15 - Added Phase 14: Order Editing
 
-Progress: ██████████ 100%
+Progress: █████████░ 93%
 
 ## Recent Progress
 
@@ -279,6 +279,14 @@ Progress: ██████████ 100%
 
 ---
 
+## Roadmap Evolution
+
+| Date | Change |
+|------|--------|
+| 2026-01-15 | Phase 14 added: Order Editing (allow buyers to edit PLACED orders before cutoff) |
+
+---
+
 ## Session Continuity
 
 **Last session:** 2026-01-15
@@ -294,7 +302,7 @@ Progress: ██████████ 100%
 - All tasks committed atomically (5bd325e, 1d6c728, d9a8e8d)
 
 **Next actions:**
-1. `/gsd:execute-phase 10` — Execute Phase 10: Packing & Distribution
+1. `/gsd:plan-phase 14` — Plan Phase 14: Order Editing
 
 ---
 

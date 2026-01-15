@@ -78,8 +78,8 @@ export function CheckoutPage() {
         navigate(`/shop/order-success?id=${orderId}`);
       } else {
         toast({
-          title: 'Failed to place order',
-          description: res.error || 'Something went wrong',
+          title: res.error || 'Failed to place order',
+          description: res.message || 'Something went wrong',
           variant: 'destructive',
         });
       }

@@ -22,6 +22,12 @@
 | 12 | Order Status | ✅ Complete |
 | 13 | Communication System | ✅ Complete |
 
+### Current Phase
+
+| Phase | Name | Status |
+|-------|------|--------|
+| 14 | Order Editing | ⏳ Pending |
+
 ### Next Milestone
 
 | Phase | Name | Status |
@@ -177,12 +183,37 @@
 
 ---
 
+### Phase 14 — Order Editing
+
+**Goal:** Allow buyers to edit placed orders before cutoff.
+
+**Scope:**
+- `PATCH /api/orders/:id` endpoint for order editing
+- Editable only when: status = PLACED, batch = OPEN, before cutoff
+- Allowed edits: add/remove items, change quantities, change fulfillment type
+- Auto-cancel order if all items removed
+- Audit logging for all edits
+- Buyer UI for editing orders (reuse cart/shop components)
+- Clear messaging about edit window availability
+
+**Business Rules:**
+- Only `PLACED` orders can be edited
+- No edits after `COMMITMENT_PAID` (payment locks the order)
+- No edits after batch cutoff
+- Prices locked per batch (no changes during edit)
+- Empty order = auto-cancel
+
+**Dependencies:**
+- Requires: Ordering Flow (Phase 07), Order Status (Phase 12)
+
+---
+
 ## Progress Summary
 
 | Category | Completed | Remaining | Total |
 |----------|-----------|-----------|-------|
-| Phases | 13 | 0 | 13 |
-| MVP Progress | 100% | 0% | 100% |
+| Phases | 13 | 1 | 14 |
+| MVP Progress | 93% | 7% | 100% |
 
 ---
 
