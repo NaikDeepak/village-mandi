@@ -13,6 +13,7 @@ const orderRoutes: FastifyPluginAsync = async (fastify) => {
     if (!parseResult.success) {
       return reply.status(400).send({
         error: 'Validation Error',
+        message: 'Validation failed',
         details: parseResult.error.flatten().fieldErrors,
       });
     }
@@ -20,82 +21,82 @@ const orderRoutes: FastifyPluginAsync = async (fastify) => {
     const { batchId, fulfillmentType, items } = parseResult.data;
     const buyerId = request.user.id;
 
-    // 1. Validate Batch
-    const batch = await prisma.batch.findUnique({
-      where: { id: batchId },
-    });
-
-    if (!batch) {
-      return reply.status(404).send({
-        error: 'Not Found',
-        message: 'Batch not found',
-      });
-    }
-
-    if (batch.status !== 'OPEN') {
-      return reply.status(400).send({
-        error: 'Invalid Operation',
-        message: 'Orders can only be placed for OPEN batches',
-      });
-    }
-
-    if (new Date(batch.cutoffAt) <= new Date()) {
-      return reply.status(400).send({
-        error: 'Invalid Operation',
-        message: 'Batch cutoff time has passed',
-      });
-    }
-
-    // 2. Validate Items & Check MOQs
-    const batchProductIds = items.map((i) => i.batchProductId);
-    const batchProducts = await prisma.batchProduct.findMany({
-      where: {
-        id: { in: batchProductIds },
-        batchId: batchId,
-        isActive: true,
-      },
-    });
-
-    if (batchProducts.length !== items.length) {
-      return reply.status(400).send({
-        error: 'Invalid Operation',
-        message: 'One or more products are invalid or not part of this batch',
-      });
-    }
-
-    let estimatedTotal = 0;
-    let facilitationAmt = 0;
-
-    const orderItemsData = items.map((item) => {
-      const bp = batchProducts.find((p) => p.id === item.batchProductId)!;
-
-      if (item.orderedQty < bp.minOrderQty) {
-        throw new Error(
-          `Quantity for product ${bp.id} is below minimum order quantity (${bp.minOrderQty})`
-        );
-      }
-
-      if (bp.maxOrderQty && item.orderedQty > bp.maxOrderQty) {
-        throw new Error(
-          `Quantity for product ${bp.id} exceeds maximum order quantity (${bp.maxOrderQty})`
-        );
-      }
-
-      const lineTotal = bp.pricePerUnit * item.orderedQty;
-      const facilitation = lineTotal * (bp.facilitationPercent / 100);
-
-      estimatedTotal += lineTotal + facilitation;
-      facilitationAmt += facilitation;
-
-      return {
-        batchProductId: item.batchProductId,
-        orderedQty: item.orderedQty,
-        unitPrice: bp.pricePerUnit,
-        lineTotal: lineTotal + facilitation,
-      };
-    });
-
     try {
+      // 1. Validate Batch
+      const batch = await prisma.batch.findUnique({
+        where: { id: batchId },
+      });
+
+      if (!batch) {
+        return reply.status(404).send({
+          error: 'Not Found',
+          message: 'Batch not found',
+        });
+      }
+
+      if (batch.status !== 'OPEN') {
+        return reply.status(400).send({
+          error: 'Invalid Operation',
+          message: 'Orders can only be placed for OPEN batches',
+        });
+      }
+
+      if (new Date(batch.cutoffAt) <= new Date()) {
+        return reply.status(400).send({
+          error: 'Invalid Operation',
+          message: 'Batch cutoff time has passed',
+        });
+      }
+
+      // 2. Validate Items & Check MOQs
+      const batchProductIds = items.map((i) => i.batchProductId);
+      const batchProducts = await prisma.batchProduct.findMany({
+        where: {
+          id: { in: batchProductIds },
+          batchId: batchId,
+          isActive: true,
+        },
+      });
+
+      if (batchProducts.length !== items.length) {
+        return reply.status(400).send({
+          error: 'Invalid Operation',
+          message: 'One or more products are invalid or not part of this batch',
+        });
+      }
+
+      let estimatedTotal = 0;
+      let facilitationAmt = 0;
+
+      const orderItemsData = items.map((item) => {
+        const bp = batchProducts.find((p) => p.id === item.batchProductId)!;
+
+        if (item.orderedQty < bp.minOrderQty) {
+          throw new Error(
+            `Quantity for product ${bp.id} is below minimum order quantity (${bp.minOrderQty})`
+          );
+        }
+
+        if (bp.maxOrderQty && item.orderedQty > bp.maxOrderQty) {
+          throw new Error(
+            `Quantity for product ${bp.id} exceeds maximum order quantity (${bp.maxOrderQty})`
+          );
+        }
+
+        const lineTotal = bp.pricePerUnit * item.orderedQty;
+        const facilitation = lineTotal * (bp.facilitationPercent / 100);
+
+        estimatedTotal += lineTotal + facilitation;
+        facilitationAmt += facilitation;
+
+        return {
+          batchProductId: item.batchProductId,
+          orderedQty: item.orderedQty,
+          unitPrice: bp.pricePerUnit,
+          lineTotal: lineTotal + facilitation,
+        };
+      });
+
       // 3. Create Order in Transaction
       const order = await prisma.$transaction(async (tx) => {
         // Create Order

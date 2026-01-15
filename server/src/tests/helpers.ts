@@ -8,10 +8,16 @@ import batchProductRoutes from '../routes/batch-products';
 import batchRoutes from '../routes/batches';
 import farmerRoutes from '../routes/farmers';
 import hubRoutes from '../routes/hubs';
+import orderRoutes from '../routes/orders';
 import productRoutes from '../routes/products';
 
 // Mock Prisma client
 export const mockPrisma = {
+  $transaction: vi.fn(async (fn) => {
+    if (typeof fn === 'function') return await fn(mockPrisma);
+    if (Array.isArray(fn)) return await Promise.all(fn);
+    return fn;
+  }),
   farmer: {
     findMany: vi.fn(),
     findUnique: vi.fn(),
@@ -44,6 +50,12 @@ export const mockPrisma = {
     update: vi.fn(),
     delete: vi.fn(),
   },
+  order: {
+    findMany: vi.fn(),
+    findUnique: vi.fn(),
+    create: vi.fn(),
+    update: vi.fn(),
+  },
   eventLog: {
     create: vi.fn(),
   },
@@ -53,7 +65,8 @@ export const mockPrisma = {
 declare module 'fastify' {
   interface FastifyRequest {
     user: {
-      userId: string;
+      id: string;
+      userId: string; // Keep for backward compatibility
       role: 'ADMIN' | 'BUYER';
     };
   }
@@ -90,23 +103,28 @@ export async function buildTestApp(): Promise<FastifyInstance> {
   await app.register(hubRoutes);
   await app.register(batchRoutes);
   await app.register(batchProductRoutes);
+  await app.register(orderRoutes);
 
   await app.ready();
   return app;
 }
 
 // Helper to generate admin JWT token for testing
-export function generateAdminToken(app: FastifyInstance): string {
+export function generateAdminToken(app: FastifyInstance, payload?: { id?: string }): string {
+  const id = payload?.id || 'test-admin-id';
   return app.jwt.sign({
-    userId: 'test-admin-id',
+    id,
+    userId: id,
     role: 'ADMIN',
   });
 }
 
 // Helper to generate buyer JWT token for testing
-export function generateBuyerToken(app: FastifyInstance): string {
+export function generateBuyerToken(app: FastifyInstance, payload?: { id?: string }): string {
+  const id = payload?.id || 'test-buyer-id';
   return app.jwt.sign({
-    userId: 'test-buyer-id',
+    id,
+    userId: id,
     role: 'BUYER',
   });
 }

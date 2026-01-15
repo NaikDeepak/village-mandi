@@ -7,14 +7,31 @@
 ## Current Position
 
 **Milestone:** 1 (MVP v1.0)
-**Phase:** 05 — Batch Management (Complete)
-**Plan:** 2 of 2 in current phase
-**Status:** Complete
-**Last activity:** 2026-01-15 - Completed 05-02-PLAN.md
+**Phase:** 07 — Ordering
+**Plan:** 1 of 1 in current phase
+**Status:** In Progress
+**Last activity:** 2026-01-15 - Starting 07-01-PLAN.md
 
-Progress: ██████████ 100%
+Progress: ████████░░ 80%
 
 ## Recent Progress
+
+### Phase 06 — Pricing & Scoping (Completed 2026-01-15)
+
+**What shipped:**
+- Plan 06-01: Batch Product Management
+- BatchProduct CRUD for DRAFT batches
+- Pricing (base price + facilitation %)
+- Order limits (minOrderQty, maxOrderQty)
+- Relationship validation (Product → Farmer)
+- 78 passing tests total
+
+**Key files added:**
+- `server/src/routes/batch-products.ts` — Batch Product API
+- `server/src/schemas/batch-products.ts` — Zod schemas
+- `server/src/routes/batch-products.test.ts` — Integration tests (20 tests)
+- `web/src/pages/admin/BatchProductsPage.tsx` — Management UI
+- `web/src/components/admin/AddProductToBatchDialog.tsx` — Dialog component
 
 ### Phase 05 — Batch Management (Completed 2026-01-15)
 

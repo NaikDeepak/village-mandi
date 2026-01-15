@@ -222,10 +222,14 @@ describe('Batch Routes', () => {
     });
 
     it('should update DRAFT batch successfully', async () => {
+      const futureCutoff = new Date(Date.now() + 86400000);
+      const futureDelivery = new Date(Date.now() + 172800000);
       const existingBatch = {
         id: 'batch-1',
         status: 'DRAFT',
         name: 'Old Name',
+        cutoffAt: futureCutoff,
+        deliveryDate: futureDelivery,
       };
 
       const updatedBatch = {

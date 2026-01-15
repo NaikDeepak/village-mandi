@@ -31,14 +31,17 @@ describe('Batch Product Routes', () => {
   // GET /batches/:id/products
   // ==========================================
   describe('GET /batches/:id/products', () => {
-    it('should return 403 for non-admin users', async () => {
+    it('should allow buyer access', async () => {
+      mockPrisma.batch.findUnique.mockResolvedValue({ id: 'batch-1' });
+      mockPrisma.batchProduct.findMany.mockResolvedValue([]);
+
       const response = await app.inject({
         method: 'GET',
         url: '/batches/batch-1/products',
         cookies: { token: buyerToken },
       });
 
-      expect(response.statusCode).toBe(403);
+      expect(response.statusCode).toBe(200);
     });
 
     it('should return 404 if batch does not exist', async () => {
