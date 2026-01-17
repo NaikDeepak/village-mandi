@@ -134,6 +134,20 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 **Research topics**: App Check enforcement, fastify-rate-limit tuning
 **Status**: Complete
 
+#### Phase 21: App Check & Security Integration
+**Goal**: Enable App Check on frontend and enforce on backend
+**Depends on**: Phase 20
+**Requirements**: SEC-02
+**Gap Closure**: Closes integration gap (Client -> Backend App Check token flow)
+**Status**: Complete
+
+#### Phase 22: Auth Flow Cleanup
+**Goal**: Remove legacy auth and fix redundant UX
+**Depends on**: Phase 21
+**Requirements**: AUTH-06
+**Gap Closure**: Closes redundant flow gap and cleans up tech debt
+**Status**: Pending
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -143,3 +157,5 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 | 18. Backend Auth | v1.1 | 2/2 | Complete | 2026-01-17 |
 | 19. Client Auth | v1.1 | 3/3 | Complete | 2026-01-17 |
 | 20. Security | v1.1 | 2/2 | Complete | 2026-01-17 |
+| 21. App Check & Security | v1.1 | 1/1 | Complete | 2026-01-17 |
+| 22. Auth Flow Cleanup | v1.1 | 0/TBD | Pending | - |

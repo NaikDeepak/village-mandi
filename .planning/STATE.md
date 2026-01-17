@@ -7,13 +7,13 @@
 ## Current Position
 
 **Milestone:** 2 (Production & Enhancements)
-**Phase:** 20 (Security Hardening)
-**Plan:** 20-01 (Completed)
+**Phase:** 21 (App Check Integration)
+**Plan:** 21-01 (Completed)
 **Status:** In progress
-**Next Phase:** 20 (Security Hardening)
-**Last activity:** 2026-01-17 — Phase 20-01 complete; App Check and security audit logging implemented
+**Next Phase:** 21 (App Check Integration)
+**Last activity:** 2026-01-17 — Phase 21-01 complete; App Check initialized on frontend and tokens attached to API requests
 
-Progress: ▓▓▓▓▓▓▓▓▓░ 89%
+Progress: ▓▓▓▓▓▓▓▓▓▓ 100%
 
 ## Recent Progress
 
@@ -332,6 +332,8 @@ Progress: ▓▓▓▓▓▓▓▓▓░ 89%
 
 | Decision | Context | Outcome |
 |----------|---------|---------|
+| ReCaptcha V3 for App Check | Standard provider for web apps | Initialized ReCaptchaV3Provider in firebase.ts |
+| Global App Check Header | Ensure all API calls are verified | Attached getToken() results to X-Firebase-AppCheck in request wrapper |
 | Conditional App Check Enforcement | Allow monitoring vs blocking | Use APP_CHECK_ENFORCED env var; log failures but allow through if false |
 | Structured Security Metadata | Need for forensic/audit trail | Log IP, UserAgent, and Path for all security-relevant events |
 | Items replacement strategy for order editing | Simplify API behavior and avoid complex merge logic | PATCH /orders/:id replaces all items, not partial update. qty=0 removes item, empty array cancels order |
