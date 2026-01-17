@@ -8,10 +8,10 @@
 
 **Milestone:** 2 (Production & Enhancements)
 **Phase:** 19 (Client Auth Integration)
-**Plan:** 19-01 (Completed)
+**Plan:** 19-02 (Completed)
 **Status:** Phase 19 In Progress
 **Next Phase:** 20 (Security Hardening)
-**Last activity:** 2026-01-17 — Firebase client SDK initialized and usePhoneAuth hook implemented
+**Last activity:** 2026-01-17 — Phone Auth UI integrated with Firebase and connected to backend verification
 
 Progress: ▓▓▓▓▓▓▓▓░░ 81%
 
@@ -27,6 +27,10 @@ Progress: ▓▓▓▓▓▓▓▓░░ 81%
   - Initialized Firebase client instance in `web/src/lib/firebase.ts`.
   - Implemented `usePhoneAuth` hook for OTP lifecycle management.
   - Added Firebase environment variables to `web/.env`.
+- Plan 19-02: Client Auth UI (Completed)
+  - Implemented `PhoneLoginForm` with reCAPTCHA and OTP flow.
+  - Updated `api.ts` with `verifyFirebaseToken` for backend sync.
+  - Replaced legacy mock OTP flow in `VerifyOtpPage`.
 
 #### Phase 18 — Backend Auth Foundation (Completed)
 
