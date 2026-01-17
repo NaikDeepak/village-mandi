@@ -7,17 +7,25 @@
 ## Current Position
 
 **Milestone:** 2 (Production & Enhancements)
-**Phase:** 19 (Client Auth Integration)
-**Plan:** 19-03 (Completed)
-**Status:** Phase 19 Complete
-**Next Phase:** 20 (Security Hardening)
-**Last activity:** 2026-01-17 — Phase 19 complete; Client-side Firebase Auth integrated and verified E2E
+**Phase:** 20 (Security Hardening)
+**Plan:** 20-02 (Completed)
+**Status:** In progress
+**Next Phase:** 20 (Security Hardening) - check for 20-03 or next phase
+**Last activity:** 2026-01-17 — Phase 20-02 complete; Auth rate limits tuned and trustProxy enabled
 
-Progress: ▓▓▓▓▓▓▓▓▓░ 85%
+Progress: ▓▓▓▓▓▓▓▓░░ 82%
 
 ## Recent Progress
 
 ### Milestone 2: Production & Enhancements
+
+#### Phase 20 — Security Hardening (In Progress)
+
+**What shipped:**
+- Plan 20-02: Rate Limit Tuning (Completed)
+  - Enabled `trustProxy` in Fastify for accurate IP detection.
+  - Tuned rate limits for auth routes to 15-minute windows.
+  - Added custom error responses for rate limiting.
 
 #### Phase 19 — Client Auth Integration (Completed)
 
