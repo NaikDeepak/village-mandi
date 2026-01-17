@@ -25,11 +25,22 @@ const firebasePlugin: FastifyPluginAsync = async (fastify) => {
       fastify.log.info('Firebase Admin initialized successfully');
     } catch (error) {
       fastify.log.error({ err: error }, 'Failed to initialize Firebase Admin');
-      throw error;
+      // Do not throw, allowing server to start.
+      // But we must handle the case where firebase is missing in routes.
     }
   }
 
-  fastify.decorate('firebase', admin.app());
+  // If initialized, decorate.
+  if (admin.apps.length > 0) {
+    fastify.decorate('firebase', admin.app());
+  } else {
+    // Decorate with a dummy that throws to alert dev/admin at runtime
+    fastify.decorate('firebase', {
+      auth: () => {
+        throw new Error('Firebase Admin not initialized');
+      },
+    } as any);
+  }
 };
 
 export default fp(firebasePlugin, {
