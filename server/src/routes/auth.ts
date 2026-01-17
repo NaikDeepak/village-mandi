@@ -1,4 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
+import { verifyAppCheck } from '../middleware/app-check';
 import { authenticate } from '../middleware/auth';
 import {
   adminLoginSchema,
@@ -20,7 +21,7 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
       config: {
         rateLimit: {
           max: 5,
-          timeWindow: '1 minute',
+          timeWindow: '15 minutes',
         },
       },
     },
@@ -93,10 +94,11 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.post(
     '/auth/request-otp',
     {
+      preHandler: [verifyAppCheck],
       config: {
         rateLimit: {
           max: 3,
-          timeWindow: '1 minute',
+          timeWindow: '10 minutes',
         },
       },
     },
@@ -317,10 +319,11 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.post(
     '/auth/firebase-verify',
     {
+      preHandler: [verifyAppCheck],
       config: {
         rateLimit: {
           max: 5,
-          timeWindow: '1 minute',
+          timeWindow: '15 minutes',
         },
       },
     },
