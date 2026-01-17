@@ -79,23 +79,6 @@ export const authApi = {
       }
     ),
 
-  // Buyer - Request OTP
-  requestOtp: (phone: string) =>
-    request<{ success: boolean; message: string; devOtp?: string }>('/auth/request-otp', {
-      method: 'POST',
-      body: JSON.stringify({ phone }),
-    }),
-
-  // Buyer - Verify OTP (Mock legacy flow)
-  verifyOtp: (phone: string, otp: string) =>
-    request<{ success: boolean; user: { id: string; role: string; name: string; phone: string } }>(
-      '/auth/verify-otp',
-      {
-        method: 'POST',
-        body: JSON.stringify({ phone, otp }),
-      }
-    ),
-
   // Firebase Token Verification
   verifyFirebaseToken: (idToken: string) =>
     request<{ success: boolean; user: { id: string; role: string; name: string; phone: string } }>(
