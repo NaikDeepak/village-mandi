@@ -19,21 +19,29 @@ export function Story() {
         {/* The Story */}
         <div className="prose prose-lg max-w-none text-mandi-muted">
           <p className="text-xl leading-relaxed mb-6">
-            I’m Deepak, and my roots are in Ghotage, Kokan. I grew up watching my family sell
-            premium mangoes for pennies, while later, my city friends paid a fortune for the same
-            fruit without knowing its origin.
+            I’m Deepak from Pune, but my roots go back to Ghotage in the Konkan. I’ve spent my life
+            in the city, visiting the village only during holidays.
           </p>
 
           <p className="leading-relaxed mb-6">
-            I tried connecting them directly, but learned a hard lesson: good intentions aren't
-            enough. When harvest came, casual buyers backed out, leaving farmers stranded.
+            My father, Ramesh, is a farmer’s son who nurtured a small orchard of 50 mango trees. He
+            watched premium fruit leave the village for prices that barely covered the effort, only
+            to see it sold in cities for a fortune, with no connection to the grower.
+          </p>
+
+          <p className="leading-relaxed mb-6">
+            I tried connecting farmers and buyers directly, but it failed. When harvest time
+            arrived, buyers often backed out, leaving farmers with no certainty.
           </p>
 
           <div className="bg-mandi-cream border-l-4 border-mandi-green p-6 my-8 rounded-r-lg">
+            <p className="text-mandi-dark font-medium text-lg mb-4 leading-relaxed">
+              That’s when I realized: Good intentions don’t protect farmers. Commitment does.
+            </p>
             <p className="text-mandi-dark font-medium text-lg mb-0 leading-relaxed">
-              That’s why {brand.name} exists. We ask for a small commitment upfront. This simple
-              pledge transforms the transaction—guaranteeing farmers fair pay and ensuring you get
-              authentic, traceable food from people you can trust.
+              {brand.name} exists because of that lesson. We ask for a small advance commitment.
+              This enables farmers to plan with confidence and guarantees you authentic produce from
+              people you can trust.
             </p>
           </div>
         </div>
