@@ -7,17 +7,26 @@
 ## Current Position
 
 **Milestone:** 2 (Production & Enhancements)
-**Phase:** 17 (Firebase Infrastructure)
-**Plan:** 17-01 (Completed)
-**Status:** Phase 17 Complete
+**Phase:** 18 (Backend Auth Foundation)
+**Plan:** 18-01 (Completed)
+**Status:** In progress
 **Next Phase:** 18 (Backend Auth Foundation)
-**Last activity:** 2026-01-17 — Firebase infrastructure configured and synced to Vercel
+**Last activity:** 2026-01-17 — Firebase Admin SDK integrated and token verification endpoint implemented
 
-Progress: ▓▓▓░░░░░░░ 25%
+Progress: ▓▓▓▓▓▓▓▓░░ 82%
 
 ## Recent Progress
 
 ### Milestone 2: Production & Enhancements
+
+#### Phase 18 — Backend Auth Foundation (In Progress)
+
+**What shipped:**
+- Plan 18-01: Backend Auth Infrastructure (Completed)
+  - Integrated Firebase Admin SDK.
+  - Added `firebaseUid` to User model with unique index.
+  - Implemented `POST /auth/firebase-verify` for token exchange.
+  - Baselined database schema with `0_init` migration.
 
 #### Phase 17 — Firebase Infrastructure (Completed)
 
@@ -28,6 +37,10 @@ Progress: ▓▓▓░░░░░░░ 25%
   - Configured custom domain `auth.apnakhet.app`.
   - Synced `VITE_FIREBASE_*` and `FIREBASE_SERVICE_ACCOUNT_JSON` to Vercel production.
   - Updated local `.env` with Firebase credentials.
+- Plan 17-02: Custom Domain Configuration (Completed)
+  - Corrected `VITE_FIREBASE_AUTH_DOMAIN` in `.env` to `auth.apnakhet.app`.
+  - Updated `.env.production.example` and `web/.env.example` templates.
+  - Verified DNS resolution for the custom domain.
 
 #### Phase 16 — Deployment (Completed)
 
@@ -357,10 +370,11 @@ Progress: ▓▓▓░░░░░░░ 25%
 - Defined requirements for Milestone 2.
 - Updated Roadmap with 4 new phases (17-20).
 - Confirmed Phase 16 Deployment is complete.
+- Executed Phase 17: Firebase Infrastructure.
+- Configured Custom Auth Domain and verified DNS.
 
 **Next actions:**
-1. Execute Phase 17: Firebase Infrastructure
-2. Configure Custom Auth Domain.
+1. Execute Phase 18: Backend Auth Foundation.
 
 ---
 *Last updated: 2026-01-17*
