@@ -8,12 +8,12 @@
 
 **Milestone:** 2 (Production & Enhancements)
 **Phase:** 20 (Security Hardening)
-**Plan:** 20-02 (Completed)
+**Plan:** 20-01 (Completed)
 **Status:** In progress
-**Next Phase:** 20 (Security Hardening) - check for 20-03 or next phase
-**Last activity:** 2026-01-17 — Phase 20-02 complete; Auth rate limits tuned and trustProxy enabled
+**Next Phase:** 20 (Security Hardening)
+**Last activity:** 2026-01-17 — Phase 20-01 complete; App Check and security audit logging implemented
 
-Progress: ▓▓▓▓▓▓▓▓░░ 82%
+Progress: ▓▓▓▓▓▓▓▓▓░ 89%
 
 ## Recent Progress
 
@@ -22,6 +22,10 @@ Progress: ▓▓▓▓▓▓▓▓░░ 82%
 #### Phase 20 — Security Hardening (In Progress)
 
 **What shipped:**
+- Plan 20-01: App Check & Security Logging (Completed)
+  - Implemented Firebase App Check verification middleware.
+  - Protected /auth/request-otp and /auth/firebase-verify.
+  - Enhanced security event logging with structured metadata (IP, UA, path).
 - Plan 20-02: Rate Limit Tuning (Completed)
   - Enabled `trustProxy` in Fastify for accurate IP detection.
   - Tuned rate limits for auth routes to 15-minute windows.
@@ -328,6 +332,8 @@ Progress: ▓▓▓▓▓▓▓▓░░ 82%
 
 | Decision | Context | Outcome |
 |----------|---------|---------|
+| Conditional App Check Enforcement | Allow monitoring vs blocking | Use APP_CHECK_ENFORCED env var; log failures but allow through if false |
+| Structured Security Metadata | Need for forensic/audit trail | Log IP, UserAgent, and Path for all security-relevant events |
 | Items replacement strategy for order editing | Simplify API behavior and avoid complex merge logic | PATCH /orders/:id replaces all items, not partial update. qty=0 removes item, empty array cancels order |
 | Metadata typing for event logs | Prisma InputJsonValue type incompatible with Record<string, unknown> | Build metadata object dynamically with explicit optional properties matching existing patterns |
 | Strict state machine for batches | Business integrity depends on predictable batch lifecycle | VALID_TRANSITIONS constant defines allowed transitions, validation rejects invalid with 400 |
