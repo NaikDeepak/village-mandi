@@ -31,21 +31,51 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
   const [localError, setLocalError] = useState<string | null>(null);
   const recaptchaVerifierRef = useRef<RecaptchaVerifier | null>(null);
 
+  const recaptchaWrapperRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    // Initialize reCAPTCHA on mount
-    const verifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-      size: 'invisible',
-      callback: () => {
-        // reCAPTCHA solved
-      },
-    });
+    // 1. Create a fresh container for this specific instance
+    const recaptchaContainer = document.createElement('div');
+    // Ensure it has an ID if internal firebase logic relies on it (optional but safe)
+    recaptchaContainer.id = `recaptcha-container-${Math.random().toString(36).substring(7)}`;
 
-    recaptchaVerifierRef.current = verifier;
-    verifier.render(); // Explicitly render the verifier
+    // 2. Append to our wrapper
+    if (recaptchaWrapperRef.current) {
+      recaptchaWrapperRef.current.appendChild(recaptchaContainer);
+    }
 
-    // Cleanup on unmount
+    try {
+      // 3. Initialize Verifier with the ELEMENT, not the ID string
+      const verifier = new RecaptchaVerifier(auth, recaptchaContainer, {
+        size: 'invisible',
+        callback: () => {
+          // reCAPTCHA solved
+        },
+        'expired-callback': () => {
+          console.warn('reCAPTCHA expired');
+        },
+      });
+
+      recaptchaVerifierRef.current = verifier;
+      verifier.render();
+    } catch (err) {
+      console.error('Failed to initialize reCAPTCHA:', err);
+    }
+
+    // 4. Robust Cleanup
     return () => {
-      verifier.clear();
+      if (recaptchaVerifierRef.current) {
+        try {
+          recaptchaVerifierRef.current.clear();
+        } catch (e) {
+          console.warn('Error clearing reCAPTCHA:', e);
+        }
+        recaptchaVerifierRef.current = null;
+      }
+      // Remove the container element from DOM
+      if (recaptchaContainer?.parentNode) {
+        recaptchaContainer.parentNode.removeChild(recaptchaContainer);
+      }
     };
   }, []);
 
@@ -69,8 +99,13 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
     } catch (err) {
       console.error('handleSendOtp: Error caught', err);
       // If error is related to reCAPTCHA, we might need to reset
+      // If error is related to reCAPTCHA, we shouldn't necessarily clear it locally
+      // unless we have logic to re-init. Better to just log and let user retry/refresh if needed.
       if (recaptchaVerifierRef.current) {
-        recaptchaVerifierRef.current.clear();
+        // If error is related to reCAPTCHA, we shouldn't necessarily clear it locally
+        // unless we have logic to re-init. Better to just log and let user retry/refresh if needed.
+        // Attempt to reset if it's in a weird state, but verifier.clear() destroys it.
+        // Actually, verifier.clear() is destructive. Let's NOT clear it here to allow retries.
       }
       const error = err as Error;
       setLocalError(error.message || 'Failed to send OTP');
@@ -125,7 +160,7 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
         </div>
       )}
 
-      <div id="recaptcha-container" />
+      <div ref={recaptchaWrapperRef} />
 
       {!confirmationResult ? (
         <form onSubmit={handleSendOtp} className="space-y-4">
