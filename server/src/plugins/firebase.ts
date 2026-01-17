@@ -18,7 +18,18 @@ const firebasePlugin: FastifyPluginAsync = async (fastify) => {
     }
 
     try {
-      const serviceAccount = JSON.parse(serviceAccountJson);
+      // Clean up common copy-paste errors in Vercel env vars
+      // 1. Remove wrapping quotes if present
+      let cleanJson = serviceAccountJson.trim();
+      if (cleanJson.startsWith('"') && cleanJson.endsWith('"')) {
+        cleanJson = cleanJson.slice(1, -1);
+      }
+      // 2. Remove all control characters (newlines, returns) that might break JSON.parse
+      // Note: We presume 'private_key' uses escaped \n (\\n), which are maintained.
+      // Real newlines in the structure are removed.
+      cleanJson = cleanJson.replace(/[\n\r\t]/g, ' ');
+
+      const serviceAccount = JSON.parse(cleanJson);
       admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
       });
