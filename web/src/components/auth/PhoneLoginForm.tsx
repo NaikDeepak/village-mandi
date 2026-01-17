@@ -33,22 +33,19 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
 
   useEffect(() => {
     // Initialize reCAPTCHA on mount
-    if (!recaptchaVerifierRef.current) {
-      recaptchaVerifierRef.current = new RecaptchaVerifier(auth, 'recaptcha-container', {
-        size: 'invisible',
-        callback: () => {
-          // reCAPTCHA solved
-          console.log('reCAPTCHA solved');
-        },
-      });
-    }
+    const verifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+      size: 'invisible',
+      callback: () => {
+        // reCAPTCHA solved
+      },
+    });
+
+    recaptchaVerifierRef.current = verifier;
+    verifier.render(); // Explicitly render the verifier
 
     // Cleanup on unmount
     return () => {
-      if (recaptchaVerifierRef.current) {
-        recaptchaVerifierRef.current.clear();
-        recaptchaVerifierRef.current = null;
-      }
+      verifier.clear();
     };
   }, []);
 
@@ -68,9 +65,7 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
 
     try {
       const fullPhone = `+91${phone}`;
-      console.log('handleSendOtp: Calling requestOtp with', fullPhone);
       await requestOtp(fullPhone, recaptchaVerifierRef.current);
-      console.log('handleSendOtp: requestOtp completed successfully');
     } catch (err) {
       console.error('handleSendOtp: Error caught', err);
       // If error is related to reCAPTCHA, we might need to reset
@@ -92,14 +87,10 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
     }
 
     try {
-      console.log('handleVerifyOtp: Calling verifyOtp with otp', otp);
       const firebaseUser = await verifyOtp(otp);
       if (firebaseUser) {
-        console.log('handleVerifyOtp: verifyOtp success, treating user...');
         const idToken = await firebaseUser.getIdToken();
-        console.log('handleVerifyOtp: Got ID token, verifying with backend...');
         const result = await authApi.verifyFirebaseToken(idToken);
-        console.log('handleVerifyOtp: Backend verification result:', result);
 
         if (result.error) {
           console.error('handleVerifyOtp: Backend verification failed', result.error);
@@ -108,7 +99,6 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
         }
 
         if (result.data?.user) {
-          console.log('handleVerifyOtp: Login success, navigating...');
           setUser({
             id: result.data.user.id,
             role: result.data.user.role as 'ADMIN' | 'BUYER',

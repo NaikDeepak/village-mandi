@@ -174,7 +174,7 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
         method: request.method,
       };
 
-      console.log('Server: Received /auth/firebase-verify request');
+      request.log.info(logContext, 'Received /auth/firebase-verify request');
 
       const parseResult = firebaseVerifySchema.safeParse(request.body);
       if (!parseResult.success) {
@@ -192,7 +192,7 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
 
       try {
         // 1. Verify token with Firebase Admin
-        console.log('Server: Verifying ID token with Firebase Admin...');
+        request.log.info(logContext, 'Verifying ID token with Firebase Admin');
         const decodedToken = await fastify.firebase.auth().verifyIdToken(idToken);
         const { uid, phone_number: firebasePhone } = decodedToken;
 
@@ -208,31 +208,30 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
         }
 
         // 2. Normalize phone number (strip +91 if present)
-        console.log(`Server: Token verified using uid: ${uid}, phone: ${firebasePhone}`);
-        const phone = firebasePhone.replace('+91', '');
+        request.log.info(
+          { ...logContext, uid, phone: firebasePhone },
+          'Firebase ID token verified'
+        );
+        const phone = firebasePhone.replace(/\D/g, '').slice(-10);
 
         // 3. Upsert User in Prisma
-        // First, try to find by firebaseUid or phone
-        let user = await prisma.user.findFirst({
-          where: {
-            OR: [{ firebaseUid: uid }, { phone }],
-          },
-        });
+        // Find user by UID first (highest priority), then by phone to link accounts.
+        let user = await prisma.user.findUnique({ where: { firebaseUid: uid } });
 
-        if (user) {
-          // Update firebaseUid if it was missing (linked by phone)
-          if (!user.firebaseUid) {
+        if (!user) {
+          // No user found by UID, try to find by phone to link the account
+          const userByPhone = await prisma.user.findUnique({ where: { phone } });
+          if (userByPhone) {
+            // User exists with this phone, link firebaseUid to it
             user = await prisma.user.update({
-              where: { id: user.id },
+              where: { id: userByPhone.id },
               data: { firebaseUid: uid },
             });
           }
-        } else {
-          // Create new user (Auto-signup for now, or check invitation if required)
-          // Note: PROJECT.md mentioned invite-only, but usually social/phone login
-          // might bypass if we want to allow discovery, but let's stick to 'isInvited: true'
-          // if we want to follow the previous pattern, or 'false' if they need manual approval.
-          // For MVP, if they have the OTP, they are "verified".
+        }
+
+        if (!user) {
+          // If still no user, create a new one
           user = await prisma.user.create({
             data: {
               firebaseUid: uid,
@@ -240,7 +239,7 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
               name: `User ${phone.slice(-4)}`, // Default name
               role: 'BUYER',
               isActive: true,
-              isInvited: true, // Auto-invite for now since they verified phone via Firebase
+              isInvited: true, // Auto-invite since they verified phone via Firebase
             },
           });
           request.log.info(

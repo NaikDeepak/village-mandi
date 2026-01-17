@@ -3,6 +3,7 @@ import { prisma } from '../db';
 import { hashPassword } from '../src/utils/password';
 
 async function main() {
+  // biome-ignore lint/suspicious/noConsoleLog: Script output
   console.log('🌱 Starting production seeding...');
 
   // =====================
@@ -38,8 +39,10 @@ async function main() {
         isActive: true,
       },
     });
+    // biome-ignore lint/suspicious/noConsoleLog: Script output
     console.log('✅ Admin user created:', admin.phone);
   } else {
+    // biome-ignore lint/suspicious/noConsoleLog: Script output
     console.log('ℹ️ Admin user already exists. Skipping creation to preserve password.');
   }
 
@@ -59,11 +62,14 @@ async function main() {
         isActive: true,
       },
     });
+    // biome-ignore lint/suspicious/noConsoleLog: Script output
     console.log('✅ Initial Hub created:', hub.name);
   } else {
+    // biome-ignore lint/suspicious/noConsoleLog: Script output
     console.log('ℹ️ Hub already exists. Skipping creation.');
   }
 
+  // biome-ignore lint/suspicious/noConsoleLog: Script output
   console.log('🎉 Production seeding completed successfully.');
 }
 

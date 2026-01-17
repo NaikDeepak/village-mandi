@@ -3,7 +3,7 @@ import {
   type RecaptchaVerifier,
   signInWithPhoneNumber,
 } from 'firebase/auth';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { auth } from '../lib/firebase';
 
 const COOLDOWN_SECONDS = 60;
@@ -14,37 +14,46 @@ export function usePhoneAuth() {
   const [isLoading, setIsLoading] = useState(false);
   const [cooldown, setCooldown] = useState(0);
 
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (cooldown > 0) {
-      timer = setInterval(() => {
-        setCooldown((prev) => prev - 1);
+    if (cooldown > 0 && !intervalRef.current) {
+      intervalRef.current = setInterval(() => {
+        setCooldown((prev) => {
+          if (prev <= 1) {
+            if (intervalRef.current) clearInterval(intervalRef.current);
+            intervalRef.current = null;
+            return 0;
+          }
+          return prev - 1;
+        });
       }, 1000);
     }
+
     return () => {
-      if (timer) clearInterval(timer);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
     };
   }, [cooldown]);
 
   const requestOtp = useCallback(
     async (phone: string, recaptchaVerifier: RecaptchaVerifier) => {
-      console.log('requestOtp called with:', { phone });
       if (cooldown > 0) {
-        console.log('requestOtp: Cooldown active', cooldown);
         return;
       }
 
       setIsLoading(true);
       setError(null);
       try {
-        console.log('requestOtp: invoking signInWithPhoneNumber...');
         const result = await signInWithPhoneNumber(auth, phone, recaptchaVerifier);
-        console.log('requestOtp: signInWithPhoneNumber success', result);
         setConfirmationResult(result);
         setCooldown(COOLDOWN_SECONDS);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('requestOtp: Phone auth error:', err);
-        setError(err.message || 'Failed to send OTP');
+        const errorMessage = err instanceof Error ? err.message : 'Failed to send OTP';
+        setError(errorMessage);
         throw err;
       } finally {
         setIsLoading(false);
@@ -55,7 +64,6 @@ export function usePhoneAuth() {
 
   const verifyOtp = useCallback(
     async (code: string) => {
-      console.log('verifyOtp called with code length:', code.length);
       if (!confirmationResult) {
         console.error('verifyOtp: No confirmationResult found');
         throw new Error('No OTP request in progress');
@@ -64,13 +72,12 @@ export function usePhoneAuth() {
       setIsLoading(true);
       setError(null);
       try {
-        console.log('verifyOtp: confirming code...');
         const result = await confirmationResult.confirm(code);
-        console.log('verifyOtp: confirm success, user:', result.user);
         return result.user;
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('verifyOtp: OTP verification error:', err);
-        setError(err?.message || 'Invalid OTP');
+        const errorMessage = err instanceof Error ? err.message : 'Invalid OTP';
+        setError(errorMessage);
         throw err;
       } finally {
         setIsLoading(false);
