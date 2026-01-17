@@ -22,6 +22,11 @@ export const verifyOTPSchema = z.object({
     .regex(/^\d{6}$/, 'OTP must be numeric'),
 });
 
+// Firebase token verification schema
+export const firebaseVerifySchema = z.object({
+  idToken: z.string().min(1, 'ID Token is required'),
+});
+
 // User response (safe, no sensitive fields)
 export const userResponseSchema = z.object({
   id: z.string(),
