@@ -1,11 +1,14 @@
 import 'dotenv/config';
 import cors from '@fastify/cors';
+import helmet from '@fastify/helmet';
 import Fastify from 'fastify';
 import { SYSTEM_RULES } from '../shared/constants';
 
-import jwtPlugin from './src/plugins/jwt';
 // Plugins
+import firebasePlugin from './src/plugins/firebase';
+import jwtPlugin from './src/plugins/jwt';
 import prismaPlugin from './src/plugins/prisma';
+import rateLimitPlugin from './src/plugins/rate-limit';
 
 // Routes
 import authRoutes from './src/routes/auth';
@@ -44,8 +47,11 @@ fastify.register(cors, {
 });
 
 // Register plugins
+fastify.register(helmet);
 fastify.register(prismaPlugin);
 fastify.register(jwtPlugin);
+fastify.register(firebasePlugin);
+fastify.register(rateLimitPlugin);
 
 // Register routes
 fastify.register(
