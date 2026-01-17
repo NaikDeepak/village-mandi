@@ -25,6 +25,7 @@ import productRoutes from './src/routes/products';
 
 const fastify = Fastify({
   logger: true,
+  trustProxy: true,
 });
 
 /**
