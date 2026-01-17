@@ -22,6 +22,7 @@ import packingRoutes from './src/routes/packing';
 import paymentRoutes from './src/routes/payments';
 import payoutRoutes from './src/routes/payouts';
 import productRoutes from './src/routes/products';
+import userRoutes from './src/routes/users';
 
 const fastify = Fastify({
   logger: {
@@ -50,7 +51,11 @@ const fastify = Fastify({
 fastify.register(cors, {
   origin:
     process.env.NODE_ENV === 'production'
-      ? ['https://virtualmandi.com'] // Update with your production domain
+      ? [
+          'https://apnakhet.app',
+          'https://www.apnakhet.app',
+          'https://village-mandi-server.vercel.app',
+        ] // Added Vercel app as potential backend host
       : ['http://localhost:5173', 'http://localhost:3000'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
@@ -77,6 +82,7 @@ fastify.register(
     api.register(payoutRoutes);
     api.register(productRoutes);
     api.register(logRoutes);
+    api.register(userRoutes);
 
     // Health check
     api.get('/health', async (_request, _reply) => {

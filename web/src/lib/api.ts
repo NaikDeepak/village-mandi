@@ -103,6 +103,19 @@ export const authApi = {
     }),
 };
 
+// Users API
+export const usersApi = {
+  invite: (data: { phone: string; name?: string }) =>
+    request<{
+      success: boolean;
+      message: string;
+      user: { id: string; name: string; phone: string };
+    }>('/users/invite', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+};
+
 import type {
   AddBatchProductInput,
   Batch,

@@ -174,7 +174,14 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
         method: request.method,
       };
 
-      request.log.info(logContext, 'Received /auth/firebase-verify request');
+      request.log.info(
+        {
+          ...logContext,
+          headers: request.headers,
+          bodyKeys: Object.keys(request.body as object),
+        },
+        'Received /auth/firebase-verify request'
+      );
 
       const parseResult = firebaseVerifySchema.safeParse(request.body);
       if (!parseResult.success) {
@@ -231,21 +238,22 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
         }
 
         if (!user) {
-          // If still no user, create a new one
-          user = await prisma.user.create({
-            data: {
-              firebaseUid: uid,
-              phone,
-              name: `User ${phone.slice(-4)}`, // Default name
-              role: 'BUYER',
-              isActive: true,
-              isInvited: true, // Auto-invite since they verified phone via Firebase
-            },
+          request.log.warn({ ...logContext, phone }, 'Login denied: User not found/not invited');
+          return reply.status(403).send({
+            error: 'Access Denied',
+            message: 'You have not been invited. Please contact admin.',
           });
-          request.log.info(
+        }
+
+        if (!user.isInvited && user.role === 'BUYER') {
+          request.log.warn(
             { ...logContext, userId: user.id },
-            'New user created via Firebase verify'
+            'Login denied: User exists but isInvited=false'
           );
+          return reply.status(403).send({
+            error: 'Access Denied',
+            message: 'You have not been invited. Please contact admin.',
+          });
         }
 
         request.log.info(
