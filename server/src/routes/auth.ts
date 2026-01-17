@@ -174,6 +174,8 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
         method: request.method,
       };
 
+      console.log('Server: Received /auth/firebase-verify request');
+
       const parseResult = firebaseVerifySchema.safeParse(request.body);
       if (!parseResult.success) {
         request.log.warn(
@@ -190,6 +192,7 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
 
       try {
         // 1. Verify token with Firebase Admin
+        console.log('Server: Verifying ID token with Firebase Admin...');
         const decodedToken = await fastify.firebase.auth().verifyIdToken(idToken);
         const { uid, phone_number: firebasePhone } = decodedToken;
 
@@ -205,6 +208,7 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
         }
 
         // 2. Normalize phone number (strip +91 if present)
+        console.log(`Server: Token verified using uid: ${uid}, phone: ${firebasePhone}`);
         const phone = firebasePhone.replace('+91', '');
 
         // 3. Upsert User in Prisma
@@ -275,6 +279,7 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
           },
         };
       } catch (error) {
+        console.error('Server: Error in /auth/firebase-verify:', error);
         fastify.log.error({ err: error }, 'Firebase token verification failed');
         return reply.status(401).send({
           error: 'Authentication Failed',

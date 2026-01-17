@@ -32,16 +32,18 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
   const recaptchaVerifierRef = useRef<RecaptchaVerifier | null>(null);
 
   useEffect(() => {
-    // Initialize reCAPTCHA
+    // Initialize reCAPTCHA on mount
     if (!recaptchaVerifierRef.current) {
       recaptchaVerifierRef.current = new RecaptchaVerifier(auth, 'recaptcha-container', {
         size: 'invisible',
         callback: () => {
-          // reCAPTCHA solved, will proceed with signInWithPhoneNumber
+          // reCAPTCHA solved
+          console.log('reCAPTCHA solved');
         },
       });
     }
 
+    // Cleanup on unmount
     return () => {
       if (recaptchaVerifierRef.current) {
         recaptchaVerifierRef.current.clear();
@@ -50,8 +52,8 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
     };
   }, []);
 
-  const handleSendOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSendOtp = async (e?: React.FormEvent) => {
+    e?.preventDefault();
     setLocalError(null);
 
     if (!phone || phone.length !== 10) {
@@ -60,14 +62,21 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
     }
 
     if (!recaptchaVerifierRef.current) {
-      setLocalError('reCAPTCHA not initialized');
+      setLocalError('reCAPTCHA not initialized. Please refresh.');
       return;
     }
 
     try {
       const fullPhone = `+91${phone}`;
+      console.log('handleSendOtp: Calling requestOtp with', fullPhone);
       await requestOtp(fullPhone, recaptchaVerifierRef.current);
+      console.log('handleSendOtp: requestOtp completed successfully');
     } catch (err) {
+      console.error('handleSendOtp: Error caught', err);
+      // If error is related to reCAPTCHA, we might need to reset
+      if (recaptchaVerifierRef.current) {
+        recaptchaVerifierRef.current.clear();
+      }
       const error = err as Error;
       setLocalError(error.message || 'Failed to send OTP');
     }
@@ -83,17 +92,23 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
     }
 
     try {
+      console.log('handleVerifyOtp: Calling verifyOtp with otp', otp);
       const firebaseUser = await verifyOtp(otp);
       if (firebaseUser) {
+        console.log('handleVerifyOtp: verifyOtp success, treating user...');
         const idToken = await firebaseUser.getIdToken();
+        console.log('handleVerifyOtp: Got ID token, verifying with backend...');
         const result = await authApi.verifyFirebaseToken(idToken);
+        console.log('handleVerifyOtp: Backend verification result:', result);
 
         if (result.error) {
+          console.error('handleVerifyOtp: Backend verification failed', result.error);
           setLocalError(result.message || result.error);
           return;
         }
 
         if (result.data?.user) {
+          console.log('handleVerifyOtp: Login success, navigating...');
           setUser({
             id: result.data.user.id,
             role: result.data.user.role as 'ADMIN' | 'BUYER',
@@ -104,6 +119,7 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
         }
       }
     } catch (err) {
+      console.error('handleVerifyOtp: Error caught', err);
       const error = err as Error;
       setLocalError(error.message || 'Invalid OTP');
     }

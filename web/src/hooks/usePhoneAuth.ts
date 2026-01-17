@@ -28,16 +28,22 @@ export function usePhoneAuth() {
 
   const requestOtp = useCallback(
     async (phone: string, recaptchaVerifier: RecaptchaVerifier) => {
-      if (cooldown > 0) return;
+      console.log('requestOtp called with:', { phone });
+      if (cooldown > 0) {
+        console.log('requestOtp: Cooldown active', cooldown);
+        return;
+      }
 
       setIsLoading(true);
       setError(null);
       try {
+        console.log('requestOtp: invoking signInWithPhoneNumber...');
         const result = await signInWithPhoneNumber(auth, phone, recaptchaVerifier);
+        console.log('requestOtp: signInWithPhoneNumber success', result);
         setConfirmationResult(result);
         setCooldown(COOLDOWN_SECONDS);
       } catch (err: any) {
-        console.error('Phone auth error:', err);
+        console.error('requestOtp: Phone auth error:', err);
         setError(err.message || 'Failed to send OTP');
         throw err;
       } finally {
@@ -49,17 +55,21 @@ export function usePhoneAuth() {
 
   const verifyOtp = useCallback(
     async (code: string) => {
+      console.log('verifyOtp called with code length:', code.length);
       if (!confirmationResult) {
+        console.error('verifyOtp: No confirmationResult found');
         throw new Error('No OTP request in progress');
       }
 
       setIsLoading(true);
       setError(null);
       try {
+        console.log('verifyOtp: confirming code...');
         const result = await confirmationResult.confirm(code);
+        console.log('verifyOtp: confirm success, user:', result.user);
         return result.user;
       } catch (err: any) {
-        console.error('OTP verification error:', err);
+        console.error('verifyOtp: OTP verification error:', err);
         setError(err?.message || 'Invalid OTP');
         throw err;
       } finally {

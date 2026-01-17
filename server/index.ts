@@ -24,7 +24,16 @@ import payoutRoutes from './src/routes/payouts';
 import productRoutes from './src/routes/products';
 
 const fastify = Fastify({
-  logger: true,
+  logger: {
+    level: 'error',
+    transport: {
+      target: 'pino-pretty',
+      options: {
+        translateTime: 'HH:MM:ss Z',
+        ignore: 'pid,hostname',
+      },
+    },
+  },
   trustProxy: true,
 });
 
