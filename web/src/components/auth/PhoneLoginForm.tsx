@@ -60,6 +60,7 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
       verifier.render();
     } catch (err) {
       console.error('Failed to initialize reCAPTCHA:', err);
+      setLocalError('Failed to initialize reCAPTCHA. Please refresh the page and try again.');
     }
 
     // 4. Robust Cleanup
@@ -98,9 +99,7 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
       await requestOtp(fullPhone, recaptchaVerifierRef.current);
     } catch (err) {
       console.error('handleSendOtp: Error caught', err);
-      // If error is related to reCAPTCHA, we might need to reset
-      // If error is related to reCAPTCHA, we shouldn't necessarily clear it locally
-      // unless we have logic to re-init. Better to just log and let user retry/refresh if needed.
+      // Do not clear the verifier locally on error to allow retries without full re-initialization.
 
       const error = err as Error;
       setLocalError(error.message || 'Failed to send OTP');
