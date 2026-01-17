@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export function Footer() {
   // Replace with actual WhatsApp number
   const whatsappNumber = '919876543210';
-  const whatsappMessage = encodeURIComponent('Hi, I would like to know more about Virtual Mandi.');
+  const whatsappMessage = encodeURIComponent('Hi, I would like to know more about Apna Khet.');
   const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 
   return (
@@ -15,7 +15,7 @@ export function Footer() {
             <div className="flex items-center gap-2 mb-4">
               <Wheat className="h-6 w-6 text-mandi-earth-light" aria-hidden="true" />
               <span className="font-bold text-2xl tracking-tight">
-                Virtual<span className="text-mandi-earth-light">Mandi</span>
+                Apna<span className="text-mandi-earth-light">Khet</span>
               </span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
@@ -100,16 +100,16 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:hello@virtualmandi.com"
+                  href="mailto:hello@apnakhet.app"
                   className="flex items-start gap-3 hover:text-white focus:text-white focus:outline-none focus-visible:underline"
                 >
                   <Mail className="h-5 w-5 mt-0.5 text-mandi-earth-light" aria-hidden="true" />
-                  <span>hello@virtualmandi.com</span>
+                  <span>hello@apnakhet.app</span>
                 </a>
               </li>
             </ul>
             <p className="text-gray-500 text-xs mt-8">
-              &copy; {new Date().getFullYear()} Virtual Mandi. All rights reserved.
+              &copy; {new Date().getFullYear()} Apna Khet. All rights reserved.
             </p>
           </div>
         </div>

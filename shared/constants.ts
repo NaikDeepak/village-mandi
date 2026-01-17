@@ -1,5 +1,5 @@
 /**
- * VIRTUAL MANDI - SYSTEM GUARDRAILS
+ * APNA KHET - SYSTEM GUARDRAILS
  * These constants define the non-negotiable rules of the aggregation system.
  */
 

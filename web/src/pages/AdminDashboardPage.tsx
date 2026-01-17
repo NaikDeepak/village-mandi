@@ -4,7 +4,7 @@ export function AdminDashboardPage() {
       <div className="bg-white rounded-lg shadow-md p-8">
         <h2 className="text-2xl font-bold text-mandi-dark mb-4">Dashboard</h2>
         <p className="text-mandi-muted">
-          Welcome to the Virtual Mandi admin panel. This is a placeholder page.
+          Welcome to the Apna Khet admin panel. This is a placeholder page.
         </p>
 
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">

@@ -26,9 +26,7 @@ export function Hero() {
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-6">
-          Virtual Mandi
-        </h1>
+        <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-6">Apna Khet</h1>
 
         <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed font-medium mb-4">
           Farm-Fresh Grains, Spices & Seasonal Fruits

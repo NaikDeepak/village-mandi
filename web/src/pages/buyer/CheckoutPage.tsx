@@ -260,7 +260,7 @@ export function CheckoutPage() {
                   <CheckCircle2 className="h-4 w-4 text-mandi-green mt-0.5" />
                   <p className="text-[10px] text-mandi-muted leading-tight">
                     By placing this order, you commit to purchasing these items. Payment will be
-                    collected as per the Virtual Mandi rules.
+                    collected as per the Apna Khet rules.
                   </p>
                 </div>
               </div>

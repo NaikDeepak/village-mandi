@@ -66,7 +66,7 @@ export function AdminLoginPage() {
       <div className="w-full max-w-md">
         <div className="bg-white rounded-lg shadow-md p-8">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-mandi-dark">Virtual Mandi</h1>
+            <h1 className="text-2xl font-bold text-mandi-dark">Apna Khet</h1>
             <p className="text-mandi-muted mt-2">Admin Login</p>
           </div>
 
@@ -82,7 +82,7 @@ export function AdminLoginPage() {
               <Input
                 id="email"
                 type="email"
-                placeholder="admin@virtualmandi.com"
+                placeholder="admin@apnakhet.app"
                 error={errors.email?.message}
                 {...register('email')}
               />

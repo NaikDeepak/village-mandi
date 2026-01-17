@@ -23,7 +23,7 @@ export function AdminLayout() {
                 to="/admin"
                 className="text-xl font-bold text-mandi-dark flex items-center gap-2"
               >
-                Virtual Mandi
+                Apna Khet
                 <span className="text-xs bg-mandi-green/10 text-mandi-green px-2 py-0.5 rounded font-normal">
                   Admin
                 </span>

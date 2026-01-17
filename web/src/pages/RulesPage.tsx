@@ -26,7 +26,7 @@ export function RulesPage() {
         <section className="bg-mandi-cream py-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h1 className="text-3xl md:text-4xl font-bold text-mandi-dark mb-4">
-              How Virtual Mandi Works
+              How Apna Khet Works
             </h1>
             <p className="text-lg text-mandi-muted">
               Clear rules ensure fairness for everyone. Read these before placing your first order.
@@ -210,13 +210,13 @@ export function RulesPage() {
             <h2 className="text-2xl font-bold text-mandi-dark mb-6">Farmer Policy</h2>
             <div className="space-y-4 text-mandi-muted">
               <p>
-                Every product on Virtual Mandi is linked to a specific farmer. We share their name,
+                Every product on Apna Khet is linked to a specific farmer. We share their name,
                 location, and story with you.
               </p>
               <p>
                 To maintain operational efficiency and prevent miscommunication, we do not
-                facilitate direct buyer-farmer communication. All coordination happens through
-                Virtual Mandi.
+                facilitate direct buyer-farmer communication. All coordination happens through Apna
+                Khet.
               </p>
               <p>
                 Farmers are paid out after each batch is settled. Payout records are maintained for

@@ -161,7 +161,7 @@ export function ShopPage() {
                   <ChevronLeft className="h-5 w-5" />
                 </Button>
                 <div>
-                  <h1 className="text-lg font-bold text-mandi-dark leading-tight">Virtual Mandi</h1>
+                  <h1 className="text-lg font-bold text-mandi-dark leading-tight">Apna Khet</h1>
                   <p className="text-[10px] text-mandi-muted uppercase tracking-wider font-semibold">
                     Hub: {currentBatch.hub?.name}
                   </p>
