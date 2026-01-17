@@ -7,19 +7,28 @@
 ## Current Position
 
 **Milestone:** 2 (Production & Enhancements)
-**Phase:** 18 (Backend Auth Foundation)
-**Plan:** 18-01 (Completed)
-**Status:** In progress
-**Next Phase:** 18 (Backend Auth Foundation)
-**Last activity:** 2026-01-17 — Firebase Admin SDK integrated and token verification endpoint implemented
+**Phase:** 19 (Client Auth Integration)
+**Plan:** 19-01 (Completed)
+**Status:** Phase 19 In Progress
+**Next Phase:** 20 (Security Hardening)
+**Last activity:** 2026-01-17 — Firebase client SDK initialized and usePhoneAuth hook implemented
 
-Progress: ▓▓▓▓▓▓▓▓░░ 82%
+Progress: ▓▓▓▓▓▓▓▓░░ 81%
 
 ## Recent Progress
 
 ### Milestone 2: Production & Enhancements
 
-#### Phase 18 — Backend Auth Foundation (In Progress)
+#### Phase 19 — Client Auth Integration (In Progress)
+
+**What shipped:**
+- Plan 19-01: Client Auth Logic (Completed)
+  - Installed `firebase` SDK in web workspace.
+  - Initialized Firebase client instance in `web/src/lib/firebase.ts`.
+  - Implemented `usePhoneAuth` hook for OTP lifecycle management.
+  - Added Firebase environment variables to `web/.env`.
+
+#### Phase 18 — Backend Auth Foundation (Completed)
 
 **What shipped:**
 - Plan 18-01: Backend Auth Infrastructure (Completed)
@@ -27,6 +36,10 @@ Progress: ▓▓▓▓▓▓▓▓░░ 82%
   - Added `firebaseUid` to User model with unique index.
   - Implemented `POST /auth/firebase-verify` for token exchange.
   - Baselined database schema with `0_init` migration.
+- Plan 18-02: Security Hardening (Completed)
+  - Configured global and route-specific rate limits.
+  - Hardened auth endpoints against brute force and SMS pumping.
+  - Enabled security headers via Helmet.
 
 #### Phase 17 — Firebase Infrastructure (Completed)
 
