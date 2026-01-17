@@ -157,5 +157,5 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 | 18. Backend Auth | v1.1 | 2/2 | Complete | 2026-01-17 |
 | 19. Client Auth | v1.1 | 3/3 | Complete | 2026-01-17 |
 | 20. Security | v1.1 | 2/2 | Complete | 2026-01-17 |
-| 21. App Check & Security | v1.1 | 1/1 | Complete | 2026-01-17 |
+| 21. App Check & Security | v1.1 | 2/2 | Complete | 2026-01-17 |
 | 22. Auth Flow Cleanup | v1.1 | 0/TBD | Pending | - |

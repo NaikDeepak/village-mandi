@@ -8,10 +8,10 @@
 
 **Milestone:** 2 (Production & Enhancements)
 **Phase:** 21 (App Check Integration)
-**Plan:** 21-01 (Completed)
-**Status:** In progress
-**Next Phase:** 21 (App Check Integration)
-**Last activity:** 2026-01-17 — Phase 21-01 complete; App Check initialized on frontend and tokens attached to API requests
+**Plan:** 21-02 (Completed)
+**Status:** Phase complete
+**Next Phase:** 22 (Auth Flow Cleanup)
+**Last activity:** 2026-01-17 — Phase 21 complete; App Check enforcement verified end-to-end
 
 Progress: ▓▓▓▓▓▓▓▓▓▓ 100%
 
@@ -19,7 +19,16 @@ Progress: ▓▓▓▓▓▓▓▓▓▓ 100%
 
 ### Milestone 2: Production & Enhancements
 
-#### Phase 20 — Security Hardening (In Progress)
+#### Phase 21 — App Check Integration (Completed)
+
+**What shipped:**
+- Plan 21-01: App Check Integration (Completed)
+  - Initialized Firebase App Check on frontend.
+  - Attached App Check tokens to all API requests.
+- Plan 21-02: Verification (Completed)
+  - Verified security perimeter: unauthorized requests are blocked while the web client succeeds.
+
+#### Phase 20 — Security Hardening (Completed)
 
 **What shipped:**
 - Plan 20-01: App Check & Security Logging (Completed)
