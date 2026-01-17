@@ -51,22 +51,22 @@ Which phases cover which requirements. Updated by create-roadmap.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | - | Pending |
-| AUTH-02 | - | Pending |
-| AUTH-03 | - | Pending |
-| AUTH-04 | - | Pending |
-| AUTH-05 | - | Pending |
-| AUTH-06 | - | Pending |
-| SEC-01 | - | Pending |
-| SEC-02 | - | Pending |
-| SEC-03 | - | Pending |
-| SEC-04 | - | Pending |
-| CMP-01 | - | Pending |
+| AUTH-01 | Phase 19 | Pending |
+| AUTH-02 | Phase 19 | Pending |
+| AUTH-03 | Phase 19 | Pending |
+| AUTH-04 | Phase 18 | Pending |
+| AUTH-05 | Phase 18 | Pending |
+| AUTH-06 | Phase 19 | Pending |
+| SEC-01 | Phase 17 | Pending |
+| SEC-02 | Phase 20 | Pending |
+| SEC-03 | Phase 18 | Pending |
+| SEC-04 | Phase 17 | Pending |
+| CMP-01 | Phase 17 | Pending |
 
 **Coverage:**
 - v1 requirements: 11 total
-- Mapped to phases: 0
-- Unmapped: 11 ⚠️
+- Mapped to phases: 11
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-01-17*

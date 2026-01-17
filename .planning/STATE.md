@@ -7,19 +7,29 @@
 ## Current Position
 
 **Milestone:** 2 (Production & Enhancements)
-**Phase:** 16 (Deployment)
-**Plan:** 01
-**Status:** Completed
-**Next Phase:** -
-**Last activity:** 2026-01-15 — Completed Plan 16-01 (Production Config)
+**Phase:** 17 (Firebase Infrastructure)
+**Plan:** 17-01 (Completed)
+**Status:** Phase 17 Complete
+**Next Phase:** 18 (Backend Auth Foundation)
+**Last activity:** 2026-01-17 — Firebase infrastructure configured and synced to Vercel
 
-Progress: ▓▓░░░░░░░░ 20%
+Progress: ▓▓▓░░░░░░░ 25%
 
 ## Recent Progress
 
 ### Milestone 2: Production & Enhancements
 
-#### Phase 16 — Deployment (In Progress)
+#### Phase 17 — Firebase Infrastructure (Completed)
+
+**What shipped:**
+- Plan 17-01: Firebase Infrastructure Configuration (Completed)
+  - Created Firebase project "apnakhet-app".
+  - Enabled Phone Authentication with test numbers.
+  - Configured custom domain `auth.apnakhet.app`.
+  - Synced `VITE_FIREBASE_*` and `FIREBASE_SERVICE_ACCOUNT_JSON` to Vercel production.
+  - Updated local `.env` with Firebase credentials.
+
+#### Phase 16 — Deployment (Completed)
 
 **What shipped:**
 - Plan 16-01: Production Configuration (Completed)
@@ -29,9 +39,6 @@ Progress: ▓▓░░░░░░░░ 20%
 - Plan 16-02: Production Deployment (Completed)
   - Successfully deployed to Vercel: https://village-mandi.vercel.app/
   - Verified landing page is live.
-
-**Upcoming:**
-- Phase 16: Deployment (Remaining plans)
 
 ### Milestone 1: MVP (Completed 2026-01-15)
 
@@ -335,6 +342,7 @@ Progress: ▓▓░░░░░░░░ 20%
 
 | Date | Change |
 |------|--------|
+| 2026-01-17 | Updated for Milestone 2 (Auth & Production) |
 | 2026-01-15 | Phase 16 added: Deployment (Milestone 2 start) |
 | 2026-01-15 | Phase 15 added: End-to-End Workflow Guide |
 | 2026-01-15 | Phase 14 added: Order Editing (allow buyers to edit PLACED orders before cutoff) |
@@ -343,17 +351,16 @@ Progress: ▓▓░░░░░░░░ 20%
 
 ## Session Continuity
 
-**Last session:** 2026-01-15 (Current)
+**Last session:** 2026-01-17
 **Work completed:**
-- Completed Phase 15 (End-to-End Workflow Guide).
-- Archived Milestone 1 (MVP) artifacts.
-- Tagged release `v1.0`.
-- Updated project documentation (`PROJECT.md`, `ROADMAP.md`, `STATE.md`).
+- Researched Firebase Auth architecture.
+- Defined requirements for Milestone 2.
+- Updated Roadmap with 4 new phases (17-20).
+- Confirmed Phase 16 Deployment is complete.
 
 **Next actions:**
-1. Deployment to Production environment.
-2. Initialize Milestone 2 planning.
+1. Execute Phase 17: Firebase Infrastructure
+2. Configure Custom Auth Domain.
 
 ---
-
-*Last updated: 2026-01-15*
+*Last updated: 2026-01-17*
