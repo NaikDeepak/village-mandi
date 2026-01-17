@@ -99,6 +99,7 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 **Status**: Complete
 
 #### Phase 18: Backend Auth Foundation
+**Status**: Complete
 **Goal**: Establish server-side token verification and user sync
 **Depends on**: Phase 17
 **Requirements**: AUTH-04, AUTH-05, SEC-03
@@ -131,14 +132,14 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
   2. Rate limiting prevents SMS pumping
 **Research**: Likely (Security config)
 **Research topics**: App Check enforcement, fastify-rate-limit tuning
-**Status**: Pending
+**Status**: Complete
 
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 16. Deployment | v1.1 | 2/2 | Complete | 2026-01-15 |
-| 17. Firebase Infra | v1.1 | 1/1 | Complete | 2026-01-17 |
-| 18. Backend Auth | v1.1 | 0/TBD | Pending | - |
-| 19. Client Auth | v1.1 | 0/TBD | Pending | - |
-| 20. Security | v1.1 | 0/TBD | Pending | - |
+| 17. Firebase Infra | v1.1 | 2/2 | Complete | 2026-01-17 |
+| 18. Backend Auth | v1.1 | 2/2 | Complete | 2026-01-17 |
+| 19. Client Auth | v1.1 | 3/3 | Complete | 2026-01-17 |
+| 20. Security | v1.1 | 2/2 | Complete | 2026-01-17 |

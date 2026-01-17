@@ -54,14 +54,14 @@ Which phases cover which requirements. Updated by create-roadmap.
 | AUTH-01 | Phase 19 | Pending |
 | AUTH-02 | Phase 19 | Pending |
 | AUTH-03 | Phase 19 | Pending |
-| AUTH-04 | Phase 18 | Pending |
-| AUTH-05 | Phase 18 | Pending |
+| AUTH-04 | Phase 18 | Complete |
+| AUTH-05 | Phase 18 | Complete |
 | AUTH-06 | Phase 19 | Pending |
-| SEC-01 | Phase 17 | Pending |
-| SEC-02 | Phase 20 | Pending |
-| SEC-03 | Phase 18 | Pending |
-| SEC-04 | Phase 17 | Pending |
-| CMP-01 | Phase 17 | Pending |
+| SEC-01 | Phase 17 | Complete |
+| SEC-02 | Phase 20 | Complete |
+| SEC-03 | Phase 18 | Complete |
+| SEC-04 | Phase 17 | Complete |
+| CMP-01 | Phase 17 | Complete |
 
 **Coverage:**
 - v1 requirements: 11 total
