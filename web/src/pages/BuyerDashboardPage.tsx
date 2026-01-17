@@ -1,6 +1,7 @@
 import { OrderCard } from '@/components/buyer/OrderCard';
 import { Navbar } from '@/components/layout/Navbar';
 import { Button } from '@/components/ui/button';
+import { brand } from '@/config/brand';
 import { authApi, logsApi, ordersApi } from '@/lib/api';
 import { getWhatsAppLink, templates } from '@/lib/communication';
 import { useAuthStore } from '@/stores/auth';
@@ -85,7 +86,7 @@ export function BuyerDashboardPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <div className="flex items-center gap-4">
-                <h1 className="text-xl font-bold text-mandi-dark">Apna Khet</h1>
+                <h1 className="text-xl font-bold text-mandi-dark">{brand.name}</h1>
                 <span className="text-xs bg-mandi-earth/10 text-mandi-earth px-2 py-0.5 rounded font-medium">
                   Buyer
                 </span>

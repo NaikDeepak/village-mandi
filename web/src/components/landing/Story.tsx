@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { brand } from '@/config/brand';
 import { Link } from 'react-router-dom';
 
 export function Story() {
@@ -11,7 +12,7 @@ export function Story() {
             Our Story
           </h2>
           <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-mandi-dark sm:text-4xl">
-            Why Apna Khet Exists
+            Why {brand.name} Exists
           </p>
         </div>
 
@@ -30,8 +31,8 @@ export function Story() {
 
           <div className="bg-mandi-cream border-l-4 border-mandi-green p-6 my-8 rounded-r-lg">
             <p className="text-mandi-dark font-medium text-lg mb-0 leading-relaxed">
-              That’s why Apna Khet exists. We ask for a small commitment upfront. This simple pledge
-              transforms the transaction—guaranteeing farmers fair pay and ensuring you get
+              That’s why {brand.name} exists. We ask for a small commitment upfront. This simple
+              pledge transforms the transaction—guaranteeing farmers fair pay and ensuring you get
               authentic, traceable food from people you can trust.
             </p>
           </div>

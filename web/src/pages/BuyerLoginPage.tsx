@@ -1,4 +1,5 @@
 import { PhoneLoginForm } from '@/components/auth/PhoneLoginForm';
+import { brand } from '@/config/brand';
 import { useAuthStore } from '@/stores/auth';
 import { Link, Navigate } from 'react-router-dom';
 
@@ -16,7 +17,7 @@ export function BuyerLoginPage() {
       <div className="w-full max-w-md">
         <div className="bg-white rounded-lg shadow-md p-8">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-mandi-dark">Apna Khet</h1>
+            <h1 className="text-2xl font-bold text-mandi-dark">{brand.name}</h1>
             <p className="text-mandi-muted mt-2">Buyer Login</p>
           </div>
 

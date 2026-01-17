@@ -1,6 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { brand } from '@/config/brand';
 import { useToast } from '@/hooks/use-toast';
 import { batchesApi, ordersApi } from '@/lib/api';
 import { useAuthStore } from '@/stores/auth';
@@ -260,7 +261,7 @@ export function CheckoutPage() {
                   <CheckCircle2 className="h-4 w-4 text-mandi-green mt-0.5" />
                   <p className="text-[10px] text-mandi-muted leading-tight">
                     By placing this order, you commit to purchasing these items. Payment will be
-                    collected as per the Apna Khet rules.
+                    collected as per the {brand.name} rules.
                   </p>
                 </div>
               </div>
