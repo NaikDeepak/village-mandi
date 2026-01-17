@@ -24,17 +24,21 @@ import payoutRoutes from './src/routes/payouts';
 import productRoutes from './src/routes/products';
 import userRoutes from './src/routes/users';
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 const fastify = Fastify({
-  logger: {
-    level: 'error',
-    transport: {
-      target: 'pino-pretty',
-      options: {
-        translateTime: 'HH:MM:ss Z',
-        ignore: 'pid,hostname',
+  logger: isProduction
+    ? { level: 'error' }
+    : {
+        level: 'debug',
+        transport: {
+          target: 'pino-pretty',
+          options: {
+            translateTime: 'HH:MM:ss Z',
+            ignore: 'pid,hostname',
+          },
+        },
       },
-    },
-  },
   trustProxy: true,
 });
 
@@ -67,6 +71,16 @@ fastify.register(prismaPlugin);
 fastify.register(jwtPlugin);
 fastify.register(firebasePlugin);
 fastify.register(rateLimitPlugin);
+
+// Global Error Handler
+fastify.setErrorHandler((error, request, reply) => {
+  request.log.error({ err: error }, 'Global Error Handler caught exception');
+
+  reply.status(error.statusCode || 500).send({
+    error: error.name || 'Internal Server Error',
+    message: error.message || 'An unexpected error occurred',
+  });
+});
 
 // Register routes
 fastify.register(
