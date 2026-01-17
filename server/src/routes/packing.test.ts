@@ -102,7 +102,7 @@ describe('Packing Routes', () => {
         count: 1,
       });
 
-      mockPrisma.$transaction.mockImplementation(async (fn) => {
+      mockPrisma.$transaction.mockImplementation(async (fn: any) => {
         return await fn(mockPrisma);
       });
 

@@ -74,7 +74,7 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
               <Wheat className="h-6 w-6 text-white" aria-hidden="true" />
             </div>
             <span className="font-bold text-xl tracking-tight text-white">
-              Virtual<span className="text-mandi-earth-light">Mandi</span>
+              Apna<span className="text-mandi-earth-light">Khet</span>
             </span>
           </Link>
 

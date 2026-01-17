@@ -122,7 +122,7 @@ describe('Payout Routes', () => {
         paidAt: new Date(payoutData.paidAt),
       });
 
-      mockPrisma.$transaction.mockImplementation(async (cb) => {
+      mockPrisma.$transaction.mockImplementation(async (cb: any) => {
         return await cb(mockPrisma);
       });
 

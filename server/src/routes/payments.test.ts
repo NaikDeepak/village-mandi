@@ -95,7 +95,7 @@ describe('Payment Routes', () => {
         payments: [],
       });
 
-      mockPrisma.$transaction.mockImplementation(async (fn) => fn(mockPrisma));
+      mockPrisma.$transaction.mockImplementation(async (fn: any) => fn(mockPrisma));
       mockPrisma.payment.create.mockResolvedValue({ id: 'pay-1', ...validPayload });
       mockPrisma.order.update.mockResolvedValue({});
       mockPrisma.eventLog.create.mockResolvedValue({});
@@ -150,7 +150,7 @@ describe('Payment Routes', () => {
         payments: [{ id: 'pay-1', stage: 'COMMITMENT' }],
       });
 
-      mockPrisma.$transaction.mockImplementation(async (fn) => fn(mockPrisma));
+      mockPrisma.$transaction.mockImplementation(async (fn: any) => fn(mockPrisma));
       mockPrisma.payment.create.mockResolvedValue({ id: 'pay-2', amount: 900, stage: 'FINAL' });
       mockPrisma.order.update.mockResolvedValue({});
       mockPrisma.eventLog.create.mockResolvedValue({});

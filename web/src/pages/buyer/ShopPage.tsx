@@ -4,6 +4,7 @@ import { ProductCard } from '@/components/shop/ProductCard';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { brand } from '@/config/brand';
 import { useToast } from '@/hooks/use-toast';
 import { batchProductsApi, batchesApi } from '@/lib/api';
 import { useAuthStore } from '@/stores/auth';
@@ -161,7 +162,7 @@ export function ShopPage() {
                   <ChevronLeft className="h-5 w-5" />
                 </Button>
                 <div>
-                  <h1 className="text-lg font-bold text-mandi-dark leading-tight">Virtual Mandi</h1>
+                  <h1 className="text-lg font-bold text-mandi-dark leading-tight">{brand.name}</h1>
                   <p className="text-[10px] text-mandi-muted uppercase tracking-wider font-semibold">
                     Hub: {currentBatch.hub?.name}
                   </p>

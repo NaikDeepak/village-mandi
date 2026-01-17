@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { brand } from '@/config/brand';
 import { authApi } from '@/lib/api';
 import { useAuthStore } from '@/stores/auth';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
@@ -23,7 +24,7 @@ export function AdminLayout() {
                 to="/admin"
                 className="text-xl font-bold text-mandi-dark flex items-center gap-2"
               >
-                Virtual Mandi
+                {brand.name}
                 <span className="text-xs bg-mandi-green/10 text-mandi-green px-2 py-0.5 rounded font-normal">
                   Admin
                 </span>

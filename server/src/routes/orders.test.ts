@@ -166,7 +166,7 @@ describe('Order Routes', () => {
         ],
       };
 
-      mockPrisma.$transaction.mockImplementation(async (fn) => fn(mockPrisma));
+      mockPrisma.$transaction.mockImplementation(async (fn: any) => fn(mockPrisma));
       mockPrisma.order.create.mockResolvedValue(mockOrder);
       mockPrisma.eventLog.create.mockResolvedValue({});
 
@@ -209,7 +209,7 @@ describe('Order Routes', () => {
         },
       ]);
 
-      mockPrisma.$transaction.mockImplementation(async (_fn) => {
+      mockPrisma.$transaction.mockImplementation(async (_fn: any) => {
         const error = new Error('Unique constraint failed') as Error & { code?: string };
         error.code = 'P2002';
         throw error;
@@ -383,7 +383,7 @@ describe('Order Routes', () => {
         fulfillmentType: 'DELIVERY',
       };
 
-      mockPrisma.$transaction.mockImplementation(async (fn) => fn(mockPrisma));
+      mockPrisma.$transaction.mockImplementation(async (fn: any) => fn(mockPrisma));
       mockPrisma.order.update.mockResolvedValue(updatedOrder);
       mockPrisma.eventLog.create.mockResolvedValue({});
 
@@ -427,7 +427,7 @@ describe('Order Routes', () => {
         },
       ];
 
-      mockPrisma.$transaction.mockImplementation(async (fn) => fn(mockPrisma));
+      mockPrisma.$transaction.mockImplementation(async (fn: any) => fn(mockPrisma));
       mockPrisma.batchProduct.findMany.mockResolvedValue(mockBatchProducts);
       mockPrisma.orderItem.deleteMany.mockResolvedValue({ count: 1 });
       mockPrisma.orderItem.createMany.mockResolvedValue({ count: 1 });
@@ -499,7 +499,7 @@ describe('Order Routes', () => {
         },
       ];
 
-      mockPrisma.$transaction.mockImplementation(async (fn) => fn(mockPrisma));
+      mockPrisma.$transaction.mockImplementation(async (fn: any) => fn(mockPrisma));
       mockPrisma.batchProduct.findMany.mockResolvedValue(mockBatchProducts);
 
       const response = await app.inject({
@@ -535,7 +535,7 @@ describe('Order Routes', () => {
         },
       ];
 
-      mockPrisma.$transaction.mockImplementation(async (fn) => fn(mockPrisma));
+      mockPrisma.$transaction.mockImplementation(async (fn: any) => fn(mockPrisma));
       mockPrisma.batchProduct.findMany.mockResolvedValue(mockBatchProducts);
 
       const response = await app.inject({
@@ -565,7 +565,7 @@ describe('Order Routes', () => {
         items: [],
       };
 
-      mockPrisma.$transaction.mockImplementation(async (fn) => fn(mockPrisma));
+      mockPrisma.$transaction.mockImplementation(async (fn: any) => fn(mockPrisma));
       mockPrisma.orderItem.deleteMany.mockResolvedValue({ count: 1 });
       mockPrisma.order.update.mockResolvedValue(cancelledOrder);
       mockPrisma.eventLog.create.mockResolvedValue({});
@@ -598,7 +598,7 @@ describe('Order Routes', () => {
     it('should log ORDER_EDITED event on successful edit', async () => {
       mockPrisma.order.findUnique.mockResolvedValue(mockOrder);
 
-      mockPrisma.$transaction.mockImplementation(async (fn) => fn(mockPrisma));
+      mockPrisma.$transaction.mockImplementation(async (fn: any) => fn(mockPrisma));
       mockPrisma.order.update.mockResolvedValue({
         ...mockOrder,
         fulfillmentType: 'DELIVERY',
@@ -626,7 +626,7 @@ describe('Order Routes', () => {
     it('should log ORDER_CANCELLED event when order cancelled', async () => {
       mockPrisma.order.findUnique.mockResolvedValue(mockOrder);
 
-      mockPrisma.$transaction.mockImplementation(async (fn) => fn(mockPrisma));
+      mockPrisma.$transaction.mockImplementation(async (fn: any) => fn(mockPrisma));
       mockPrisma.orderItem.deleteMany.mockResolvedValue({ count: 1 });
       mockPrisma.order.update.mockResolvedValue({
         ...mockOrder,

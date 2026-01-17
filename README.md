@@ -1,6 +1,6 @@
-# Virtual Mandi - Trust & Transparency
+# Apna Khet - Trust & Transparency
 
-Virtual Mandi is a batch-based, trust-driven aggregation system designed to facilitate the sale of agricultural products directly from farmers to buyers. Unlike traditional e-commerce marketplaces, it operates on a "batch" model where orders are aggregated and fulfilled in cycles.
+Apna Khet is a batch-based, trust-driven aggregation system designed to facilitate the sale of agricultural products directly from farmers to buyers. Unlike traditional e-commerce marketplaces, it operates on a "batch" model where orders are aggregated and fulfilled in cycles.
 
 ## 🌿 Core Philosophy
 - **Batch-Based Aggregation**: Not an open marketplace. All activities are centered around discrete batches.

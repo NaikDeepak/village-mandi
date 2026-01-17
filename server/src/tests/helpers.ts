@@ -15,9 +15,9 @@ import payoutRoutes from '../routes/payouts';
 import productRoutes from '../routes/products';
 
 // Mock Prisma client
-export const mockPrisma = {
-  $transaction: vi.fn(async (fn) => {
-    if (typeof fn === 'function') return await fn(mockPrisma);
+export const mockPrisma: any = {
+  $transaction: vi.fn(async (fn: any) => {
+    if (typeof fn === 'function') return await fn(mockPrisma as any);
     if (Array.isArray(fn)) return await Promise.all(fn);
     return fn;
   }),
