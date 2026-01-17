@@ -26,8 +26,19 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
       },
     },
     async (request, reply) => {
+      const logContext = {
+        ip: request.ip,
+        userAgent: request.headers['user-agent'],
+        path: request.url,
+        method: request.method,
+      };
+
       const parseResult = adminLoginSchema.safeParse(request.body);
       if (!parseResult.success) {
+        request.log.warn(
+          { ...logContext, details: parseResult.error.flatten().fieldErrors },
+          'Admin login validation failed'
+        );
         return reply.status(400).send({
           error: 'Validation Error',
           details: parseResult.error.flatten().fieldErrors,
@@ -46,6 +57,10 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
       });
 
       if (!user || !user.passwordHash) {
+        request.log.warn(
+          { ...logContext, email },
+          'Admin login failed: Invalid credentials or inactive'
+        );
         return reply.status(401).send({
           error: 'Invalid credentials',
           message: 'Email or password is incorrect',
@@ -55,11 +70,14 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
       // Verify password
       const isValid = await verifyPassword(password, user.passwordHash);
       if (!isValid) {
+        request.log.warn({ ...logContext, email }, 'Admin login failed: Incorrect password');
         return reply.status(401).send({
           error: 'Invalid credentials',
           message: 'Email or password is incorrect',
         });
       }
+
+      request.log.info({ ...logContext, userId: user.id }, 'Admin login successful');
 
       // Generate JWT token
       const token = fastify.jwt.sign({
@@ -103,8 +121,19 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
       },
     },
     async (request, reply) => {
+      const logContext = {
+        ip: request.ip,
+        userAgent: request.headers['user-agent'],
+        path: request.url,
+        method: request.method,
+      };
+
       const parseResult = requestOTPSchema.safeParse(request.body);
       if (!parseResult.success) {
+        request.log.warn(
+          { ...logContext, details: parseResult.error.flatten().fieldErrors },
+          'OTP request validation failed'
+        );
         return reply.status(400).send({
           error: 'Validation Error',
           details: parseResult.error.flatten().fieldErrors,
@@ -123,6 +152,7 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
       });
 
       if (!user) {
+        request.log.warn({ ...logContext, phone }, 'OTP request failed: Account not found');
         return reply.status(404).send({
           error: 'Not Found',
           message: 'No account found with this phone number. Please contact admin for an invite.',
@@ -130,6 +160,10 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
       }
 
       if (!user.isInvited) {
+        request.log.warn(
+          { ...logContext, phone, userId: user.id },
+          'OTP request failed: Not invited'
+        );
         return reply.status(403).send({
           error: 'Not Invited',
           message: 'Your account is pending invitation. Please contact admin.',
@@ -148,6 +182,8 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
           otpExpiresAt,
         },
       });
+
+      request.log.info({ ...logContext, userId: user.id }, 'OTP generated and saved');
 
       // In development, log OTP to console (Mock OTP)
       if (process.env.NODE_ENV !== 'production') {
@@ -177,8 +213,19 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
       },
     },
     async (request, reply) => {
+      const logContext = {
+        ip: request.ip,
+        userAgent: request.headers['user-agent'],
+        path: request.url,
+        method: request.method,
+      };
+
       const parseResult = verifyOTPSchema.safeParse(request.body);
       if (!parseResult.success) {
+        request.log.warn(
+          { ...logContext, details: parseResult.error.flatten().fieldErrors },
+          'OTP verification validation failed'
+        );
         return reply.status(400).send({
           error: 'Validation Error',
           details: parseResult.error.flatten().fieldErrors,
@@ -198,6 +245,7 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
       });
 
       if (!user) {
+        request.log.warn({ ...logContext, phone }, 'OTP verification failed: Account not found');
         return reply.status(404).send({
           error: 'Not Found',
           message: 'No account found with this phone number',
@@ -206,6 +254,10 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
 
       // Check OTP
       if (!user.otpCode || !user.otpExpiresAt) {
+        request.log.warn(
+          { ...logContext, userId: user.id },
+          'OTP verification failed: No active OTP'
+        );
         return reply.status(400).send({
           error: 'Invalid OTP',
           message: 'Please request a new OTP',
@@ -213,6 +265,10 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
       }
 
       if (user.otpCode !== otp) {
+        request.log.warn(
+          { ...logContext, userId: user.id },
+          'OTP verification failed: Incorrect code'
+        );
         return reply.status(401).send({
           error: 'Invalid OTP',
           message: 'The OTP you entered is incorrect',
@@ -220,11 +276,14 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
       }
 
       if (new Date() > user.otpExpiresAt) {
+        request.log.warn({ ...logContext, userId: user.id }, 'OTP verification failed: Expired');
         return reply.status(401).send({
           error: 'OTP Expired',
           message: 'OTP has expired. Please request a new one.',
         });
       }
+
+      request.log.info({ ...logContext, userId: user.id }, 'OTP verified successfully');
 
       // Clear OTP after successful verification
       await prisma.user.update({
@@ -328,8 +387,19 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
       },
     },
     async (request, reply) => {
+      const logContext = {
+        ip: request.ip,
+        userAgent: request.headers['user-agent'],
+        path: request.url,
+        method: request.method,
+      };
+
       const parseResult = firebaseVerifySchema.safeParse(request.body);
       if (!parseResult.success) {
+        request.log.warn(
+          { ...logContext, details: parseResult.error.flatten().fieldErrors },
+          'Firebase verify validation failed'
+        );
         return reply.status(400).send({
           error: 'Validation Error',
           details: parseResult.error.flatten().fieldErrors,
@@ -344,6 +414,10 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
         const { uid, phone_number: firebasePhone } = decodedToken;
 
         if (!firebasePhone) {
+          request.log.warn(
+            { ...logContext, uid },
+            'Firebase verify failed: Phone number missing in token'
+          );
           return reply.status(400).send({
             error: 'Invalid Token',
             message: 'Phone number not found in token',
@@ -385,7 +459,16 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
               isInvited: true, // Auto-invite for now since they verified phone via Firebase
             },
           });
+          request.log.info(
+            { ...logContext, userId: user.id },
+            'New user created via Firebase verify'
+          );
         }
+
+        request.log.info(
+          { ...logContext, userId: user.id },
+          'Firebase token verified successfully'
+        );
 
         // 4. Generate internal JWT
         const token = fastify.jwt.sign({
