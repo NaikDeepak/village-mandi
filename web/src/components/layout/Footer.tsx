@@ -113,6 +113,9 @@ export function Footer() {
             <p className="text-gray-500 text-xs mt-8">
               &copy; {new Date().getFullYear()} {brand.name}. All rights reserved.
             </p>
+            <div className="mt-2 text-xs text-gray-600 font-mono">
+              v{__APP_VERSION__} ({new Date(__BUILD_TIMESTAMP__).toLocaleDateString()})
+            </div>
           </div>
         </div>
 

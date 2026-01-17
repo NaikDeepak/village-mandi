@@ -17,8 +17,6 @@ export const auth = getAuth(app);
 // self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
 // before initializing App Check.
 export const appCheck = initializeAppCheck(app, {
-  provider: new ReCaptchaV3Provider(
-    import.meta.env.VITE_RECAPTCHA_SITE_KEY || '6Lc_placeholder_key_for_dev'
-  ),
+  provider: new ReCaptchaV3Provider(import.meta.env.VITE_RECAPTCHA_SITE_KEY),
   isTokenAutoRefreshEnabled: true,
 });
