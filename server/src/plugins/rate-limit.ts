@@ -8,11 +8,24 @@ const rateLimitPlugin: FastifyPluginAsync = async (fastify) => {
     max: 100,
     timeWindow: '1 minute',
     keyGenerator: (request) => request.ip,
-    errorResponseBuilder: (_request, context) => ({
-      statusCode: 429,
-      error: 'Too Many Requests',
-      message: `Rate limit exceeded. Please try again in ${context.after}.`,
-    }),
+    errorResponseBuilder: (request, context) => {
+      request.log.warn(
+        {
+          ip: request.ip,
+          userAgent: request.headers['user-agent'],
+          path: request.url,
+          method: request.method,
+          after: context.after,
+          max: context.max,
+        },
+        'Rate limit exceeded'
+      );
+      return {
+        statusCode: 429,
+        error: 'Too Many Requests',
+        message: `Rate limit exceeded. Please try again in ${context.after}.`,
+      };
+    },
   });
 };
 
