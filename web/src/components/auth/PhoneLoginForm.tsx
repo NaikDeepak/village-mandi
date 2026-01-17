@@ -101,12 +101,7 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
       // If error is related to reCAPTCHA, we might need to reset
       // If error is related to reCAPTCHA, we shouldn't necessarily clear it locally
       // unless we have logic to re-init. Better to just log and let user retry/refresh if needed.
-      if (recaptchaVerifierRef.current) {
-        // If error is related to reCAPTCHA, we shouldn't necessarily clear it locally
-        // unless we have logic to re-init. Better to just log and let user retry/refresh if needed.
-        // Attempt to reset if it's in a weird state, but verifier.clear() destroys it.
-        // Actually, verifier.clear() is destructive. Let's NOT clear it here to allow retries.
-      }
+
       const error = err as Error;
       setLocalError(error.message || 'Failed to send OTP');
     }
