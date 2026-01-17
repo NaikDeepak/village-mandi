@@ -101,8 +101,18 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
       console.error('handleSendOtp: Error caught', err);
       // Do not clear the verifier locally on error to allow retries without full re-initialization.
 
-      const error = err as Error;
-      setLocalError(error.message || 'Failed to send OTP');
+      const error = err as any; // Cast to access code property
+      let message = error.message || 'Failed to send OTP';
+
+      if (error.code === 'auth/invalid-app-credential') {
+        message =
+          'Configuration Error: Domain not authorized or App Check failed. Please add this domain/IP to Firebase Console > Auth > Settings > Authorized Domains.';
+      } else if (error.code === 'auth/captcha-check-failed') {
+        message =
+          'reCAPTCHA check failed. Please refresh and try again. Ensure your site key is correct.';
+      }
+
+      setLocalError(message);
     }
   };
 

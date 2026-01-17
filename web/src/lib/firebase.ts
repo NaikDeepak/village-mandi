@@ -16,7 +16,21 @@ export const auth = getAuth(app);
 // Note: In development, you can use a debug token by setting:
 // self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
 // before initializing App Check.
-export const appCheck = initializeAppCheck(app, {
-  provider: new ReCaptchaV3Provider(import.meta.env.VITE_RECAPTCHA_SITE_KEY),
-  isTokenAutoRefreshEnabled: true,
-});
+// Initialize App Check
+// Note: In development, you can use a debug token by setting:
+// self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+// before initializing App Check.
+export let appCheck: any = null;
+
+if (import.meta.env.VITE_RECAPTCHA_SITE_KEY) {
+  try {
+    appCheck = initializeAppCheck(app, {
+      provider: new ReCaptchaV3Provider(import.meta.env.VITE_RECAPTCHA_SITE_KEY),
+      isTokenAutoRefreshEnabled: true,
+    });
+  } catch (err) {
+    console.warn('Failed to initialize App Check:', err);
+  }
+} else {
+  console.warn('VITE_RECAPTCHA_SITE_KEY not found. App Check disabled.');
+}
