@@ -6,20 +6,9 @@ export const adminLoginSchema = z.object({
   password: z.string().min(8, 'Password must be at least 8 characters'),
 });
 
-// Buyer request OTP schema
-export const requestOTPSchema = z.object({
-  phone: z
-    .string()
-    .regex(/^[6-9]\d{9}$/, 'Invalid Indian phone number (10 digits starting with 6-9)'),
-});
-
-// Buyer verify OTP schema
-export const verifyOTPSchema = z.object({
-  phone: z.string().regex(/^[6-9]\d{9}$/, 'Invalid Indian phone number'),
-  otp: z
-    .string()
-    .length(6, 'OTP must be 6 digits')
-    .regex(/^\d{6}$/, 'OTP must be numeric'),
+// Firebase token verification schema
+export const firebaseVerifySchema = z.object({
+  idToken: z.string().min(1, 'ID Token is required'),
 });
 
 // User response (safe, no sensitive fields)
@@ -34,6 +23,4 @@ export const userResponseSchema = z.object({
 });
 
 export type AdminLoginInput = z.infer<typeof adminLoginSchema>;
-export type RequestOTPInput = z.infer<typeof requestOTPSchema>;
-export type VerifyOTPInput = z.infer<typeof verifyOTPSchema>;
 export type UserResponse = z.infer<typeof userResponseSchema>;

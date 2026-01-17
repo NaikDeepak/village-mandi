@@ -1,7 +1,8 @@
 import type { FastifyPluginAsync } from 'fastify';
+import { verifyAppCheck } from '../middleware/app-check';
 import { authenticate } from '../middleware/auth';
-import { adminLoginSchema, requestOTPSchema, verifyOTPSchema } from '../schemas/auth';
-import { generateOTP, getOTPExpiry, verifyPassword } from '../utils/password';
+import { adminLoginSchema, firebaseVerifySchema } from '../schemas/auth';
+import { verifyPassword } from '../utils/password';
 
 const authRoutes: FastifyPluginAsync = async (fastify) => {
   const { prisma } = fastify;
@@ -9,218 +10,96 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
   // ==========================================
   // ADMIN LOGIN (Email + Password)
   // ==========================================
-  fastify.post('/auth/admin/login', async (request, reply) => {
-    const parseResult = adminLoginSchema.safeParse(request.body);
-    if (!parseResult.success) {
-      return reply.status(400).send({
-        error: 'Validation Error',
-        details: parseResult.error.flatten().fieldErrors,
-      });
-    }
-
-    const { email, password } = parseResult.data;
-
-    // Find admin user by email
-    const user = await prisma.user.findFirst({
-      where: {
-        email,
-        role: 'ADMIN',
-        isActive: true,
+  fastify.post(
+    '/auth/admin/login',
+    {
+      config: {
+        rateLimit: {
+          max: 5,
+          timeWindow: '15 minutes',
+        },
       },
-    });
+    },
+    async (request, reply) => {
+      const logContext = {
+        ip: request.ip,
+        userAgent: request.headers['user-agent'],
+        path: request.url,
+        method: request.method,
+      };
 
-    if (!user || !user.passwordHash) {
-      return reply.status(401).send({
-        error: 'Invalid credentials',
-        message: 'Email or password is incorrect',
+      const parseResult = adminLoginSchema.safeParse(request.body);
+      if (!parseResult.success) {
+        request.log.warn(
+          { ...logContext, details: parseResult.error.flatten().fieldErrors },
+          'Admin login validation failed'
+        );
+        return reply.status(400).send({
+          error: 'Validation Error',
+          details: parseResult.error.flatten().fieldErrors,
+        });
+      }
+
+      const { email, password } = parseResult.data;
+
+      // Find admin user by email
+      const user = await prisma.user.findFirst({
+        where: {
+          email,
+          role: 'ADMIN',
+          isActive: true,
+        },
       });
-    }
 
-    // Verify password
-    const isValid = await verifyPassword(password, user.passwordHash);
-    if (!isValid) {
-      return reply.status(401).send({
-        error: 'Invalid credentials',
-        message: 'Email or password is incorrect',
-      });
-    }
+      if (!user || !user.passwordHash) {
+        request.log.warn(
+          { ...logContext, email },
+          'Admin login failed: Invalid credentials or inactive'
+        );
+        return reply.status(401).send({
+          error: 'Invalid credentials',
+          message: 'Email or password is incorrect',
+        });
+      }
 
-    // Generate JWT token
-    const token = fastify.jwt.sign({
-      userId: user.id,
-      role: user.role,
-    });
+      // Verify password
+      const isValid = await verifyPassword(password, user.passwordHash);
+      if (!isValid) {
+        request.log.warn({ ...logContext, email }, 'Admin login failed: Incorrect password');
+        return reply.status(401).send({
+          error: 'Invalid credentials',
+          message: 'Email or password is incorrect',
+        });
+      }
 
-    // Set HTTP-only cookie
-    reply.setCookie('token', token, {
-      path: '/',
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60, // 7 days
-    });
+      request.log.info({ ...logContext, userId: user.id }, 'Admin login successful');
 
-    return {
-      success: true,
-      user: {
-        id: user.id,
+      // Generate JWT token
+      const token = fastify.jwt.sign({
+        userId: user.id,
         role: user.role,
-        name: user.name,
-        email: user.email,
-      },
-    };
-  });
-
-  // ==========================================
-  // BUYER REQUEST OTP
-  // ==========================================
-  fastify.post('/auth/request-otp', async (request, reply) => {
-    const parseResult = requestOTPSchema.safeParse(request.body);
-    if (!parseResult.success) {
-      return reply.status(400).send({
-        error: 'Validation Error',
-        details: parseResult.error.flatten().fieldErrors,
       });
-    }
 
-    const { phone } = parseResult.data;
-
-    // Find buyer by phone
-    const user = await prisma.user.findFirst({
-      where: {
-        phone,
-        role: 'BUYER',
-        isActive: true,
-      },
-    });
-
-    if (!user) {
-      return reply.status(404).send({
-        error: 'Not Found',
-        message: 'No account found with this phone number. Please contact admin for an invite.',
+      // Set HTTP-only cookie
+      reply.setCookie('token', token, {
+        path: '/',
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60, // 7 days
       });
+
+      return {
+        success: true,
+        user: {
+          id: user.id,
+          role: user.role,
+          name: user.name,
+          email: user.email,
+        },
+      };
     }
-
-    if (!user.isInvited) {
-      return reply.status(403).send({
-        error: 'Not Invited',
-        message: 'Your account is pending invitation. Please contact admin.',
-      });
-    }
-
-    // Generate OTP
-    const otp = generateOTP();
-    const otpExpiresAt = getOTPExpiry();
-
-    // Save OTP to user
-    await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        otpCode: otp,
-        otpExpiresAt,
-      },
-    });
-
-    // In development, log OTP to console (Mock OTP)
-    if (process.env.NODE_ENV !== 'production') {
-      console.info('OTP', otp);
-    }
-
-    return {
-      success: true,
-      message: 'OTP sent to your phone number',
-      // Only include in development for testing
-      ...(process.env.NODE_ENV !== 'production' && { devOtp: otp }),
-    };
-  });
-
-  // ==========================================
-  // BUYER VERIFY OTP
-  // ==========================================
-  fastify.post('/auth/verify-otp', async (request, reply) => {
-    const parseResult = verifyOTPSchema.safeParse(request.body);
-    if (!parseResult.success) {
-      return reply.status(400).send({
-        error: 'Validation Error',
-        details: parseResult.error.flatten().fieldErrors,
-      });
-    }
-
-    const { phone, otp } = parseResult.data;
-
-    // Find user with matching OTP
-    const user = await prisma.user.findFirst({
-      where: {
-        phone,
-        role: 'BUYER',
-        isActive: true,
-        isInvited: true,
-      },
-    });
-
-    if (!user) {
-      return reply.status(404).send({
-        error: 'Not Found',
-        message: 'No account found with this phone number',
-      });
-    }
-
-    // Check OTP
-    if (!user.otpCode || !user.otpExpiresAt) {
-      return reply.status(400).send({
-        error: 'Invalid OTP',
-        message: 'Please request a new OTP',
-      });
-    }
-
-    if (user.otpCode !== otp) {
-      return reply.status(401).send({
-        error: 'Invalid OTP',
-        message: 'The OTP you entered is incorrect',
-      });
-    }
-
-    if (new Date() > user.otpExpiresAt) {
-      return reply.status(401).send({
-        error: 'OTP Expired',
-        message: 'OTP has expired. Please request a new one.',
-      });
-    }
-
-    // Clear OTP after successful verification
-    await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        otpCode: null,
-        otpExpiresAt: null,
-      },
-    });
-
-    // Generate JWT token
-    const token = fastify.jwt.sign({
-      userId: user.id,
-      role: user.role,
-    });
-
-    // Set HTTP-only cookie
-    reply.setCookie('token', token, {
-      path: '/',
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60, // 7 days
-    });
-
-    return {
-      success: true,
-      user: {
-        id: user.id,
-        role: user.role,
-        name: user.name,
-        phone: user.phone,
-      },
-    };
-  });
+  );
 
   // ==========================================
   // GET CURRENT USER
@@ -272,6 +151,142 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
     });
     return { success: true, message: 'Logged out successfully' };
   });
+
+  // ==========================================
+  // FIREBASE TOKEN VERIFICATION
+  // ==========================================
+  fastify.post(
+    '/auth/firebase-verify',
+    {
+      preHandler: [verifyAppCheck],
+      config: {
+        rateLimit: {
+          max: 5,
+          timeWindow: '15 minutes',
+        },
+      },
+    },
+    async (request, reply) => {
+      const logContext = {
+        ip: request.ip,
+        userAgent: request.headers['user-agent'],
+        path: request.url,
+        method: request.method,
+      };
+
+      request.log.info(logContext, 'Received /auth/firebase-verify request');
+
+      const parseResult = firebaseVerifySchema.safeParse(request.body);
+      if (!parseResult.success) {
+        request.log.warn(
+          { ...logContext, details: parseResult.error.flatten().fieldErrors },
+          'Firebase verify validation failed'
+        );
+        return reply.status(400).send({
+          error: 'Validation Error',
+          details: parseResult.error.flatten().fieldErrors,
+        });
+      }
+
+      const { idToken } = parseResult.data;
+
+      try {
+        // 1. Verify token with Firebase Admin
+        request.log.info(logContext, 'Verifying ID token with Firebase Admin');
+        const decodedToken = await fastify.firebase.auth().verifyIdToken(idToken);
+        const { uid, phone_number: firebasePhone } = decodedToken;
+
+        if (!firebasePhone) {
+          request.log.warn(
+            { ...logContext, uid },
+            'Firebase verify failed: Phone number missing in token'
+          );
+          return reply.status(400).send({
+            error: 'Invalid Token',
+            message: 'Phone number not found in token',
+          });
+        }
+
+        // 2. Normalize phone number (strip +91 if present)
+        request.log.info(
+          { ...logContext, uid, phone: firebasePhone },
+          'Firebase ID token verified'
+        );
+        const phone = firebasePhone.replace(/\D/g, '').slice(-10);
+
+        // 3. Upsert User in Prisma
+        // Find user by UID first (highest priority), then by phone to link accounts.
+        let user = await prisma.user.findUnique({ where: { firebaseUid: uid } });
+
+        if (!user) {
+          // No user found by UID, try to find by phone to link the account
+          const userByPhone = await prisma.user.findUnique({ where: { phone } });
+          if (userByPhone) {
+            // User exists with this phone, link firebaseUid to it
+            user = await prisma.user.update({
+              where: { id: userByPhone.id },
+              data: { firebaseUid: uid },
+            });
+          }
+        }
+
+        if (!user) {
+          // If still no user, create a new one
+          user = await prisma.user.create({
+            data: {
+              firebaseUid: uid,
+              phone,
+              name: `User ${phone.slice(-4)}`, // Default name
+              role: 'BUYER',
+              isActive: true,
+              isInvited: true, // Auto-invite since they verified phone via Firebase
+            },
+          });
+          request.log.info(
+            { ...logContext, userId: user.id },
+            'New user created via Firebase verify'
+          );
+        }
+
+        request.log.info(
+          { ...logContext, userId: user.id },
+          'Firebase token verified successfully'
+        );
+
+        // 4. Generate internal JWT
+        const token = fastify.jwt.sign({
+          userId: user.id,
+          role: user.role,
+        });
+
+        // 5. Set HTTP-only cookie
+        reply.setCookie('token', token, {
+          path: '/',
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          maxAge: 7 * 24 * 60 * 60, // 7 days
+        });
+
+        return {
+          success: true,
+          user: {
+            id: user.id,
+            role: user.role,
+            name: user.name,
+            phone: user.phone,
+          },
+        };
+      } catch (error) {
+        console.error('Server: Error in /auth/firebase-verify:', error);
+        fastify.log.error({ err: error }, 'Firebase token verification failed');
+        return reply.status(401).send({
+          error: 'Authentication Failed',
+          message: 'Invalid or expired Firebase token',
+        });
+      }
+    }
+  );
 };
 
 export default authRoutes;

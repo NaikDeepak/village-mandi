@@ -80,6 +80,7 @@ model User {
   name         String
   phone        String    @unique
   email        String?   @unique
+  firebaseUid  String?   @unique
   passwordHash String?   // Only for ADMIN users
   isActive     Boolean   @default(true)
   isInvited    Boolean   @default(false) // Buyer must be invited to access
@@ -92,6 +93,8 @@ model User {
 
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
+
+  @@index([firebaseUid])
 }
 
 //////////////////////

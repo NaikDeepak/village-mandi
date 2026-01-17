@@ -7,7 +7,6 @@ import { BuyerDashboardPage } from './pages/BuyerDashboardPage';
 import { BuyerLoginPage } from './pages/BuyerLoginPage';
 import { LandingPage } from './pages/LandingPage';
 import { RulesPage } from './pages/RulesPage';
-import { VerifyOtpPage } from './pages/VerifyOtpPage';
 import { AdminLayout } from './pages/admin/AdminLayout';
 import { BatchDetailPage } from './pages/admin/BatchDetailPage';
 import { BatchFormPage } from './pages/admin/BatchFormPage';
@@ -37,7 +36,6 @@ function App() {
           <Route path="/rules" element={<RulesPage />} />
           <Route path="/login" element={<AdminLoginPage />} />
           <Route path="/buyer-login" element={<BuyerLoginPage />} />
-          <Route path="/verify-otp" element={<VerifyOtpPage />} />
 
           {/* Protected admin routes */}
           {/* Protected admin routes */}

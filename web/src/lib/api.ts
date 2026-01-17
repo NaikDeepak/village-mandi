@@ -1,3 +1,6 @@
+import { getToken } from 'firebase/app-check';
+import { appCheck } from './firebase';
+
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 const API_BASE = `${BASE_URL.replace(/\/$/, '')}/api`;
 
@@ -12,6 +15,17 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
 
   if (options.body && !headers['Content-Type']) {
     headers['Content-Type'] = 'application/json';
+  }
+
+  // Attach App Check token
+  try {
+    const appCheckToken = await getToken(appCheck);
+    if (appCheckToken.token) {
+      headers['X-Firebase-AppCheck'] = appCheckToken.token;
+    }
+  } catch (err) {
+    // Log error but continue - backend handles enforcement policy
+    console.warn('App Check token retrieval failed:', err);
   }
 
   try {
@@ -65,20 +79,13 @@ export const authApi = {
       }
     ),
 
-  // Buyer - Request OTP
-  requestOtp: (phone: string) =>
-    request<{ success: boolean; message: string; devOtp?: string }>('/auth/request-otp', {
-      method: 'POST',
-      body: JSON.stringify({ phone }),
-    }),
-
-  // Buyer - Verify OTP
-  verifyOtp: (phone: string, otp: string) =>
+  // Firebase Token Verification
+  verifyFirebaseToken: (idToken: string) =>
     request<{ success: boolean; user: { id: string; role: string; name: string; phone: string } }>(
-      '/auth/verify-otp',
+      '/auth/firebase-verify',
       {
         method: 'POST',
-        body: JSON.stringify({ phone, otp }),
+        body: JSON.stringify({ idToken }),
       }
     ),
 

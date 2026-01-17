@@ -7,19 +7,82 @@
 ## Current Position
 
 **Milestone:** 2 (Production & Enhancements)
-**Phase:** 16 (Deployment)
-**Plan:** 01
-**Status:** Completed
-**Next Phase:** -
-**Last activity:** 2026-01-15 — Completed Plan 16-01 (Production Config)
+**Phase:** 21 (App Check Integration)
+**Plan:** 21-02 (Completed)
+**Status:** Phase complete
+**Next Phase:** 22 (Auth Flow Cleanup)
+**Last activity:** 2026-01-17 — Phase 21 complete; App Check enforcement verified end-to-end
 
-Progress: ▓▓░░░░░░░░ 20%
+Progress: ▓▓▓▓▓▓▓▓▓▓ 100%
 
 ## Recent Progress
 
 ### Milestone 2: Production & Enhancements
 
-#### Phase 16 — Deployment (In Progress)
+#### Phase 21 — App Check Integration (Completed)
+
+**What shipped:**
+- Plan 21-01: App Check Integration (Completed)
+  - Initialized Firebase App Check on frontend.
+  - Attached App Check tokens to all API requests.
+- Plan 21-02: Verification (Completed)
+  - Verified security perimeter: unauthorized requests are blocked while the web client succeeds.
+
+#### Phase 20 — Security Hardening (Completed)
+
+**What shipped:**
+- Plan 20-01: App Check & Security Logging (Completed)
+  - Implemented Firebase App Check verification middleware.
+  - Protected /auth/request-otp and /auth/firebase-verify.
+  - Enhanced security event logging with structured metadata (IP, UA, path).
+- Plan 20-02: Rate Limit Tuning (Completed)
+  - Enabled `trustProxy` in Fastify for accurate IP detection.
+  - Tuned rate limits for auth routes to 15-minute windows.
+  - Added custom error responses for rate limiting.
+
+#### Phase 19 — Client Auth Integration (Completed)
+
+**What shipped:**
+- Plan 19-01: Client Auth Logic (Completed)
+  - Installed `firebase` SDK in web workspace.
+  - Initialized Firebase client instance.
+  - Implemented `usePhoneAuth` hook for OTP lifecycle.
+- Plan 19-02: Client Auth UI (Completed)
+  - Implemented `PhoneLoginForm` with reCAPTCHA.
+  - Updated `api.ts` for backend sync.
+  - Replaced legacy mock OTP flow.
+- Plan 19-03: End-to-End Verification (Completed)
+  - Verified real SMS delivery and login flow.
+  - Confirmed user session persistence and backend user creation.
+
+#### Phase 18 — Backend Auth Foundation (Completed)
+
+**What shipped:**
+- Plan 18-01: Backend Auth Infrastructure (Completed)
+  - Integrated Firebase Admin SDK.
+  - Added `firebaseUid` to User model with unique index.
+  - Implemented `POST /auth/firebase-verify` for token exchange.
+  - Baselined database schema with `0_init` migration.
+- Plan 18-02: Security Hardening (Completed)
+  - Configured global and route-specific rate limits.
+  - Hardened auth endpoints against brute force and SMS pumping.
+  - Enabled security headers via Helmet.
+
+#### Phase 17 — Firebase Infrastructure (Completed)
+
+**What shipped:**
+- Plan 17-01: Firebase Infrastructure Configuration (Completed)
+  - Created Firebase project "apnakhet-app".
+  - Enabled Phone Authentication with test numbers.
+  - Configured custom domain `auth.apnakhet.app`.
+  - Synced `VITE_FIREBASE_*` and `FIREBASE_SERVICE_ACCOUNT_JSON` to Vercel production.
+  - Updated local `.env` with Firebase credentials.
+- Plan 17-02: Custom Domain Configuration (Completed)
+  - Corrected `VITE_FIREBASE_AUTH_DOMAIN` in `.env` to `auth.apnakhet.app`.
+  - Updated `.env.production.example` and `web/.env.example` templates.
+  - Verified DNS resolution for the custom domain.
+
+#### Phase 16 — Deployment (Completed)
 
 **What shipped:**
 - Plan 16-01: Production Configuration (Completed)
@@ -29,9 +92,6 @@ Progress: ▓▓░░░░░░░░ 20%
 - Plan 16-02: Production Deployment (Completed)
   - Successfully deployed to Vercel: https://village-mandi.vercel.app/
   - Verified landing page is live.
-
-**Upcoming:**
-- Phase 16: Deployment (Remaining plans)
 
 ### Milestone 1: MVP (Completed 2026-01-15)
 
@@ -281,6 +341,10 @@ Progress: ▓▓░░░░░░░░ 20%
 
 | Decision | Context | Outcome |
 |----------|---------|---------|
+| ReCaptcha V3 for App Check | Standard provider for web apps | Initialized ReCaptchaV3Provider in firebase.ts |
+| Global App Check Header | Ensure all API calls are verified | Attached getToken() results to X-Firebase-AppCheck in request wrapper |
+| Conditional App Check Enforcement | Allow monitoring vs blocking | Use APP_CHECK_ENFORCED env var; log failures but allow through if false |
+| Structured Security Metadata | Need for forensic/audit trail | Log IP, UserAgent, and Path for all security-relevant events |
 | Items replacement strategy for order editing | Simplify API behavior and avoid complex merge logic | PATCH /orders/:id replaces all items, not partial update. qty=0 removes item, empty array cancels order |
 | Metadata typing for event logs | Prisma InputJsonValue type incompatible with Record<string, unknown> | Build metadata object dynamically with explicit optional properties matching existing patterns |
 | Strict state machine for batches | Business integrity depends on predictable batch lifecycle | VALID_TRANSITIONS constant defines allowed transitions, validation rejects invalid with 400 |
@@ -335,6 +399,7 @@ Progress: ▓▓░░░░░░░░ 20%
 
 | Date | Change |
 |------|--------|
+| 2026-01-17 | Updated for Milestone 2 (Auth & Production) |
 | 2026-01-15 | Phase 16 added: Deployment (Milestone 2 start) |
 | 2026-01-15 | Phase 15 added: End-to-End Workflow Guide |
 | 2026-01-15 | Phase 14 added: Order Editing (allow buyers to edit PLACED orders before cutoff) |
@@ -343,17 +408,17 @@ Progress: ▓▓░░░░░░░░ 20%
 
 ## Session Continuity
 
-**Last session:** 2026-01-15 (Current)
+**Last session:** 2026-01-17
 **Work completed:**
-- Completed Phase 15 (End-to-End Workflow Guide).
-- Archived Milestone 1 (MVP) artifacts.
-- Tagged release `v1.0`.
-- Updated project documentation (`PROJECT.md`, `ROADMAP.md`, `STATE.md`).
+- Researched Firebase Auth architecture.
+- Defined requirements for Milestone 2.
+- Updated Roadmap with 4 new phases (17-20).
+- Confirmed Phase 16 Deployment is complete.
+- Executed Phase 17: Firebase Infrastructure.
+- Configured Custom Auth Domain and verified DNS.
 
 **Next actions:**
-1. Deployment to Production environment.
-2. Initialize Milestone 2 planning.
+1. Execute Phase 18: Backend Auth Foundation.
 
 ---
-
-*Last updated: 2026-01-15*
+*Last updated: 2026-01-17*

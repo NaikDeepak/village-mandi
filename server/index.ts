@@ -1,11 +1,14 @@
 import 'dotenv/config';
 import cors from '@fastify/cors';
+import helmet from '@fastify/helmet';
 import Fastify from 'fastify';
 import { SYSTEM_RULES } from '../shared/constants';
 
-import jwtPlugin from './src/plugins/jwt';
 // Plugins
+import firebasePlugin from './src/plugins/firebase';
+import jwtPlugin from './src/plugins/jwt';
 import prismaPlugin from './src/plugins/prisma';
+import rateLimitPlugin from './src/plugins/rate-limit';
 
 // Routes
 import authRoutes from './src/routes/auth';
@@ -21,7 +24,17 @@ import payoutRoutes from './src/routes/payouts';
 import productRoutes from './src/routes/products';
 
 const fastify = Fastify({
-  logger: true,
+  logger: {
+    level: 'error',
+    transport: {
+      target: 'pino-pretty',
+      options: {
+        translateTime: 'HH:MM:ss Z',
+        ignore: 'pid,hostname',
+      },
+    },
+  },
+  trustProxy: true,
 });
 
 /**
@@ -44,8 +57,11 @@ fastify.register(cors, {
 });
 
 // Register plugins
+fastify.register(helmet);
 fastify.register(prismaPlugin);
 fastify.register(jwtPlugin);
+fastify.register(firebasePlugin);
+fastify.register(rateLimitPlugin);
 
 // Register routes
 fastify.register(
