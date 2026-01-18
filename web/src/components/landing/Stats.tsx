@@ -3,9 +3,9 @@ import { usePublicStats } from '../../hooks/useStats';
 
 // Fallback values if API fails or is loading
 const DEFAULT_STATS = {
-  farmers: 0,
-  products: 0,
-  regions: 0,
+  farmers: 5,
+  products: 10,
+  regions: 2,
 };
 
 export function Stats() {
@@ -44,10 +44,7 @@ export function Stats() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 divide-y md:divide-y-0 md:divide-x divide-gray-100">
           {statItems.map((stat) => (
-            <div
-              key={stat.label}
-              className="text-center group pt-8 md:pt-0"
-            >
+            <div key={stat.label} className="text-center group pt-8 md:pt-0">
               <div className="mb-4 inline-flex items-center justify-center p-3 rounded-full bg-mandi-cream group-hover:bg-mandi-green/10 transition-colors duration-300">
                 <stat.icon className="h-6 w-6 text-mandi-green opacity-80" aria-hidden="true" />
               </div>
