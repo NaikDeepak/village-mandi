@@ -37,17 +37,23 @@ export function Hero() {
         </h1>
 
         <p className="text-xl md:text-3xl text-white/95 max-w-3xl mx-auto leading-relaxed font-light mb-8 text-balance">
-          Reconnect with the hands that feed you.
+          Reconnect with the hands that feed you. <br className="hidden md:block" />
+          Pre-book authentic produce directly from{' '}
+          <span className="text-mandi-green-light font-medium">Konkan farmers</span>.
         </p>
 
         <p className="text-lg text-white/80 max-w-2xl mx-auto leading-relaxed mb-10 font-light">
           Join a community of mindful eaters who support farmers directly.
-          Experience the taste of trust, transparency, and tradition in every batch.
+          <strong className="text-white/90 font-medium"> No middlemen.</strong> Just trust,
+          transparency, and tradition.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
           <Link to="/buyer-login">
-            <Button size="lg" className="w-full sm:w-auto h-12 px-8 text-base shadow-lg shadow-mandi-green/20">
+            <Button
+              size="lg"
+              className="w-full sm:w-auto h-12 px-8 text-base shadow-lg shadow-mandi-green/20"
+            >
               Join the Community
             </Button>
           </Link>
@@ -65,7 +71,10 @@ export function Hero() {
         {/* Commitment Highlight */}
         <p className="text-white/80 text-sm font-medium mb-12 flex items-center justify-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-mandi-earth-light" />
-          Secure your batch with just <span className="text-white font-bold border-b border-mandi-earth-light/50">10% commitment fee</span>
+          Secure your batch with just{' '}
+          <span className="text-white font-bold border-b border-mandi-earth-light/50">
+            10% commitment fee
+          </span>
         </p>
 
         {/* WhatsApp Contact - Subtle & Accessible */}

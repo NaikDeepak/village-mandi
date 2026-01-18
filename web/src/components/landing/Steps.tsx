@@ -1,11 +1,11 @@
 import { BATCH_STATUS } from '@shared/constants';
-import { MessageCircle, CheckCircle2, Clock, Package, Truck, UserCheck } from 'lucide-react';
+import { CheckCircle2, Clock, MessageCircle, Package, Truck, UserCheck } from 'lucide-react';
 
 const steps = [
   {
     id: 1,
     title: BATCH_STATUS.OPEN,
-    desc: 'You pre-book with a small advance and choose quantity. Booking window: 5-7 days.',
+    desc: 'Pre-booking farm produce. Secure your harvest with an advance commitment before harvest.',
     icon: Clock,
   },
   {
@@ -50,10 +50,7 @@ export function Steps() {
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
             {steps.map((step, index) => (
-              <div
-                key={step.id}
-                className="relative flex flex-col items-center text-center group"
-              >
+              <div key={step.id} className="relative flex flex-col items-center text-center group">
                 {/* Step Circle with Icon */}
                 <div className="w-16 h-16 rounded-full bg-white border-4 border-mandi-cream flex items-center justify-center mb-6 shadow-sm group-hover:border-mandi-green/30 transition-colors duration-300 relative z-10">
                   <step.icon className="w-6 h-6 text-mandi-green" />
@@ -69,13 +66,9 @@ export function Steps() {
                   <div className="md:hidden absolute top-16 bottom-[-3rem] left-1/2 w-0.5 bg-gray-100 -z-0" />
                 )}
 
-                <h3 className="text-lg font-bold text-mandi-dark mb-3">
-                  {step.title}
-                </h3>
+                <h3 className="text-lg font-bold text-mandi-dark mb-3">{step.title}</h3>
 
-                <p className="text-sm text-mandi-muted leading-relaxed">
-                  {step.desc}
-                </p>
+                <p className="text-sm text-mandi-muted leading-relaxed">{step.desc}</p>
               </div>
             ))}
           </div>
@@ -89,11 +82,26 @@ export function Steps() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {[
-              { icon: UserCheck, title: "1. Verify", desc: "Verify your phone number to access the dashboard." },
-              { icon: MessageCircle, title: "2. Connect", desc: "Join the WhatsApp group for batch alerts." },
-              { icon: CheckCircle2, title: "3. Pre-book", desc: "Pay a small advance to secure your order." }
+              {
+                icon: UserCheck,
+                title: '1. Verify',
+                desc: 'Verify your phone number to access the dashboard.',
+              },
+              {
+                icon: MessageCircle,
+                title: '2. Connect',
+                desc: 'Join the WhatsApp group for batch alerts.',
+              },
+              {
+                icon: CheckCircle2,
+                title: '3. Pre-book',
+                desc: 'Pay a small advance to secure your order.',
+              },
             ].map((item) => (
-              <div key={item.title} className="flex flex-col items-center p-6 bg-gray-50 rounded-2xl border border-gray-100">
+              <div
+                key={item.title}
+                className="flex flex-col items-center p-6 bg-gray-50 rounded-2xl border border-gray-100"
+              >
                 <item.icon className="w-8 h-8 text-mandi-green mb-4 opacity-80" />
                 <div className="font-bold text-mandi-dark mb-2">{item.title}</div>
                 <div className="text-sm text-mandi-muted text-center">{item.desc}</div>
