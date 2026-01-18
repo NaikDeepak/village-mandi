@@ -26,10 +26,10 @@ export function RulesPage() {
     mainEntity: [
       {
         '@type': 'Question',
-        name: 'What is a Batch in Village Mandi?',
+        name: 'What is a Batch in Apna Khet?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Village Mandi operates in cycles called "Batches." Each batch moves from Draft to Open (for orders), then Closed (at cutoff), followed by Collection, Delivery, and finally Settlement.',
+          text: 'Apna Khet operates in cycles called "Batches." Each batch moves from Draft to Open (for orders), then Closed (at cutoff), followed by Collection, Delivery, and finally Settlement.',
         },
       },
       {
@@ -54,8 +54,8 @@ export function RulesPage() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead
-        title="Commitment Rules & FAQ | Village Mandi"
-        description="Learn about our batch cycles, two-stage payment system, cutoff enforcement, and fulfilment options. Essential reading for all Village Mandi buyers."
+        title="Commitment Rules & FAQ | Apna Khet"
+        description="Learn about our batch cycles, two-stage payment system, cutoff enforcement, and fulfilment options. Essential reading for all Apna Khet buyers."
         jsonLd={faqJsonLd}
       />
       <Navbar variant="internal" />

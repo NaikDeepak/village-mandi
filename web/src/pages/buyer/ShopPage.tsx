@@ -242,7 +242,7 @@ export function ShopPage() {
             },
             brand: {
               '@type': 'Brand',
-              name: bp.product.farmer?.name || 'Village Mandi Farmer',
+              name: bp.product.farmer?.name || 'Apna Khet Farmer',
             },
           },
         })),
@@ -286,7 +286,7 @@ export function ShopPage() {
   return (
     <>
       <SEOHead
-        title={`${currentBatch?.name || 'Shop'} | Village Mandi`}
+        title={`${currentBatch?.name || 'Shop'} | Apna Khet`}
         description={`Order fresh farm produce from ${currentBatch?.hub?.name || 'local'} hub. Delivery on ${currentBatch ? new Date(currentBatch.deliveryDate).toLocaleDateString() : 'scheduled date'}.`}
         jsonLd={productJsonLd}
       />
