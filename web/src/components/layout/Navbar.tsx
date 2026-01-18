@@ -175,6 +175,7 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
           <div className="px-4 pt-2 pb-6 space-y-2">
             <Link
               to="/"
+              onClick={() => setIsOpen(false)}
               className={`block px-3 py-3 text-base font-medium rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-white ${isActive('/') ? 'text-mandi-earth-light bg-white/10' : 'text-white hover:text-mandi-earth-light'}`}
             >
               Home
@@ -197,6 +198,7 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
             </a>
             <Link
               to="/rules"
+              onClick={() => setIsOpen(false)}
               className={`block px-3 py-3 text-base font-medium rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-white ${isActive('/rules') ? 'text-mandi-earth-light bg-white/10' : 'text-white hover:text-mandi-earth-light'}`}
             >
               Commitment Rules
@@ -205,12 +207,14 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
               <>
                 <Link
                   to="/shop"
+                  onClick={() => setIsOpen(false)}
                   className="block w-full text-center mt-4 px-5 py-3 rounded-lg bg-white/20 text-white font-bold border border-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white hover:bg-white/30"
                 >
                   Shop
                 </Link>
                 <Link
                   to={getDashboardLink()}
+                  onClick={() => setIsOpen(false)}
                   className="block w-full text-center mt-2 px-5 py-3 rounded-lg bg-white/20 text-white font-bold border border-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white hover:bg-white/30"
                 >
                   Dashboard
@@ -226,6 +230,7 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
             ) : (
               <Link
                 to="/buyer-login"
+                onClick={() => setIsOpen(false)}
                 className="block w-full text-center mt-4 px-5 py-3 rounded-lg bg-white text-mandi-green font-bold shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-mandi-green"
               >
                 Join as Buyer
