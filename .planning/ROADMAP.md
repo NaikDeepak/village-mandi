@@ -153,6 +153,11 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 **Depends on**: Phase 22
 **Status**: Complete
 
+#### Phase 24: Rebrand and Domain Migration to ApnaKhet.app
+**Goal**: Update branding to ApnaKhet and migrate domain to apnakhet.app
+**Depends on**: Phase 23
+**Status**: Pending
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -165,3 +170,4 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 | 21. App Check & Security | v1.1 | 2/2 | Complete | 2026-01-17 |
 | 22. Auth Flow Cleanup | v1.1 | 0/TBD | Pending | - |
 | 23. SEO and AI Bot friendly | v1.1 | 2/2 | Complete | 2026-01-18 |
+| 24. Rebrand & Domain | v1.1 | 0/TBD | Pending | - |
