@@ -50,6 +50,7 @@ const firebasePlugin: FastifyPluginAsync = async (fastify) => {
       auth: () => {
         throw new Error('Firebase Admin not initialized');
       },
+      // biome-ignore lint/suspicious/noExplicitAny: Mock object for type safety
     } as any);
   }
 };

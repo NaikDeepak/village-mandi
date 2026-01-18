@@ -102,6 +102,7 @@ describe('Packing Routes', () => {
         count: 1,
       });
 
+      // biome-ignore lint/suspicious/noExplicitAny: Mock transaction
       mockPrisma.$transaction.mockImplementation(async (fn: any) => {
         return await fn(mockPrisma);
       });

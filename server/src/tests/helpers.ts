@@ -15,8 +15,12 @@ import payoutRoutes from '../routes/payouts';
 import productRoutes from '../routes/products';
 
 // Mock Prisma client
+// Mock Prisma client
+// biome-ignore lint/suspicious/noExplicitAny: Mocking complex Prisma client
 export const mockPrisma: any = {
+  // biome-ignore lint/suspicious/noExplicitAny: Mock implementation
   $transaction: vi.fn(async (fn: any) => {
+    // biome-ignore lint/suspicious/noExplicitAny: Mock implementation
     if (typeof fn === 'function') return await fn(mockPrisma as any);
     if (Array.isArray(fn)) return await Promise.all(fn);
     return fn;

@@ -19,8 +19,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
           id: result.data.user.id,
           role: result.data.user.role as 'ADMIN' | 'BUYER',
           name: result.data.user.name,
-          email: result.data.user.email,
-          phone: result.data.user.phone,
+          email: result.data.user.email ?? null,
+          phone: result.data.user.phone ?? null,
         });
       } else {
         setUser(null);

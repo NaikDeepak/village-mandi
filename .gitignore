@@ -11,3 +11,4 @@ out
 test-results
 /playwright
 /playwright-report
+/public

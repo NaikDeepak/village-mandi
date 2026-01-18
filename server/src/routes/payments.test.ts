@@ -95,6 +95,7 @@ describe('Payment Routes', () => {
         payments: [],
       });
 
+      // biome-ignore lint/suspicious/noExplicitAny: Mock transaction
       mockPrisma.$transaction.mockImplementation(async (fn: any) => fn(mockPrisma));
       mockPrisma.payment.create.mockResolvedValue({ id: 'pay-1', ...validPayload });
       mockPrisma.order.update.mockResolvedValue({});
@@ -150,6 +151,7 @@ describe('Payment Routes', () => {
         payments: [{ id: 'pay-1', stage: 'COMMITMENT' }],
       });
 
+      // biome-ignore lint/suspicious/noExplicitAny: Mock transaction
       mockPrisma.$transaction.mockImplementation(async (fn: any) => fn(mockPrisma));
       mockPrisma.payment.create.mockResolvedValue({ id: 'pay-2', amount: 900, stage: 'FINAL' });
       mockPrisma.order.update.mockResolvedValue({});

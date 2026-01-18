@@ -122,6 +122,7 @@ describe('Payout Routes', () => {
         paidAt: new Date(payoutData.paidAt),
       });
 
+      // biome-ignore lint/suspicious/noExplicitAny: Mock transaction
       mockPrisma.$transaction.mockImplementation(async (cb: any) => {
         return await cb(mockPrisma);
       });

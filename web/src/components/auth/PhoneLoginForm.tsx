@@ -101,6 +101,7 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
       console.error('handleSendOtp: Error caught', err);
       // Do not clear the verifier locally on error to allow retries without full re-initialization.
 
+      // biome-ignore lint/suspicious/noExplicitAny: Firebase error type is not exported clean
       const error = err as any; // Cast to access code property
       let message = error.message || 'Failed to send OTP';
 
@@ -143,6 +144,7 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
             role: result.data.user.role as 'ADMIN' | 'BUYER',
             name: result.data.user.name,
             phone: result.data.user.phone,
+            email: null,
           });
           navigate('/buyer-dashboard');
         }

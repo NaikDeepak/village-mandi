@@ -7,7 +7,7 @@ interface SEOHeadProps {
   keywords?: string;
   image?: string;
   type?: 'website' | 'article' | 'product';
-  jsonLd?: Record<string, any>;
+  jsonLd?: Record<string, unknown>;
 }
 
 export function SEOHead({

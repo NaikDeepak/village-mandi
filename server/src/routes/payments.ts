@@ -1,3 +1,4 @@
+import type { Prisma } from '@prisma/client';
 import type { FastifyPluginAsync } from 'fastify';
 import { requireAdmin } from '../middleware/auth';
 import { logPaymentSchema } from '../schemas/payments';
@@ -69,7 +70,7 @@ const paymentRoutes: FastifyPluginAsync = async (fastify) => {
       }
 
       // 3. Execute Transaction
-      const result = await prisma.$transaction(async (tx: any) => {
+      const result = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
         // Create Payment
         const payment = await tx.payment.create({
           data: {

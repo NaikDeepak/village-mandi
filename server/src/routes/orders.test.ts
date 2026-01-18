@@ -166,6 +166,7 @@ describe('Order Routes', () => {
         ],
       };
 
+      // biome-ignore lint/suspicious/noExplicitAny: Mock transaction implementation
       mockPrisma.$transaction.mockImplementation(async (fn: any) => fn(mockPrisma));
       mockPrisma.order.create.mockResolvedValue(mockOrder);
       mockPrisma.eventLog.create.mockResolvedValue({});
@@ -209,6 +210,7 @@ describe('Order Routes', () => {
         },
       ]);
 
+      // biome-ignore lint/suspicious/noExplicitAny: Mock transaction
       mockPrisma.$transaction.mockImplementation(async (_fn: any) => {
         const error = new Error('Unique constraint failed') as Error & { code?: string };
         error.code = 'P2002';
@@ -383,6 +385,7 @@ describe('Order Routes', () => {
         fulfillmentType: 'DELIVERY',
       };
 
+      // biome-ignore lint/suspicious/noExplicitAny: Mock transaction
       mockPrisma.$transaction.mockImplementation(async (fn: any) => fn(mockPrisma));
       mockPrisma.order.update.mockResolvedValue(updatedOrder);
       mockPrisma.eventLog.create.mockResolvedValue({});
@@ -427,6 +430,7 @@ describe('Order Routes', () => {
         },
       ];
 
+      // biome-ignore lint/suspicious/noExplicitAny: Mock transaction
       mockPrisma.$transaction.mockImplementation(async (fn: any) => fn(mockPrisma));
       mockPrisma.batchProduct.findMany.mockResolvedValue(mockBatchProducts);
       mockPrisma.orderItem.deleteMany.mockResolvedValue({ count: 1 });
@@ -499,6 +503,7 @@ describe('Order Routes', () => {
         },
       ];
 
+      // biome-ignore lint/suspicious/noExplicitAny: Mock transaction
       mockPrisma.$transaction.mockImplementation(async (fn: any) => fn(mockPrisma));
       mockPrisma.batchProduct.findMany.mockResolvedValue(mockBatchProducts);
 
@@ -535,6 +540,7 @@ describe('Order Routes', () => {
         },
       ];
 
+      // biome-ignore lint/suspicious/noExplicitAny: Mock transaction
       mockPrisma.$transaction.mockImplementation(async (fn: any) => fn(mockPrisma));
       mockPrisma.batchProduct.findMany.mockResolvedValue(mockBatchProducts);
 
@@ -565,6 +571,7 @@ describe('Order Routes', () => {
         items: [],
       };
 
+      // biome-ignore lint/suspicious/noExplicitAny: Mock transaction
       mockPrisma.$transaction.mockImplementation(async (fn: any) => fn(mockPrisma));
       mockPrisma.orderItem.deleteMany.mockResolvedValue({ count: 1 });
       mockPrisma.order.update.mockResolvedValue(cancelledOrder);
@@ -598,6 +605,7 @@ describe('Order Routes', () => {
     it('should log ORDER_EDITED event on successful edit', async () => {
       mockPrisma.order.findUnique.mockResolvedValue(mockOrder);
 
+      // biome-ignore lint/suspicious/noExplicitAny: Mock transaction
       mockPrisma.$transaction.mockImplementation(async (fn: any) => fn(mockPrisma));
       mockPrisma.order.update.mockResolvedValue({
         ...mockOrder,
@@ -626,6 +634,7 @@ describe('Order Routes', () => {
     it('should log ORDER_CANCELLED event when order cancelled', async () => {
       mockPrisma.order.findUnique.mockResolvedValue(mockOrder);
 
+      // biome-ignore lint/suspicious/noExplicitAny: Mock transaction
       mockPrisma.$transaction.mockImplementation(async (fn: any) => fn(mockPrisma));
       mockPrisma.orderItem.deleteMany.mockResolvedValue({ count: 1 });
       mockPrisma.order.update.mockResolvedValue({
