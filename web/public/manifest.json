@@ -1,0 +1,16 @@
+{
+  "name": "Apna Khet - Fresh Farm Produce",
+  "short_name": "Apna Khet",
+  "description": "Connect directly with local farmers. Buy fresh, high-quality produce with full transparency and traceability.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FDFBF7",
+  "theme_color": "#166534",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
