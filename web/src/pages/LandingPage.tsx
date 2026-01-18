@@ -12,7 +12,10 @@ import { SEOHead } from '../components/seo/SEOHead';
 export function LandingPage() {
   return (
     <div className="min-h-screen bg-white">
-      <SEOHead />
+      <SEOHead
+        title="Village Mandi - Fresh Farm Produce Directly from Local Farmers"
+        description="Buy fresh, high-quality agricultural produce directly from local farmers. Full transparency, traceability, and fair pricing for everyone."
+      />
       <Navbar />
       <main>
         <Hero />
