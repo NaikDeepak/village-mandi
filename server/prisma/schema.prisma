@@ -215,7 +215,7 @@ model Order {
 
   createdAt         DateTime        @default(now())
 
-  @@unique([batchId, buyerId])
+  // @@unique([batchId, buyerId]) - Removed to allow multiple orders per batch
 }
 
 //////////////////////

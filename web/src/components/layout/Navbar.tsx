@@ -60,7 +60,11 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
 
   return (
     <nav
-      className={`fixed w-full z-50 ${isScrolled ? 'bg-mandi-green shadow-md py-2' : 'bg-transparent py-4'}`}
+      className={`fixed w-full z-50 transition-all duration-300 ease-in-out ${
+        isScrolled
+          ? 'bg-mandi-green/90 backdrop-blur-md shadow-lg py-3 border-b border-white/10'
+          : 'bg-black/15 backdrop-blur-[4px] py-5 border-b border-transparent'
+      }`}
       aria-label="Main navigation"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -106,7 +110,7 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
               to="/rules"
               className={`font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white rounded px-2 py-1 ${isActive('/rules') ? 'text-mandi-earth-light' : 'text-white hover:text-mandi-earth-light'}`}
             >
-              Rules
+              Commitment Rules
             </Link>
           </div>
 
@@ -115,6 +119,11 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
             {isAuthenticated ? (
               <>
                 <span className="text-white/80 text-sm">{user?.name}</span>
+                <Link to="/shop">
+                  <Button className="bg-mandi-green text-white hover:bg-mandi-green/80 border border-white/30 hidden sm:inline-flex">
+                    Shop
+                  </Button>
+                </Link>
                 <Link to={getDashboardLink()}>
                   <Button className="bg-white/20 text-white hover:bg-white/30 border border-white/30">
                     Dashboard
@@ -190,7 +199,7 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
               to="/rules"
               className={`block px-3 py-3 text-base font-medium rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-white ${isActive('/rules') ? 'text-mandi-earth-light bg-white/10' : 'text-white hover:text-mandi-earth-light'}`}
             >
-              Rules
+              Commitment Rules
             </Link>
             {isAuthenticated ? (
               <>

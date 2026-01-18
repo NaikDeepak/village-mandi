@@ -1,28 +1,29 @@
 import { BATCH_STATUS } from '@shared/constants';
+import { MessageCircle, Phone } from 'lucide-react';
 
 const steps = [
   {
     id: 1,
     title: BATCH_STATUS.OPEN,
-    desc: 'Pricing locked. Place your orders.',
+    desc: 'You pre-book with a small advance and choose quantity. Booking window: 5-7 days.',
     color: 'bg-green-100 text-green-800 border-green-200',
   },
   {
     id: 2,
     title: BATCH_STATUS.CLOSED,
-    desc: 'Cutoff reached. Orders locked.',
+    desc: 'Batch cutoff reached. Orders are locked and sent to farmers for harvest & dispatch.',
     color: 'bg-red-100 text-red-800 border-red-200',
   },
   {
     id: 3,
     title: BATCH_STATUS.COLLECTED,
-    desc: 'Goods sourced from farmers.',
+    desc: 'Fresh produce sourced significantly from Karnataka & Maharashtra regions.',
     color: 'bg-yellow-100 text-yellow-800 border-yellow-200',
   },
   {
     id: 4,
     title: BATCH_STATUS.DELIVERED,
-    desc: 'Distributed to buyers.',
+    desc: 'Sorted and delivered to collection points in Pune/Mumbai. Balance payment upon collection.',
     color: 'bg-blue-100 text-blue-800 border-blue-200',
   },
 ];
@@ -72,6 +73,46 @@ export function Steps() {
                 <p className="text-gray-600 font-medium leading-relaxed">{step.desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Post-Signup Expectations */}
+        <div className="mt-20 max-w-3xl mx-auto text-center border-t border-gray-200 pt-12">
+          <h3 className="text-2xl font-bold text-mandi-dark mb-6">What happens after you join?</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+            <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="bg-green-100 p-2 rounded-full text-green-600">
+                  <Phone className="w-4 h-4" />
+                </span>
+                <p className="font-bold text-mandi-dark">1. Verify</p>
+              </div>
+              <p className="text-sm text-gray-600">
+                Verify your phone number to access the buyer dashboard.
+              </p>
+            </div>
+            <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="bg-green-100 p-2 rounded-full text-green-600">
+                  <MessageCircle className="w-4 h-4" />
+                </span>
+                <p className="font-bold text-mandi-dark">2. Connect</p>
+              </div>
+              <p className="text-sm text-gray-600">
+                Join the WhatsApp group for real-time batch announcements.
+              </p>
+            </div>
+            <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="bg-green-100 p-2 rounded-full text-green-600">
+                  <span className="font-bold">₹</span>
+                </span>
+                <p className="font-bold text-mandi-dark">3. Pre-book</p>
+              </div>
+              <p className="text-sm text-gray-600">
+                Pay a small advance to secure your order when a batch opens.
+              </p>
+            </div>
           </div>
         </div>
       </div>

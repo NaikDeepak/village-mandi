@@ -28,6 +28,8 @@ export interface Product {
     id: string;
     name: string;
     location: string;
+    description?: string | null;
+    relationshipLevel?: 'SELF' | 'FAMILY' | 'FRIEND' | 'REFERRED';
     isActive: boolean;
   };
 }

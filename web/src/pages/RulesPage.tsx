@@ -27,7 +27,7 @@ export function RulesPage() {
         <section className="bg-mandi-cream py-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h1 className="text-3xl md:text-4xl font-bold text-mandi-dark mb-4">
-              How {brand.name} Works
+              Commitment Rules
             </h1>
             <p className="text-lg text-mandi-muted">
               Clear rules ensure fairness for everyone. Read these before placing your first order.
@@ -116,7 +116,7 @@ export function RulesPage() {
                   Stage 1
                 </div>
                 <h3 className="text-xl font-bold text-mandi-dark mb-3">
-                  Commitment Fee ({SYSTEM_RULES.FACILITATION_FEE_PERCENTAGE}%)
+                  Commitment Advance ({SYSTEM_RULES.FACILITATION_FEE_PERCENTAGE}%)
                 </h3>
                 <ul className="space-y-2 text-mandi-muted">
                   <li className="flex items-start gap-2">

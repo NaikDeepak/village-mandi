@@ -29,16 +29,30 @@ export function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
   const [currentBatch, setCurrentBatch] = useState<Batch | null>(null);
   const location = useLocation();
+  const state = location.state as {
+    fulfillmentType?: 'PICKUP' | 'DELIVERY';
+    batchId?: string;
+  } | null;
+
   const [fulfillmentType, setFulfillmentType] = useState<'PICKUP' | 'DELIVERY'>(
-    (location.state as { fulfillmentType?: 'PICKUP' | 'DELIVERY' })?.fulfillmentType || 'PICKUP'
+    state?.fulfillmentType || 'PICKUP'
   );
 
   useEffect(() => {
     const fetchBatch = async () => {
       try {
-        const res = await batchesApi.getCurrent();
-        if (res.data?.batch) {
-          setCurrentBatch(res.data.batch);
+        // Fetch ALL open batches to find the target one (since we don't have public GET /batches/:id)
+        const res = await batchesApi.getOpen();
+        if (res.data?.batches) {
+          const targetBatchId = state?.batchId;
+          // Find specific batch if ID provided, otherwise default to first (legacy behavior fallback)
+          const batch = targetBatchId
+            ? res.data.batches.find((b) => b.id === targetBatchId)
+            : res.data.batches[0];
+
+          if (batch) {
+            setCurrentBatch(batch);
+          }
         }
       } catch (error) {
         console.error('Failed to fetch batch:', error);
@@ -48,7 +62,7 @@ export function CheckoutPage() {
     };
 
     fetchBatch();
-  }, []);
+  }, [state?.batchId]);
 
   // Redirect if cart is empty
   useEffect(() => {

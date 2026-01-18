@@ -92,6 +92,15 @@ export function BuyerDashboardPage() {
                 </span>
               </div>
               <div className="flex items-center gap-4">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => navigate('/shop')}
+                  className="flex text-mandi-dark hover:text-mandi-green hover:bg-mandi-green/5"
+                >
+                  <ShoppingBag size={16} className="mr-2" />
+                  Shop
+                </Button>
                 <div className="hidden sm:block text-right">
                   <p className="text-sm font-bold text-mandi-dark leading-none">{user?.name}</p>
                   <p className="text-[10px] text-mandi-muted">{user?.phone}</p>

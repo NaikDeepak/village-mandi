@@ -2,30 +2,19 @@ import { Button } from '@/components/ui/button';
 import { brand } from '@/config/brand';
 import { SYSTEM_RULES } from '@shared/constants';
 import { ChevronDown, Layers, Percent, Users } from 'lucide-react';
+import { MessageCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import heroBg from '../../assets/hero-bg.png';
-// Placeholder imports for new images - these will be generated
-// import hero1 from '../../assets/hero-marketplace.png';
-// import hero2 from '../../assets/hero-produce.png';
-// import hero3 from '../../assets/hero-tech.png';
-
-// Placeholder for future hero images
-// const HERO_IMAGES = [
-//   heroBg,
-//   // '/src/assets/hero_marketplace_vibrant.png',
-//   // '/src/assets/hero_fresh_produce_closeup.png',
-//   // '/src/assets/hero_tech_farmer_field.png'
-// ];
+import hero1 from '../../assets/hero-marketplace.png';
+import hero2 from '../../assets/hero-produce.png';
+import hero3 from '../../assets/hero-tech.png';
 
 export function Hero() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  // Temporary array until images are physically present and imported
-  // Using the imported heroBg for now to prevent errors, will update once images are generated
   const heroImages = [
-    { id: 'hero-1', src: heroBg },
-    { id: 'hero-2', src: heroBg },
-    { id: 'hero-3', src: heroBg },
+    { id: 'hero-1', src: hero1 },
+    { id: 'hero-2', src: hero2 },
+    { id: 'hero-3', src: hero3 },
   ];
 
   useEffect(() => {
@@ -60,7 +49,7 @@ export function Hero() {
                 e.currentTarget.style.display = 'none';
               }}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-mandi-dark/30 via-mandi-dark/60 to-mandi-dark/90" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-mandi-dark/30 to-mandi-dark/95" />
           </div>
         ))}
       </div>
@@ -71,13 +60,26 @@ export function Hero() {
         </h1>
 
         <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed font-medium mb-4">
-          Farm-Fresh Grains, Spices & Seasonal Fruits
+          Pre-commit with a small advance. Get traceable batches at fair prices.
         </p>
 
         <p className="text-lg text-white/80 max-w-2xl mx-auto leading-relaxed mb-8">
           Order directly from farmers you can trust. We aggregate orders in batches for Mango, Rice,
-          Jaggery, Tur Dal, Jowar, and more. Know your source. Pay fair prices.
+          Jaggery, Tur Dal, Jowar, and more.
         </p>
+
+        {/* WhatsApp Contact */}
+        <div className="flex justify-center mb-8">
+          <a
+            href="https://wa.me/919876543210" // TODO: Replace with actual WhatsApp number
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-white/90 hover:text-white transition-colors bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full backdrop-blur-sm"
+          >
+            <MessageCircle className="w-5 h-5" />
+            <span className="font-medium">Questions? Chat on WhatsApp</span>
+          </a>
+        </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
           <Link to="/buyer-login">
@@ -85,13 +87,14 @@ export function Hero() {
               Join as Buyer
             </Button>
           </Link>
-          <Link to="/rules">
+          <Link to="/buyer-dashboard">
+            {/* Redirects to dashboard which would show current batches if logged in, otherwise login */}
             <Button
               variant="outline"
               size="lg"
               className="w-full sm:w-auto border-white text-white hover:bg-white hover:text-mandi-dark"
             >
-              How It Works
+              See Batches & Prices
             </Button>
           </Link>
         </div>
@@ -105,7 +108,9 @@ export function Hero() {
           </div>
           <div className="flex flex-col items-center gap-2">
             <Percent className="h-6 w-6 text-mandi-earth-light" aria-hidden="true" />
-            <div className="text-xl font-bold">{SYSTEM_RULES.FACILITATION_FEE_PERCENTAGE}% Fee</div>
+            <div className="text-xl font-bold">
+              {SYSTEM_RULES.FACILITATION_FEE_PERCENTAGE}% Advance
+            </div>
             <div className="text-sm text-white/70">Transparent facilitation</div>
           </div>
           <div className="flex flex-col items-center gap-2">
