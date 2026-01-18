@@ -7,9 +7,12 @@ import { TraceabilityDemo } from '../components/landing/TraceabilityDemo';
 import { Footer } from '../components/layout/Footer';
 import { Navbar } from '../components/layout/Navbar';
 
+import { SEOHead } from '../components/seo/SEOHead';
+
 export function LandingPage() {
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead />
       <Navbar />
       <main>
         <Hero />

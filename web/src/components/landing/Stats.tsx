@@ -3,9 +3,9 @@ import { usePublicStats } from '../../hooks/useStats';
 
 // Fallback values if API fails or is loading
 const DEFAULT_STATS = {
-  farmers: 0,
-  products: 0,
-  regions: 0,
+  farmers: 5,
+  products: 10,
+  regions: 2,
 };
 
 export function Stats() {
@@ -29,39 +29,41 @@ export function Stats() {
       label: 'Products Available',
       value: `${displayStats.products}`, // Exact count
       icon: Package,
-      description: 'Mango, Rice, Jaggery, Tur Dal, Jowar, Supari',
+      description: 'Mango, Rice, Jaggery, Tur Dal, Jowar',
     },
     {
       label: 'Sourcing Regions',
       value: `${displayStats.regions}+`,
       icon: MapPin,
-      description: 'Karnataka & Maharashtra',
+      description: 'Maharashtra',
     },
   ];
 
   return (
-    <div className="py-16 bg-white border-b border-gray-100">
+    <div className="py-24 bg-white border-y border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 divide-y md:divide-y-0 md:divide-x divide-gray-100">
           {statItems.map((stat) => (
-            <div
-              key={stat.label}
-              className="text-center group p-6 rounded-2xl hover:bg-gray-50 transition-colors duration-300"
-            >
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-mandi-cream group-hover:bg-mandi-green/10 transition-colors duration-300 mb-4 shadow-sm">
-                <stat.icon className="h-7 w-7 text-mandi-green" aria-hidden="true" />
+            <div key={stat.label} className="text-center group pt-8 md:pt-0">
+              <div className="mb-4 inline-flex items-center justify-center p-3 rounded-full bg-mandi-cream group-hover:bg-mandi-green/10 transition-colors duration-300">
+                <stat.icon className="h-6 w-6 text-mandi-green opacity-80" aria-hidden="true" />
               </div>
-              <div className="text-4xl font-bold text-mandi-dark mb-2 tracking-tight">
+
+              <div className="text-5xl md:text-6xl font-serif font-bold text-mandi-dark mb-3 tracking-tight">
                 {isLoading ? (
-                  <span className="animate-pulse bg-gray-200 text-transparent rounded">00</span>
+                  <span className="animate-pulse bg-gray-100 text-transparent rounded">--</span>
                 ) : (
                   stat.value
                 )}
               </div>
-              <div className="text-sm font-semibold text-mandi-green uppercase tracking-wide mb-2 opacity-80">
+
+              <div className="text-sm font-bold text-mandi-earth-light uppercase tracking-widest mb-2">
                 {stat.label}
               </div>
-              <div className="text-sm text-gray-500 font-medium">{stat.description}</div>
+
+              <div className="text-base text-mandi-muted max-w-[200px] mx-auto">
+                {stat.description}
+              </div>
             </div>
           ))}
         </div>
