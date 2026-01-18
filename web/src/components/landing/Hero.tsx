@@ -17,37 +17,38 @@ export function Hero() {
         <img
           src={heroBg}
           alt="Lush green farm landscape"
-          className="w-full h-full object-cover opacity-90"
+          className="w-full h-full object-cover opacity-80"
         />
-        {/* Cinematic Scrim - Gradient from bottom-left for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-transparent to-transparent" />
+        {/* Cinematic Scrim - Darker, flatter overlay for maximal text contrast */}
+        <div className="absolute inset-0 bg-black/40 mix-blend-multiply" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
       </div>
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20 animate-fade-in-up">
-        {/* Brand Label */}
-        <div className="inline-block mb-4 px-3 py-1 rounded-full border border-white/20 bg-white/10 backdrop-blur-md">
-          <span className="text-xs font-medium text-white tracking-widest uppercase">
-            Direct from the Source
+      <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 text-center pt-20 animate-fade-in-up">
+        {/* Editorial Brand Label */}
+        <div className="mb-8 flex justify-center">
+          <span className="px-4 py-1.5 rounded-full border border-white/30 bg-white/5 backdrop-blur-md text-[11px] font-bold tracking-[0.2em] text-white uppercase transform hover:scale-105 transition-transform duration-300 cursor-default">
+            Direct Source • Est. 2024
           </span>
         </div>
 
-        <h1 className="text-5xl md:text-7xl font-serif font-bold tracking-tight text-white mb-6 drop-shadow-sm text-balance">
+        {/* Headline - "The Promise" */}
+        <h1 className="text-6xl md:text-8xl lg:text-9xl font-serif font-medium tracking-tight text-white mb-8 leading-[0.9] drop-shadow-lg text-balance opacity-95">
           {brand.name}
         </h1>
 
-        <p className="text-xl md:text-3xl text-white/95 max-w-3xl mx-auto leading-relaxed font-light mb-8 text-balance">
+        {/* Subhead - "The Truth" */}
+        <p className="text-xl md:text-3xl text-white/90 max-w-2xl mx-auto leading-snug font-light mb-12 text-balance tracking-wide">
           Reconnect with the hands that feed you.
+          <span className="block mt-2 text-white/70 text-lg md:text-xl">
+            Experience the trust of a village, delivered.
+          </span>
         </p>
 
-        <p className="text-lg text-white/80 max-w-2xl mx-auto leading-relaxed mb-10 font-light">
-          Join a community of mindful eaters who support farmers directly.
-          Experience the taste of trust, transparency, and tradition in every batch.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+        {/* Primary Actions - Clean & Minimal */}
+        <div className="flex flex-col sm:flex-row gap-5 justify-center items-center mb-14">
           <Link to="/buyer-login">
-            <Button size="lg" className="w-full sm:w-auto h-12 px-8 text-base shadow-lg shadow-mandi-green/20">
+            <Button size="lg" className="h-14 px-10 text-lg rounded-full shadow-2xl hover:bg-mandi-green-light transition-all duration-300">
               Join the Community
             </Button>
           </Link>
@@ -55,41 +56,43 @@ export function Hero() {
             <Button
               variant="outline"
               size="lg"
-              className="w-full sm:w-auto h-12 px-8 text-base border-white text-white hover:bg-white hover:text-mandi-dark backdrop-blur-sm bg-white/5"
+              className="h-14 px-10 text-lg rounded-full border border-white/30 text-white hover:bg-white hover:text-black backdrop-blur-sm bg-transparent transition-all duration-300"
             >
-              See Batches & Prices
+              View Batches
             </Button>
           </Link>
         </div>
 
-        {/* Commitment Highlight */}
-        <p className="text-white/80 text-sm font-medium mb-12 flex items-center justify-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-mandi-earth-light" />
-          Secure your batch with just <span className="text-white font-bold border-b border-mandi-earth-light/50">10% commitment fee</span>
-        </p>
-
-        {/* WhatsApp Contact - Subtle & Accessible */}
-        <div className="flex justify-center">
-          <a
-            href="https://wa.me/919689823838"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors duration-300 text-sm font-medium"
-          >
-            <MessageCircle className="w-4 h-4" />
-            <span>Chat with us on WhatsApp</span>
-          </a>
+        {/* Commitment Highlight - The "Hook" */}
+        <div className="inline-flex flex-col items-center gap-3">
+          <div className="h-8 w-[1px] bg-white/30 mb-2"></div>
+          <p className="text-white/80 text-sm font-medium tracking-wide">
+            RESERVE WITH <span className="text-white font-bold border-b border-white/40 pb-0.5 mx-1">10% COMMITMENT</span>
+          </p>
         </div>
       </div>
+
+      {/* Floating WhatsApp - Bottom Right fixed */}
+      <a
+        href="https://wa.me/919689823838"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="absolute bottom-8 right-8 z-20 flex items-center gap-3 text-white/80 hover:text-white transition-opacity duration-300 group"
+      >
+        <span className="text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block">Chat with us</span>
+        <div className="p-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-green-500 hover:border-green-500 transition-all duration-300">
+          <MessageCircle className="w-5 h-5" />
+        </div>
+      </a>
 
       {/* Scroll Indicator - Minimal */}
       <button
         type="button"
         onClick={scrollToContent}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/50 hover:text-white transition-colors duration-300 focus:outline-none animate-bounce-slow"
+        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white/40 hover:text-white transition-colors duration-300 focus:outline-none animate-pulse"
         aria-label="Scroll to content"
       >
-        <ChevronDown className="h-6 w-6" />
+        <ChevronDown className="h-8 w-8 stroke-[1px]" />
       </button>
     </div>
   );

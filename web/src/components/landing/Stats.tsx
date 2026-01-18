@@ -1,7 +1,5 @@
-import { MapPin, Package, Wheat } from 'lucide-react';
 import { usePublicStats } from '../../hooks/useStats';
 
-// Fallback values if API fails or is loading
 const DEFAULT_STATS = {
   farmers: 0,
   products: 0,
@@ -11,7 +9,6 @@ const DEFAULT_STATS = {
 export function Stats() {
   const { data: serverStats, isLoading } = usePublicStats();
 
-  // Use server data if available, otherwise default
   const displayStats = {
     farmers: serverStats?.farmers ?? DEFAULT_STATS.farmers,
     products: serverStats?.products ?? DEFAULT_STATS.products,
@@ -22,55 +19,56 @@ export function Stats() {
     {
       label: 'Partner Farmers',
       value: `${displayStats.farmers}+`,
-      icon: Wheat,
-      description: 'Trusted farmers from known villages',
+      // icon removed for minimalism, focusing on typography
+      description: 'Families supported directly',
     },
     {
-      label: 'Products Available',
-      value: `${displayStats.products}`, // Exact count
-      icon: Package,
-      description: 'Mango, Rice, Jaggery, Tur Dal, Jowar',
+      label: 'Products',
+      value: `${displayStats.products}`,
+      description: 'Varieties of indigenous produce',
     },
     {
-      label: 'Sourcing Regions',
+      label: 'Villages',
       value: `${displayStats.regions}+`,
-      icon: MapPin,
-      description: 'Karnataka & Maharashtra',
+      description: 'Across Konkan & Western Ghats',
     },
   ];
 
   return (
-    <div className="py-24 bg-white border-y border-gray-100">
+    <section className="py-24 bg-white border-y border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 divide-y md:divide-y-0 md:divide-x divide-gray-100">
-          {statItems.map((stat) => (
-            <div
-              key={stat.label}
-              className="text-center group pt-8 md:pt-0"
-            >
-              <div className="mb-4 inline-flex items-center justify-center p-3 rounded-full bg-mandi-cream group-hover:bg-mandi-green/10 transition-colors duration-300">
-                <stat.icon className="h-6 w-6 text-mandi-green opacity-80" aria-hidden="true" />
-              </div>
+        <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-12 md:gap-8">
 
-              <div className="text-5xl md:text-6xl font-serif font-bold text-mandi-dark mb-3 tracking-tight">
-                {isLoading ? (
-                  <span className="animate-pulse bg-gray-100 text-transparent rounded">--</span>
-                ) : (
-                  stat.value
-                )}
-              </div>
+          {/* Context Heading */}
+          <div className="md:w-1/4">
+            <h3 className="text-sm font-bold tracking-[0.2em] text-mandi-green uppercase mb-2">Impact</h3>
+            <p className="font-serif text-2xl text-mandi-dark leading-tight">
+              Our growing footprint.
+            </p>
+          </div>
 
-              <div className="text-sm font-bold text-mandi-earth-light uppercase tracking-widest mb-2">
-                {stat.label}
+          {/* Stats Grid - Cleaner, Horizontal */}
+          <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+            {statItems.map((stat) => (
+              <div key={stat.label} className="flex flex-col items-center md:items-start group cursor-default">
+                <div className="text-6xl font-serif font-medium text-mandi-dark mb-2 tracking-tighter group-hover:text-mandi-green transition-colors duration-300">
+                  {isLoading ? (
+                    <span className="animate-pulse bg-gray-100 text-transparent rounded">--</span>
+                  ) : (
+                    stat.value
+                  )}
+                </div>
+                <div className="text-xs font-bold text-mandi-earth-light uppercase tracking-widest mb-1">
+                  {stat.label}
+                </div>
+                <div className="text-sm text-mandi-muted font-light">
+                  {stat.description}
+                </div>
               </div>
-
-              <div className="text-base text-mandi-muted max-w-[200px] mx-auto">
-                {stat.description}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
