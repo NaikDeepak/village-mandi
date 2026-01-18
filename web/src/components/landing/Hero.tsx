@@ -22,7 +22,11 @@ export function Hero() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   // Temporary array until images are physically present and imported
   // Using the imported heroBg for now to prevent errors, will update once images are generated
-  const heroImages = [heroBg, heroBg, heroBg];
+  const heroImages = [
+    { id: 'hero-1', src: heroBg },
+    { id: 'hero-2', src: heroBg },
+    { id: 'hero-3', src: heroBg },
+  ];
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -43,13 +47,13 @@ export function Hero() {
       <div className="absolute inset-0 z-0 bg-mandi-green">
         {heroImages.map((img, index) => (
           <div
-            key={img}
+            key={img.id}
             className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
               index === currentImageIndex ? 'opacity-100' : 'opacity-0'
             }`}
           >
             <img
-              src={img}
+              src={img.src}
               alt={`Agricultural landscape ${index + 1}`}
               className="w-full h-full object-cover"
               onError={(e) => {

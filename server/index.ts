@@ -22,6 +22,7 @@ import packingRoutes from './src/routes/packing';
 import paymentRoutes from './src/routes/payments';
 import payoutRoutes from './src/routes/payouts';
 import productRoutes from './src/routes/products';
+import { publicStatsRoutes } from './src/routes/public/stats';
 import userRoutes from './src/routes/users';
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -73,7 +74,7 @@ fastify.register(firebasePlugin);
 fastify.register(rateLimitPlugin);
 
 // Global Error Handler
-fastify.setErrorHandler((error: any, request, reply) => {
+fastify.setErrorHandler((error, request, reply) => {
   request.log.error({ err: error }, 'Global Error Handler caught exception');
 
   reply.status(error.statusCode || 500).send({
@@ -97,6 +98,7 @@ fastify.register(
     api.register(productRoutes);
     api.register(logRoutes);
     api.register(userRoutes);
+    api.register(publicStatsRoutes);
 
     // Health check
     api.get('/health', async (_request, _reply) => {
