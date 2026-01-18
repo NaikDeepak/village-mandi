@@ -1,3 +1,26 @@
+# Allow all search engines
 User-agent: *
 Allow: /
-Sitemap: https://apnakhet.app/sitemap.xml
+Disallow: /admin/
+Disallow: /api/
+
+# Explicitly allow AI bots
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Anthropic-AI
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+Sitemap: https://village-mandi.vercel.app/sitemap.xml
