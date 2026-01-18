@@ -7,17 +7,25 @@
 ## Current Position
 
 **Milestone:** 2 (Production & Enhancements)
-**Phase:** 21 (App Check Integration)
-**Plan:** 21-02 (Completed)
-**Status:** Phase complete
-**Next Phase:** 22 (Auth Flow Cleanup)
-**Last activity:** 2026-01-17 — Phase 21 complete; App Check enforcement verified end-to-end
+**Phase:** 23 (SEO and AI Bot friendly)
+**Plan:** 23-01 (Completed)
+**Status:** In progress
+**Next Phase:** 23-02
+**Last activity:** 2026-01-18 — Completed 23-01-PLAN.md (SEO Assets & Landing Page Metadata)
 
-Progress: ▓▓▓▓▓▓▓▓▓▓ 100%
+Progress: ▓▓▓▓▓▓▓▓░░ 85%
 
 ## Recent Progress
 
 ### Milestone 2: Production & Enhancements
+
+#### Phase 23 — SEO and AI Bot friendly (In Progress)
+
+**What shipped:**
+- Plan 23-01: SEO Assets & Landing Page Metadata (Completed)
+  - Optimized `robots.txt` for AI crawlers (GPTBot, etc.).
+  - Enhanced `sitemap.xml` with production URLs and lastmod dates.
+  - Integrated rich metadata and keywords into `SEOHead` and `LandingPage`.
 
 #### Phase 21 — App Check Integration (Completed)
 
@@ -399,6 +407,7 @@ Progress: ▓▓▓▓▓▓▓▓▓▓ 100%
 
 | Date | Change |
 |------|--------|
+| 2026-01-18 | Phase 23 added: SEO and AI Bot friendly |
 | 2026-01-17 | Updated for Milestone 2 (Auth & Production) |
 | 2026-01-15 | Phase 16 added: Deployment (Milestone 2 start) |
 | 2026-01-15 | Phase 15 added: End-to-End Workflow Guide |
