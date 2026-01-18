@@ -7,8 +7,8 @@ export interface User {
   id: string;
   role: UserRole;
   name: string;
-  email?: string | null;
-  phone?: string | null;
+  phone: string;
+  email: string | null;
 }
 
 interface AuthState {
@@ -29,8 +29,6 @@ export const useAuthStore = create<AuthState>()(
       setUser: (user) => set({ user, isAuthenticated: !!user, isLoading: false }),
       setLoading: (isLoading) => set({ isLoading }),
       logout: () => {
-        // Clear persisted storage on logout
-        localStorage.removeItem('auth-storage');
         set({ user: null, isAuthenticated: false, isLoading: false });
       },
     }),
