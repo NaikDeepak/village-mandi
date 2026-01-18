@@ -150,6 +150,9 @@ Progress: ██████████ 100%
 - [ ] BUG-001: AuthProvider missing finally block
 - [ ] BUG-002: Phone state lost on page refresh
 
+**Pending Todos (1):**
+- 2026-01-18: Build is failing (tooling)
+
 **Full list:** See `docs/todo.md`
 
 ---
