@@ -45,7 +45,9 @@ const paymentRoutes: FastifyPluginAsync = async (fastify) => {
 
       // 2. Validate Stage Transitions
       if (stage === 'FINAL') {
-        const hasCommitment = order.payments.some((p) => p.stage === 'COMMITMENT');
+        const hasCommitment = order.payments.some(
+          (p: { stage: string }) => p.stage === 'COMMITMENT'
+        );
         if (!hasCommitment) {
           return reply.status(400).send({
             error: 'Invalid Operation',
@@ -55,7 +57,9 @@ const paymentRoutes: FastifyPluginAsync = async (fastify) => {
       }
 
       if (stage === 'COMMITMENT') {
-        const alreadyHasCommitment = order.payments.some((p) => p.stage === 'COMMITMENT');
+        const alreadyHasCommitment = order.payments.some(
+          (p: { stage: string }) => p.stage === 'COMMITMENT'
+        );
         if (alreadyHasCommitment) {
           return reply.status(400).send({
             error: 'Invalid Operation',
@@ -65,7 +69,7 @@ const paymentRoutes: FastifyPluginAsync = async (fastify) => {
       }
 
       // 3. Execute Transaction
-      const result = await prisma.$transaction(async (tx) => {
+      const result = await prisma.$transaction(async (tx: any) => {
         // Create Payment
         const payment = await tx.payment.create({
           data: {

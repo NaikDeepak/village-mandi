@@ -101,7 +101,7 @@ const packingRoutes: FastifyPluginAsync = async (fastify) => {
       }
     }
 
-    const updatedOrder = await prisma.$transaction(async (tx) => {
+    const updatedOrder = await prisma.$transaction(async (tx: any) => {
       // 1. Update order status
       const updated = await tx.order.update({
         where: { id },

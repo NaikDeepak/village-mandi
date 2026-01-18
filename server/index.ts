@@ -77,9 +77,11 @@ fastify.register(rateLimitPlugin);
 fastify.setErrorHandler((error, request, reply) => {
   request.log.error({ err: error }, 'Global Error Handler caught exception');
 
-  reply.status(error.statusCode || 500).send({
-    error: error.name || 'Internal Server Error',
-    message: error.message || 'An unexpected error occurred',
+  const err = error as { statusCode?: number; name?: string; message?: string };
+
+  reply.status(err.statusCode || 500).send({
+    error: err.name || 'Internal Server Error',
+    message: err.message || 'An unexpected error occurred',
   });
 });
 
