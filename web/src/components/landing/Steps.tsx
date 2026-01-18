@@ -51,21 +51,25 @@ export function Steps() {
             {steps.map((step, index) => (
               <div
                 key={step.id}
-                className="relative bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md text-center group"
+                className="relative bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 text-center group z-10"
               >
                 <div
-                  className={`absolute -top-4 left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${index === 0 ? 'bg-mandi-green text-white' : 'bg-gray-200 text-gray-600'} border-4 border-white`}
+                  className={`absolute -top-5 left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full flex items-center justify-center font-bold text-base shadow-md transition-colors duration-300 ${
+                    index === 0
+                      ? 'bg-mandi-green text-white ring-4 ring-mandi-green/20'
+                      : 'bg-white text-gray-500 border border-gray-200 group-hover:border-mandi-green group-hover:text-mandi-green'
+                  }`}
                 >
                   {step.id}
                 </div>
 
                 <div
-                  className={`inline-block px-3 py-1 rounded-full text-xs font-bold mb-4 mt-2 ${step.color}`}
+                  className={`inline-block px-4 py-1.5 rounded-full text-xs font-bold mb-5 mt-4 tracking-wide shadow-sm ${step.color}`}
                 >
                   {step.title}
                 </div>
 
-                <p className="text-mandi-muted font-medium">{step.desc}</p>
+                <p className="text-gray-600 font-medium leading-relaxed">{step.desc}</p>
               </div>
             ))}
           </div>

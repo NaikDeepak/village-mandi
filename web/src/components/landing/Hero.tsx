@@ -2,10 +2,39 @@ import { Button } from '@/components/ui/button';
 import { brand } from '@/config/brand';
 import { SYSTEM_RULES } from '@shared/constants';
 import { ChevronDown, Layers, Percent, Users } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import heroBg from '../../assets/hero-bg.png';
+// Placeholder imports for new images - these will be generated
+// import hero1 from '../../assets/hero-marketplace.png';
+// import hero2 from '../../assets/hero-produce.png';
+// import hero3 from '../../assets/hero-tech.png';
+
+// Placeholder for future hero images
+// const HERO_IMAGES = [
+//   heroBg,
+//   // '/src/assets/hero_marketplace_vibrant.png',
+//   // '/src/assets/hero_fresh_produce_closeup.png',
+//   // '/src/assets/hero_tech_farmer_field.png'
+// ];
 
 export function Hero() {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  // Temporary array until images are physically present and imported
+  // Using the imported heroBg for now to prevent errors, will update once images are generated
+  const heroImages = [
+    { id: 'hero-1', src: heroBg },
+    { id: 'hero-2', src: heroBg },
+    { id: 'hero-3', src: heroBg },
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [heroImages.length]);
+
   const scrollToContent = () => {
     const element = document.getElementById('our-story');
     element?.scrollIntoView({ behavior: 'smooth' });
@@ -14,20 +43,30 @@ export function Hero() {
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image with Fallback */}
+      {/* Background Image Carousel */}
       <div className="absolute inset-0 z-0 bg-mandi-green">
-        <img
-          src={heroBg}
-          alt="Agricultural landscape"
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            e.currentTarget.style.display = 'none';
-          }}
-        />
-        <div className="absolute inset-0 bg-mandi-dark/60" />
+        {heroImages.map((img, index) => (
+          <div
+            key={img.id}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+              index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <img
+              src={img.src}
+              alt={`Agricultural landscape ${index + 1}`}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-mandi-dark/30 via-mandi-dark/60 to-mandi-dark/90" />
+          </div>
+        ))}
       </div>
 
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-6">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20 animate-fade-in-up">
+        <h1 className="text-4xl md:text-6xl font-serif font-bold tracking-tight text-white mb-6 drop-shadow-lg">
           {brand.name}
         </h1>
 
@@ -41,7 +80,7 @@ export function Hero() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-          <Link to="/login">
+          <Link to="/buyer-login">
             <Button size="lg" className="w-full sm:w-auto">
               Join as Buyer
             </Button>

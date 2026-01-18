@@ -22,6 +22,7 @@ import packingRoutes from './src/routes/packing';
 import paymentRoutes from './src/routes/payments';
 import payoutRoutes from './src/routes/payouts';
 import productRoutes from './src/routes/products';
+import { publicStatsRoutes } from './src/routes/public/stats';
 import userRoutes from './src/routes/users';
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -76,9 +77,11 @@ fastify.register(rateLimitPlugin);
 fastify.setErrorHandler((error, request, reply) => {
   request.log.error({ err: error }, 'Global Error Handler caught exception');
 
-  reply.status(error.statusCode || 500).send({
-    error: error.name || 'Internal Server Error',
-    message: error.message || 'An unexpected error occurred',
+  const err = error as { statusCode?: number; name?: string; message?: string };
+
+  reply.status(err.statusCode || 500).send({
+    error: err.name || 'Internal Server Error',
+    message: err.message || 'An unexpected error occurred',
   });
 });
 
@@ -97,6 +100,7 @@ fastify.register(
     api.register(productRoutes);
     api.register(logRoutes);
     api.register(userRoutes);
+    api.register(publicStatsRoutes);
 
     // Health check
     api.get('/health', async (_request, _reply) => {

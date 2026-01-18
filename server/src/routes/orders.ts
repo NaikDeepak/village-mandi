@@ -187,7 +187,7 @@ const orderRoutes: FastifyPluginAsync = async (fastify) => {
 
       // Map to order items
       const orderItemsData = items.map((item) => {
-        const bp = batchProducts.find((p) => p.id === item.batchProductId)!;
+        const bp = batchProducts.find((p: { id: string }) => p.id === item.batchProductId)!;
 
         const lineTotal = bp.pricePerUnit * item.orderedQty;
         const facilitation = lineTotal * (bp.facilitationPercent / 100);
@@ -204,7 +204,7 @@ const orderRoutes: FastifyPluginAsync = async (fastify) => {
       });
 
       // 3. Create Order in Transaction
-      const order = await prisma.$transaction(async (tx) => {
+      const order = await prisma.$transaction(async (tx: any) => {
         // Create Order
         const newOrder = await tx.order.create({
           data: {
@@ -353,7 +353,7 @@ const orderRoutes: FastifyPluginAsync = async (fastify) => {
         items !== undefined && (items.length === 0 || items.every((item) => item.orderedQty === 0));
 
       // Transaction: Update order
-      const updatedOrder = await prisma.$transaction(async (tx) => {
+      const updatedOrder = await prisma.$transaction(async (tx: any) => {
         const updateData: {
           fulfillmentType?: 'PICKUP' | 'DELIVERY';
           status?: 'CANCELLED';
@@ -441,7 +441,7 @@ const orderRoutes: FastifyPluginAsync = async (fastify) => {
           let facilitationAmt = 0;
 
           const orderItemsData = validItems.map((item) => {
-            const bp = batchProducts.find((p) => p.id === item.batchProductId)!;
+            const bp = batchProducts.find((p: { id: string }) => p.id === item.batchProductId)!;
 
             if (item.orderedQty < bp.minOrderQty) {
               throw new Error(

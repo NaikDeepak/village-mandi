@@ -169,7 +169,7 @@ const payoutRoutes: FastifyPluginAsync = async (fastify) => {
       }
 
       // 2. Create Payout and Log Event in Transaction
-      const payout = await prisma.$transaction(async (tx) => {
+      const payout = await prisma.$transaction(async (tx: any) => {
         const newPayout = await tx.farmerPayout.create({
           data: {
             batchId,

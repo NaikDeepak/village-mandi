@@ -234,7 +234,7 @@ export function RulesPage() {
             <p className="text-mandi-muted mb-6">
               Join as a buyer to participate in the next batch.
             </p>
-            <Link to="/login">
+            <Link to="/buyer-login">
               <Button size="lg">Join as Buyer</Button>
             </Link>
           </div>
