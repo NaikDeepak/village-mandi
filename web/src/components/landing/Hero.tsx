@@ -23,11 +23,11 @@ export function Hero() {
             e.currentTarget.style.display = 'none';
           }}
         />
-        <div className="absolute inset-0 bg-mandi-dark/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-mandi-dark/30 via-mandi-dark/60 to-mandi-dark/90" />
       </div>
 
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-6">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20 animate-fade-in-up">
+        <h1 className="text-4xl md:text-6xl font-serif font-bold tracking-tight text-white mb-6 drop-shadow-lg">
           {brand.name}
         </h1>
 
@@ -41,7 +41,7 @@ export function Hero() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-          <Link to="/login">
+          <Link to="/buyer-login">
             <Button size="lg" className="w-full sm:w-auto">
               Join as Buyer
             </Button>

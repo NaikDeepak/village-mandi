@@ -38,6 +38,7 @@ export function AdminLoginPage() {
   }
 
   const onSubmit = async (data: LoginFormData) => {
+    // TODO: Harden security later for admin login
     setError(null);
     setIsSubmitting(true);
 

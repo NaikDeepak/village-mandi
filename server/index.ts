@@ -73,7 +73,7 @@ fastify.register(firebasePlugin);
 fastify.register(rateLimitPlugin);
 
 // Global Error Handler
-fastify.setErrorHandler((error, request, reply) => {
+fastify.setErrorHandler((error: any, request, reply) => {
   request.log.error({ err: error }, 'Global Error Handler caught exception');
 
   reply.status(error.statusCode || 500).send({

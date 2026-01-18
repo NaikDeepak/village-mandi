@@ -50,7 +50,7 @@ export function Story() {
         <div className="text-center mt-12 pt-8 border-t border-gray-100">
           <p className="text-mandi-dark font-medium mb-4">Ready to be part of something real?</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/login">
+            <Link to="/buyer-login">
               <Button size="lg">Join as Buyer</Button>
             </Link>
             <Link to="/rules">

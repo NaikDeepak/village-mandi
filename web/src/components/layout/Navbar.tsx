@@ -161,7 +161,7 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
       {isOpen && (
         <div
           id="mobile-menu"
-          className="md:hidden absolute w-full bg-mandi-green border-t border-white/10 shadow-lg"
+          className="md:hidden absolute w-full bg-mandi-green border-t border-white/10 shadow-lg animate-fade-in"
         >
           <div className="px-4 pt-2 pb-6 space-y-2">
             <Link

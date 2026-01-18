@@ -9,6 +9,7 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
 
   // ==========================================
   // ADMIN LOGIN (Email + Password)
+  // TODO: Harden security later for admin login
   // ==========================================
   fastify.post(
     '/auth/admin/login',
