@@ -1,11 +1,13 @@
 {
   "name": "web",
   "private": true,
-  "version": "0.0.3",
+  "version": "0.0.10",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/bump-version.js && tsc -b && vite build",
+    "build": "npm run build:client && npm run build:server && node prerender.js",
+    "build:client": "node scripts/bump-version.js && tsc -b && vite build --outDir dist",
+    "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
     "preview": "vite preview",
     "test": "vitest",
     "test:run": "vitest run"
@@ -29,7 +31,8 @@
     "react-dom": "^19.2.3",
     "react-helmet-async": "^2.0.5",
     "react-hook-form": "^7.71.0",
-    "react-router-dom": "^7.12.0",
+    "react-router": "^6.28.0",
+    "react-router-dom": "^6.28.0",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18",
     "zod": "^4.3.5",
@@ -42,6 +45,7 @@
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
+    "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^5.1.1",
     "jsdom": "^27.4.0",
     "typescript": "~5.9.3",
