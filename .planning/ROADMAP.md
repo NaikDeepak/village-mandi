@@ -156,6 +156,11 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 #### Phase 24: Rebrand and Domain Migration to ApnaKhet.app
 **Goal**: Update branding to ApnaKhet and migrate domain to apnakhet.app
 **Depends on**: Phase 23
+**Status**: Complete
+
+#### Phase 25: Future Phase
+**Goal**: TBD
+**Depends on**: Phase 24
 **Status**: Pending
 
 ## Progress
