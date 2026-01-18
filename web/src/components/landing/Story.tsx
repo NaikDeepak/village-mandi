@@ -18,10 +18,7 @@ export function Story() {
 
         {/* The Story */}
         <div className="prose prose-lg max-w-none text-mandi-muted">
-          <p className="text-xl leading-relaxed mb-6">
-            I’m Deepak from Pune, but my roots go back to Ghotage in the Konkan. I’ve spent my life
-            in the city, visiting the village only during holidays.
-          </p>
+          <p className="text-xl leading-relaxed mb-6">My roots go back to Ghotage in the Konkan.</p>
 
           <p className="leading-relaxed mb-6">
             My father, Ramesh, is a farmer’s son who nurtured a small orchard of 50 mango trees. He
@@ -30,13 +27,13 @@ export function Story() {
           </p>
 
           <p className="leading-relaxed mb-6">
-            I tried connecting farmers and buyers directly, but it failed. When harvest time
-            arrived, buyers often backed out, leaving farmers with no certainty.
+            Attempts to connect farmers and buyers directly often failed. When harvest time arrived,
+            buyers often backed out, leaving farmers with no certainty.
           </p>
 
           <div className="bg-mandi-cream/50 border-l-4 border-mandi-green p-8 my-10 rounded-r-xl italic">
             <p className="text-mandi-dark font-medium text-xl mb-4 leading-relaxed font-serif">
-              "That’s when I realized: Good intentions don’t protect farmers. Commitment does."
+              "That’s when we realized: Good intentions don’t protect farmers. Commitment does."
             </p>
             <p className="text-mandi-dark text-lg mb-0 leading-relaxed text-gray-700">
               {brand.name} exists because of that lesson. We ask for a small advance commitment.
