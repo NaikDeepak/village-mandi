@@ -48,7 +48,7 @@ export function BatchPayoutsPage() {
 
     const message = templates.payoutConfirmation(
       payout.amount,
-      'Village Mandi Batch', // We don't have batch name here, but id is available.
+      'Apna Khet Batch', // We don't have batch name here, but id is available.
       payout.upiReference
     );
 
