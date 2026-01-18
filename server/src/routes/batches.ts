@@ -53,7 +53,7 @@ const batchRoutes: FastifyPluginAsync = async (fastify) => {
   // GET ALL OPEN BATCHES (For Buyers)
   // Avoids collision with /batches/:id
   // ==========================================
-  fastify.get('/batches-list/open', { preHandler: [authenticate] }, async (_request, _reply) => {
+  fastify.get('/batches/open', { preHandler: [authenticate] }, async (_request, _reply) => {
     const batches = await prisma.batch.findMany({
       where: { status: 'OPEN' },
       include: {

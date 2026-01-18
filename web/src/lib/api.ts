@@ -206,7 +206,7 @@ export const hubsApi = {
 export const batchesApi = {
   getAll: () => request<{ batches: Batch[] }>('/batches'),
 
-  getOpen: () => request<{ batches: Batch[] }>('/batches-list/open'),
+  getOpen: () => request<{ batches: Batch[] }>('/batches/open'),
 
   getCurrent: () => request<{ batch: Batch | null }>('/batches/current'),
 

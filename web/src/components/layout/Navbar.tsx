@@ -204,8 +204,14 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
             {isAuthenticated ? (
               <>
                 <Link
+                  to="/shop"
+                  className="block w-full text-center mt-4 px-5 py-3 rounded-lg bg-white/20 text-white font-bold border border-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white hover:bg-white/30"
+                >
+                  Shop
+                </Link>
+                <Link
                   to={getDashboardLink()}
-                  className="block w-full text-center mt-4 px-5 py-3 rounded-lg bg-white/20 text-white font-bold border border-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                  className="block w-full text-center mt-2 px-5 py-3 rounded-lg bg-white/20 text-white font-bold border border-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white hover:bg-white/30"
                 >
                   Dashboard
                 </Link>
