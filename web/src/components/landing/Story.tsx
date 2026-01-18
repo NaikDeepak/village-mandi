@@ -34,11 +34,11 @@ export function Story() {
             arrived, buyers often backed out, leaving farmers with no certainty.
           </p>
 
-          <div className="bg-mandi-cream border-l-4 border-mandi-green p-6 my-8 rounded-r-lg">
-            <p className="text-mandi-dark font-medium text-lg mb-4 leading-relaxed">
-              That’s when I realized: Good intentions don’t protect farmers. Commitment does.
+          <div className="bg-mandi-cream/50 border-l-4 border-mandi-green p-8 my-10 rounded-r-xl italic">
+            <p className="text-mandi-dark font-medium text-xl mb-4 leading-relaxed font-serif">
+              "That’s when I realized: Good intentions don’t protect farmers. Commitment does."
             </p>
-            <p className="text-mandi-dark font-medium text-lg mb-0 leading-relaxed">
+            <p className="text-mandi-dark text-lg mb-0 leading-relaxed text-gray-700">
               {brand.name} exists because of that lesson. We ask for a small advance commitment.
               This enables farmers to plan with confidence and guarantees you authentic produce from
               people you can trust.

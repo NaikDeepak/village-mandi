@@ -28,15 +28,20 @@ export function Stats() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {stats.map((stat) => (
-            <div key={stat.label} className="text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-mandi-cream mb-4">
-                <stat.icon className="h-6 w-6 text-mandi-green" aria-hidden="true" />
+            <div
+              key={stat.label}
+              className="text-center group p-6 rounded-2xl hover:bg-gray-50 transition-colors duration-300"
+            >
+              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-mandi-cream group-hover:bg-mandi-green/10 transition-colors duration-300 mb-4 shadow-sm">
+                <stat.icon className="h-7 w-7 text-mandi-green" aria-hidden="true" />
               </div>
-              <div className="text-3xl font-bold text-mandi-dark mb-1">{stat.value}</div>
-              <div className="text-sm font-medium text-mandi-green uppercase tracking-wide mb-2">
+              <div className="text-4xl font-bold text-mandi-dark mb-2 tracking-tight">
+                {stat.value}
+              </div>
+              <div className="text-sm font-semibold text-mandi-green uppercase tracking-wide mb-2 opacity-80">
                 {stat.label}
               </div>
-              <div className="text-sm text-mandi-muted">{stat.description}</div>
+              <div className="text-sm text-gray-500 font-medium">{stat.description}</div>
             </div>
           ))}
         </div>

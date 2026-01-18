@@ -29,7 +29,7 @@ const features = [
 
 export function Features() {
   return (
-    <div id="philosophy" className="py-24 bg-white">
+    <div id="philosophy" className="py-24 bg-gray-50/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h2 className="text-base text-mandi-green font-semibold tracking-wide uppercase">
@@ -48,17 +48,17 @@ export function Features() {
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {features.map((feature) => (
               <div key={feature.name} className="pt-6">
-                <div className="flow-root bg-gray-50 rounded-2xl px-6 pb-8 h-full border border-gray-100 hover:shadow-lg">
+                <div className="flow-root bg-white rounded-2xl px-8 pb-10 h-full border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                   <div className="-mt-6">
                     <div>
-                      <span className="inline-flex items-center justify-center p-3 bg-mandi-green rounded-xl shadow-lg">
-                        <feature.icon className="h-6 w-6 text-white" aria-hidden="true" />
+                      <span className="inline-flex items-center justify-center p-4 bg-gradient-to-br from-mandi-green to-emerald-600 rounded-xl shadow-lg transform transition-transform group-hover:scale-110">
+                        <feature.icon className="h-7 w-7 text-white" aria-hidden="true" />
                       </span>
                     </div>
-                    <h3 className="mt-8 text-lg font-bold tracking-tight text-mandi-dark">
+                    <h3 className="mt-8 text-xl font-bold tracking-tight text-mandi-dark">
                       {feature.name}
                     </h3>
-                    <p className="mt-5 text-base text-mandi-muted leading-relaxed">
+                    <p className="mt-5 text-base text-gray-600 leading-relaxed">
                       {feature.description}
                     </p>
                   </div>
