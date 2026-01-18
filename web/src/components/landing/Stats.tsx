@@ -35,7 +35,7 @@ export function Stats() {
       label: 'Sourcing Regions',
       value: `${displayStats.regions}+`,
       icon: MapPin,
-      description: 'Karnataka & Maharashtra',
+      description: 'Maharashtra',
     },
   ];
 
