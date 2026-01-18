@@ -71,7 +71,7 @@ export function Hero() {
         {/* WhatsApp Contact */}
         <div className="flex justify-center mb-8">
           <a
-            href="https://wa.me/919876543210" // TODO: Replace with actual WhatsApp number
+            href="https://wa.me/919689823838" // TODO: Replace with actual WhatsApp number
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-white/90 hover:text-white transition-colors bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full backdrop-blur-sm"

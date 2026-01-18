@@ -30,9 +30,9 @@ export function OrderStatusBar({ status }: OrderStatusBarProps) {
     <div className="w-full py-6">
       <div className="relative">
         {/* Progress Line */}
-        <div className="absolute top-1/2 left-0 w-full h-0.5 bg-gray-200 -translate-y-1/2" />
+        <div className="absolute top-4 left-0 w-full h-0.5 bg-gray-200 -translate-y-1/2" />
         <div
-          className="absolute top-1/2 left-0 h-0.5 bg-mandi-green -translate-y-1/2 transition-all duration-500"
+          className="absolute top-4 left-0 h-0.5 bg-mandi-green -translate-y-1/2 transition-all duration-500"
           style={{ width: `${(Math.max(0, currentIndex) / (STAGES.length - 1)) * 100}%` }}
         />
 
