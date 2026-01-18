@@ -60,7 +60,11 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
 
   return (
     <nav
-      className={`fixed w-full z-50 ${isScrolled ? 'bg-mandi-green shadow-md py-2' : 'bg-transparent py-4'}`}
+      className={`fixed w-full z-50 transition-all duration-300 ease-in-out ${
+        isScrolled
+          ? 'bg-mandi-green/90 backdrop-blur-md shadow-lg py-3 border-b border-white/10'
+          : 'bg-black/15 backdrop-blur-[4px] py-5 border-b border-transparent'
+      }`}
       aria-label="Main navigation"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -106,7 +110,7 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
               to="/rules"
               className={`font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white rounded px-2 py-1 ${isActive('/rules') ? 'text-mandi-earth-light' : 'text-white hover:text-mandi-earth-light'}`}
             >
-              Rules
+              Commitment Rules
             </Link>
           </div>
 
@@ -115,6 +119,11 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
             {isAuthenticated ? (
               <>
                 <span className="text-white/80 text-sm">{user?.name}</span>
+                <Link to="/shop">
+                  <Button className="bg-mandi-green text-white hover:bg-mandi-green/80 border border-white/30 hidden sm:inline-flex">
+                    Shop
+                  </Button>
+                </Link>
                 <Link to={getDashboardLink()}>
                   <Button className="bg-white/20 text-white hover:bg-white/30 border border-white/30">
                     Dashboard
@@ -166,6 +175,7 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
           <div className="px-4 pt-2 pb-6 space-y-2">
             <Link
               to="/"
+              onClick={() => setIsOpen(false)}
               className={`block px-3 py-3 text-base font-medium rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-white ${isActive('/') ? 'text-mandi-earth-light bg-white/10' : 'text-white hover:text-mandi-earth-light'}`}
             >
               Home
@@ -188,15 +198,24 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
             </a>
             <Link
               to="/rules"
+              onClick={() => setIsOpen(false)}
               className={`block px-3 py-3 text-base font-medium rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-white ${isActive('/rules') ? 'text-mandi-earth-light bg-white/10' : 'text-white hover:text-mandi-earth-light'}`}
             >
-              Rules
+              Commitment Rules
             </Link>
             {isAuthenticated ? (
               <>
                 <Link
+                  to="/shop"
+                  onClick={() => setIsOpen(false)}
+                  className="block w-full text-center mt-4 px-5 py-3 rounded-lg bg-white/20 text-white font-bold border border-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white hover:bg-white/30"
+                >
+                  Shop
+                </Link>
+                <Link
                   to={getDashboardLink()}
-                  className="block w-full text-center mt-4 px-5 py-3 rounded-lg bg-white/20 text-white font-bold border border-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                  onClick={() => setIsOpen(false)}
+                  className="block w-full text-center mt-2 px-5 py-3 rounded-lg bg-white/20 text-white font-bold border border-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white hover:bg-white/30"
                 >
                   Dashboard
                 </Link>
@@ -211,6 +230,7 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
             ) : (
               <Link
                 to="/buyer-login"
+                onClick={() => setIsOpen(false)}
                 className="block w-full text-center mt-4 px-5 py-3 rounded-lg bg-white text-mandi-green font-bold shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-mandi-green"
               >
                 Join as Buyer

@@ -43,6 +43,10 @@ export function Story() {
               This enables farmers to plan with confidence and guarantees you authentic produce from
               people you can trust.
             </p>
+            <p className="text-mandi-dark text-base mt-3 leading-relaxed text-gray-600 font-medium">
+              (You pay a small advance, e.g., 10%, to confirm. The remaining amount is paid after
+              collection, before delivery.)
+            </p>
           </div>
         </div>
 
@@ -55,7 +59,7 @@ export function Story() {
             </Link>
             <Link to="/rules">
               <Button variant="outline" size="lg">
-                See How It Works
+                How It Works & Rules
               </Button>
             </Link>
           </div>

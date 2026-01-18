@@ -16,7 +16,7 @@ const features = [
   },
   {
     name: 'Fair Pricing',
-    description: `We charge a nominal facilitation fee of ${SYSTEM_RULES.FACILITATION_FEE_PERCENTAGE}% on top of the Farmer's Base Price. Transparent for everyone.`,
+    description: `We ask for a transparent advance of ${SYSTEM_RULES.FACILITATION_FEE_PERCENTAGE}% on top of the Farmer's Base Price. This covers facilitation and commitment.`,
     icon: IndianRupee,
   },
   {

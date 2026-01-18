@@ -50,6 +50,22 @@ const batchRoutes: FastifyPluginAsync = async (fastify) => {
   });
 
   // ==========================================
+  // GET ALL OPEN BATCHES (For Buyers)
+  // Avoids collision with /batches/:id
+  // ==========================================
+  fastify.get('/batches/open', { preHandler: [authenticate] }, async (_request, _reply) => {
+    const batches = await prisma.batch.findMany({
+      where: { status: 'OPEN' },
+      include: {
+        hub: true,
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return { batches: batches.map(withAllowedTransitions) };
+  });
+
+  // ==========================================
   // GET SINGLE BATCH
   // ==========================================
   fastify.get('/batches/:id', { preHandler: [requireAdmin] }, async (request, reply) => {

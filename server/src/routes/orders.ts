@@ -204,7 +204,7 @@ const orderRoutes: FastifyPluginAsync = async (fastify) => {
       });
 
       // 3. Create Order in Transaction
-      const order = await prisma.$transaction(async (tx: any) => {
+      const order = await prisma.$transaction(async (tx) => {
         // Create Order
         const newOrder = await tx.order.create({
           data: {
@@ -243,12 +243,7 @@ const orderRoutes: FastifyPluginAsync = async (fastify) => {
       return reply.status(201).send({ order });
     } catch (error: unknown) {
       const err = error as { code?: string; message?: string };
-      if (err.code === 'P2002') {
-        return reply.status(400).send({
-          error: 'Invalid Operation',
-          message: 'You have already placed an order for this batch',
-        });
-      }
+      /* P2002 check removed as we now allow multiple orders */
       return reply.status(400).send({
         error: 'Error',
         message: err.message || 'Failed to place order',
@@ -353,7 +348,7 @@ const orderRoutes: FastifyPluginAsync = async (fastify) => {
         items !== undefined && (items.length === 0 || items.every((item) => item.orderedQty === 0));
 
       // Transaction: Update order
-      const updatedOrder = await prisma.$transaction(async (tx: any) => {
+      const updatedOrder = await prisma.$transaction(async (tx) => {
         const updateData: {
           fulfillmentType?: 'PICKUP' | 'DELIVERY';
           status?: 'CANCELLED';
@@ -372,10 +367,11 @@ const orderRoutes: FastifyPluginAsync = async (fastify) => {
           updateData.estimatedTotal = 0;
           updateData.facilitationAmt = 0;
 
-          // Delete all items
-          await tx.orderItem.deleteMany({
-            where: { orderId: id },
-          });
+          // We used to delete items here, but we now keep them
+          // to allow "Buy Again" functionality and historical reference.
+          // await tx.orderItem.deleteMany({
+          //   where: { orderId: id },
+          // });
 
           // Update order
           const cancelled = await tx.order.update({
