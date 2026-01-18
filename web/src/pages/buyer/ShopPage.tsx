@@ -1,4 +1,5 @@
 import { Navbar } from '@/components/layout/Navbar';
+import { SEOHead } from '@/components/seo/SEOHead';
 import { CartDrawer } from '@/components/shop/CartDrawer';
 import { FarmerTrustHeader } from '@/components/shop/FarmerTrustHeader';
 import { ProductCard } from '@/components/shop/ProductCard';
@@ -217,6 +218,37 @@ export function ShopPage() {
   const cartTotal = getTotalAmount();
   const cartItemsCount = getTotalItems();
 
+  // JSON-LD for products
+  const productJsonLd = currentBatch
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        name: `Products in ${currentBatch.name}`,
+        description: `Fresh produce available for delivery on ${new Date(currentBatch.deliveryDate).toLocaleDateString()}`,
+        numberOfItems: products.length,
+        itemListElement: products.map((bp, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          item: {
+            '@type': 'Product',
+            name: bp.product.name,
+            description: bp.product.description,
+            image: bp.product.imageUrl, // Assuming imageUrl exists or will exist
+            offers: {
+              '@type': 'Offer',
+              price: bp.pricePerUnit,
+              priceCurrency: 'INR',
+              availability: 'https://schema.org/InStock',
+            },
+            brand: {
+              '@type': 'Brand',
+              name: bp.product.farmer?.name || 'Village Mandi Farmer',
+            },
+          },
+        })),
+      }
+    : undefined;
+
   // Group products by farmer
   const productsByFarmer = products.reduce(
     (acc, bp) => {
@@ -253,6 +285,11 @@ export function ShopPage() {
 
   return (
     <>
+      <SEOHead
+        title={`${currentBatch?.name || 'Shop'} | Village Mandi`}
+        description={`Order fresh farm produce from ${currentBatch?.hub?.name || 'local'} hub. Delivery on ${currentBatch ? new Date(currentBatch.deliveryDate).toLocaleDateString() : 'scheduled date'}.`}
+        jsonLd={productJsonLd}
+      />
       <Navbar variant="internal" />
       <div className="min-h-screen bg-mandi-cream pb-40 pt-24">
         {/* Shop Header */}
