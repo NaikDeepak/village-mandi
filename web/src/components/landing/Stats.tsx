@@ -3,9 +3,9 @@ import { usePublicStats } from '../../hooks/useStats';
 
 // Fallback values if API fails or is loading
 const DEFAULT_STATS = {
-  farmers: 12,
-  products: 8,
-  regions: 2,
+  farmers: 0,
+  products: 0,
+  regions: 0,
 };
 
 export function Stats() {

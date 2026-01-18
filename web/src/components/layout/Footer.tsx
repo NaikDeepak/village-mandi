@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 export function Footer() {
   // Replace with actual WhatsApp number
-  const whatsappNumber = '919876543210';
+  const whatsappNumber = '919689823838';
   const whatsappMessage = encodeURIComponent(`Hi, I would like to know more about ${brand.name}.`);
   const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 
