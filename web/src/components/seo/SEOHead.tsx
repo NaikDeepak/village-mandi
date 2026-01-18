@@ -60,7 +60,9 @@ export function SEOHead({
       <meta name="twitter:image" content={image} />
 
       {/* Structured Data (JSON-LD) */}
-      <script type="application/ld+json">{JSON.stringify(jsonLd || defaultJsonLd)}</script>
+      <script type="application/ld+json">
+        {JSON.stringify(jsonLd || defaultJsonLd).replace(/</g, '\\u003c')}
+      </script>
     </Helmet>
   );
 }

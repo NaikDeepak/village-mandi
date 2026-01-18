@@ -19,9 +19,11 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
 
   // Attach App Check token
   try {
-    const appCheckToken = await getToken(appCheck);
-    if (appCheckToken.token) {
-      headers['X-Firebase-AppCheck'] = appCheckToken.token;
+    if (appCheck) {
+      const appCheckToken = await getToken(appCheck);
+      if (appCheckToken.token) {
+        headers['X-Firebase-AppCheck'] = appCheckToken.token;
+      }
     }
   } catch (err) {
     // Log error but continue - backend handles enforcement policy
