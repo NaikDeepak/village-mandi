@@ -23,4 +23,4 @@ Allow: /
 User-agent: Claude-Web
 Allow: /
 
-Sitemap: https://village-mandi.vercel.app/sitemap.xml
+Sitemap: https://apnakhet.app/sitemap.xml
