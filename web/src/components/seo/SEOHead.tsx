@@ -11,24 +11,24 @@ interface SEOHeadProps {
 }
 
 export function SEOHead({
-  title = 'Village Mandi - Fresh Farm Produce Directly to You',
+  title = 'Apna Khet - Fresh Farm Produce Directly to You',
   description = 'Connect directly with local farmers. Buy fresh, high-quality produce with full transparency and traceability.',
-  keywords = 'organic, farm fresh, direct from farmer, agriculture, village mandi, sustainable farming',
-  image = 'https://village-mandi.vercel.app/og-image.jpg',
+  keywords = 'organic, farm fresh, direct from farmer, agriculture, apna khet, sustainable farming',
+  image = 'https://apnakhet.app/og-image.jpg',
   type = 'website',
   jsonLd,
 }: SEOHeadProps) {
   const location = useLocation();
-  const canonicalUrl = `https://village-mandi.vercel.app${location.pathname}`;
-  const siteName = 'Village Mandi';
+  const canonicalUrl = `https://apnakhet.app${location.pathname}`;
+  const siteName = 'Apna Khet';
 
   const defaultJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: siteName,
-    url: 'https://village-mandi.vercel.app',
-    logo: 'https://village-mandi.vercel.app/logo.png',
-    sameAs: ['https://twitter.com/villagemandi', 'https://instagram.com/villagemandi'],
+    url: 'https://apnakhet.app',
+    logo: 'https://apnakhet.app/logo.png',
+    sameAs: ['https://twitter.com/apnakhetapp', 'https://instagram.com/apnakhetapp'],
     contactPoint: {
       '@type': 'ContactPoint',
       telephone: '+91-1234567890',
