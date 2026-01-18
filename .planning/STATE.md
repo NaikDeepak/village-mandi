@@ -8,24 +8,28 @@
 
 **Milestone:** 2 (Production & Enhancements)
 **Phase:** 23 (SEO and AI Bot friendly)
-**Plan:** 23-01 (Completed)
-**Status:** In progress
-**Next Phase:** 23-02
-**Last activity:** 2026-01-18 — Completed 23-01-PLAN.md (SEO Assets & Landing Page Metadata)
+**Plan:** 23-02 (Completed)
+**Status:** Phase complete
+**Next Phase:** TBD (Reviewing Roadmap)
+**Last activity:** 2026-01-18 — Phase 23 complete (SEO Assets, Metadata & Dynamic Schema)
 
-Progress: ▓▓▓▓▓▓▓▓░░ 85%
+Progress: ▓▓▓▓▓▓▓▓▓▓ 100%
 
 ## Recent Progress
 
 ### Milestone 2: Production & Enhancements
 
-#### Phase 23 — SEO and AI Bot friendly (In Progress)
+#### Phase 23 — SEO and AI Bot friendly (Completed)
 
 **What shipped:**
 - Plan 23-01: SEO Assets & Landing Page Metadata (Completed)
   - Optimized `robots.txt` for AI crawlers (GPTBot, etc.).
   - Enhanced `sitemap.xml` with production URLs and lastmod dates.
   - Integrated rich metadata and keywords into `SEOHead` and `LandingPage`.
+- Plan 23-02: Dynamic SEO & Structured Data (Completed)
+  - Integrated dynamic `SEOHead` in `ShopPage` with batch-specific metadata.
+  - Added `ItemList` and `Product` JSON-LD schemas for rich snippets.
+  - Enhanced `RulesPage` with `FAQPage` JSON-LD schema.
 
 #### Phase 21 — App Check Integration (Completed)
 
