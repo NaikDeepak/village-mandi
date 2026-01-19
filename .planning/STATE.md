@@ -7,17 +7,24 @@
 ## Current Position
 
 **Milestone:** 2 (Production & Enhancements)
-**Phase:** 26 (Add testcases for uncovered code)
-**Plan:** 26-01 (Completed)
-**Status:** Phase complete
-**Next Phase:** Phase 22 (Auth Flow Cleanup)
-**Last activity:** 2026-01-19 — Phase 26 execution complete
+**Phase:** 22 (Auth Flow Cleanup)
+**Plan:** 22-01 (Completed)
+**Status:** In progress
+**Last activity:** 2026-01-19 — Phase 22-01 execution complete
 
-Progress: █████████░ 91%
+Progress: ████████░░ 87%
 
 ## Recent Progress
 
 ### Milestone 2: Production & Enhancements
+
+#### Phase 22 — Auth Flow Cleanup (In progress)
+
+**What shipped:**
+- Plan 22-01: Standardize User Type & Centralize Phone Normalization (Completed)
+  - Aligned frontend User interface with backend schema.
+  - Centralized phone normalization in server and web utilities.
+  - Refactored auth and user routes to use the new utilities.
 
 #### Phase 26 — Add testcases for uncovered code (Completed)
 
