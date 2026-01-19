@@ -146,7 +146,12 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 **Depends on**: Phase 21
 **Requirements**: AUTH-06
 **Gap Closure**: Closes redundant flow gap and cleans up tech debt
+**Plans**: 2 plans
 **Status**: Pending
+
+Plans:
+- [ ] 22-01: Standardize User Type & Phone Normalization
+- [ ] 22-02: Refactor API client & AuthProvider for strict types
 
 #### Phase 23: SEO and AI Bot friendly
 **Goal**: Optimize application for SEO and AI Bot discoverability
