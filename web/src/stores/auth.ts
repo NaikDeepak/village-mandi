@@ -7,7 +7,7 @@ export interface User {
   id: string;
   role: UserRole;
   name: string;
-  phone: string | null;
+  phone: string;
   email: string | null;
 }
 
