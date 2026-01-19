@@ -23,7 +23,7 @@
 - **Description**: Unlimited requests allowed to `/auth/admin/login`, `/auth/request-otp`, `/auth/verify-otp`
 - **Attack Vector**: Brute-force password attacks, OTP spam (SMS cost attack), credential stuffing
 - **Fix**: Add `@fastify/rate-limit` — 5 attempts/15min for login, 3 OTP requests/hour per phone
-- **Status**: Open
+- **Status**: Resolved
 - **Added**: 2026-01-14
 
 ### SEC-002: OTP Stored as Plaintext
@@ -32,7 +32,7 @@
 - **Description**: OTP code stored directly in database without hashing
 - **Attack Vector**: Database breach exposes all active OTPs, enabling account takeover
 - **Fix**: Hash OTP with bcrypt before storage, compare hashed values on verification
-- **Status**: Open
+- **Status**: Resolved (Firebase Auth transition)
 - **Added**: 2026-01-14
 
 ### SEC-003: No OTP Attempt Limiting
@@ -41,7 +41,7 @@
 - **Description**: Unlimited OTP verification attempts allowed
 - **Attack Vector**: 6-digit OTP brute-forceable in ~1M requests (~3 hours at 100 req/sec)
 - **Fix**: Add `otpAttempts` counter to User model, max 3 attempts then invalidate OTP
-- **Status**: Open
+- **Status**: Resolved (Firebase Auth transition)
 - **Added**: 2026-01-14
 
 ### SEC-004: Weak OTP Generation (Math.random)
@@ -50,7 +50,7 @@
 - **Description**: `Math.random()` is not cryptographically secure
 - **Attack Vector**: Predictable OTP generation if attacker knows timing/state
 - **Fix**: Use `crypto.randomInt(100000, 999999)` from Node.js crypto module
-- **Status**: Open
+- **Status**: Resolved (Firebase Auth transition)
 - **Added**: 2026-01-14
 
 ### SEC-005: No Server-Side Token Revocation
@@ -72,7 +72,7 @@
 - **Description**: If `authApi.me()` throws an exception, `setLoading(false)` never called
 - **Impact**: Loading spinner stuck forever, app unusable
 - **Fix**: Wrap in try/finally block to ensure `setLoading(false)` always runs
-- **Status**: Open
+- **Status**: Resolved
 - **Added**: 2026-01-14
 
 ### BUG-002: Phone State Lost on Page Refresh
@@ -81,7 +81,7 @@
 - **Description**: Phone number passed via `location.state`, lost on browser refresh
 - **Impact**: User must restart OTP flow from beginning
 - **Fix**: Persist phone in `sessionStorage`, restore on mount
-- **Status**: Open
+- **Status**: Resolved (Firebase Auth transition)
 - **Added**: 2026-01-14
 
 ### SEC-006: Debug Logging Contains Headers
@@ -90,7 +90,7 @@
 - **Description**: `request.log.info({ headers: request.headers })` logs all headers
 - **Impact**: Potential PII/tokens in production logs
 - **Fix**: Remove debug logging or sanitize sensitive headers before logging
-- **Status**: Open
+- **Status**: Resolved
 - **Added**: 2026-01-14
 
 ### UX-001: No JWT Refresh Mechanism
@@ -112,7 +112,7 @@
 - **Description**: Early return when user not found vs. password mismatch has different timing
 - **Impact**: Attacker can enumerate valid email addresses
 - **Fix**: Use constant-time comparison, always run password check (against dummy hash if no user)
-- **Status**: Open
+- **Status**: Resolved
 - **Added**: 2026-01-14
 
 ### SEC-008: No Explicit CSRF Protection
@@ -139,7 +139,7 @@
 - **Description**: Page renders its own header, but AdminLayout already provides one
 - **Impact**: Redundant UI, inconsistent logout behavior
 - **Fix**: Remove duplicate header from AdminDashboardPage
-- **Status**: Open
+- **Status**: Resolved
 - **Added**: 2026-01-14
 
 ### UX-003: Browser confirm() Dialog
@@ -169,7 +169,7 @@
 - **Risk**: Trivial
 - **Description**: `{/* Protected admin routes */}` comment appears twice
 - **Fix**: Remove duplicate comment
-- **Status**: Open
+- **Status**: Resolved
 - **Added**: 2026-01-14
 
 ### UX-005: No Empty State UI
@@ -203,11 +203,11 @@
 
 | Priority | Open | Resolved | Total |
 |----------|------|----------|-------|
-| P0 | 5 | 0 | 5 |
-| P1 | 4 | 0 | 4 |
-| P2 | 6 | 0 | 6 |
-| P3 | 4 | 0 | 4 |
-| **Total** | **19** | **0** | **19** |
+| P0 | 1 | 4 | 5 |
+| P1 | 1 | 3 | 4 |
+| P2 | 3 | 3 | 6 |
+| P3 | 3 | 1 | 4 |
+| **Total** | **8** | **11** | **19** |
 
 ---
 
@@ -215,8 +215,17 @@
 
 | ID | Resolved Date | Resolution Notes |
 |----|---------------|------------------|
-| — | — | No items resolved yet |
+| SEC-001 | 2026-01-18 | Added rate limiting to auth routes |
+| SEC-002 | 2026-01-19 | Migrated to Firebase Auth (handled by Firebase) |
+| SEC-003 | 2026-01-19 | Migrated to Firebase Auth (handled by Firebase) |
+| SEC-004 | 2026-01-19 | Migrated to Firebase Auth (handled by Firebase) |
+| BUG-001 | 2026-01-19 | Wrapped checkAuth in try/finally |
+| BUG-002 | 2026-01-19 | Migrated to Firebase Auth |
+| SEC-006 | 2026-01-19 | Removed raw header logging |
+| SEC-007 | 2026-01-19 | Implemented constant-time password check |
+| UX-002  | 2026-01-19 | Verified/Cleaned up redundant UI in AdminDashboard |
+| CODE-001| 2026-01-19 | Removed duplicate comment in App.tsx |
 
 ---
 
-*Last updated: 2026-01-14*
+*Last updated: 2026-01-19*

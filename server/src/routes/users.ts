@@ -1,6 +1,7 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { authenticate, requireAdmin } from '../middleware/auth';
 import { inviteUserSchema } from '../schemas/users';
+import { normalizePhone } from '../utils/phone';
 
 const userRoutes: FastifyPluginAsync = async (fastify) => {
   const { prisma } = fastify;
@@ -33,7 +34,7 @@ const userRoutes: FastifyPluginAsync = async (fastify) => {
       }
 
       const { phone, name } = parseResult.data;
-      const normalizedPhone = phone.replace(/\D/g, '').slice(-10); // Ensure consistent 10-digit format
+      const normalizedPhone = normalizePhone(phone); // Ensure consistent 10-digit format
 
       try {
         // Upsert user: create if not exists, or update just to set isInvited=true

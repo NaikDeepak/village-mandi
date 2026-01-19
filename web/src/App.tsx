@@ -42,7 +42,6 @@ function App() {
             <Route path="/buyer-login" element={<BuyerLoginPage />} />
 
             {/* Protected admin routes */}
-            {/* Protected admin routes */}
             <Route
               path="/admin"
               element={

@@ -4,6 +4,7 @@ import { Label } from '@/components/ui/label';
 import { usePhoneAuth } from '@/hooks/usePhoneAuth';
 import { authApi } from '@/lib/api';
 import { auth } from '@/lib/firebase';
+import { isValidPhone, normalizePhone } from '@/lib/utils';
 import { useAuthStore } from '@/stores/auth';
 import { RecaptchaVerifier } from 'firebase/auth';
 import { useEffect, useRef, useState } from 'react';
@@ -84,8 +85,8 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
     e?.preventDefault();
     setLocalError(null);
 
-    if (!phone || phone.length !== 10) {
-      setLocalError('Please enter a valid 10-digit phone number');
+    if (!isValidPhone(phone)) {
+      setLocalError('Please enter a valid 10-digit mobile number');
       return;
     }
 
@@ -142,7 +143,7 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
         if (result.data?.user) {
           setUser({
             id: result.data.user.id,
-            role: result.data.user.role as 'ADMIN' | 'BUYER',
+            role: result.data.user.role,
             name: result.data.user.name,
             phone: result.data.user.phone,
             email: result.data.user.email ?? null,
@@ -183,7 +184,7 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
                 placeholder="9876543210"
                 className="rounded-l-none"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                onChange={(e) => setPhone(normalizePhone(e.target.value))}
                 maxLength={10}
                 required
               />

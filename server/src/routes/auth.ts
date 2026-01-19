@@ -3,14 +3,18 @@ import { verifyAppCheck } from '../middleware/app-check';
 import { authenticate } from '../middleware/auth';
 import { adminLoginSchema, firebaseVerifySchema } from '../schemas/auth';
 import { verifyPassword } from '../utils/password';
+import { normalizePhone } from '../utils/phone';
 
 const authRoutes: FastifyPluginAsync = async (fastify) => {
   const { prisma } = fastify;
 
   // ==========================================
   // ADMIN LOGIN (Email + Password)
-  // TODO: Harden security later for admin login
   // ==========================================
+  // Precomputed bcrypt hash for a non-secret dummy password.
+  // Must be a valid bcrypt hash to avoid `bcrypt.compare()` throwing and leaking behavior differences.
+  const DUMMY_HASH = '$2b$12$KbQi0d8EwWbF6V2VymxJ5O9O4o6Zx0l7T8L2M2oWfQZ0hYtVJ8i3a';
+
   fastify.post(
     '/auth/admin/login',
     {
@@ -52,21 +56,13 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
         },
       });
 
-      if (!user || !user.passwordHash) {
-        request.log.warn(
-          { ...logContext, email },
-          'Admin login failed: Invalid credentials or inactive'
-        );
-        return reply.status(401).send({
-          error: 'Invalid credentials',
-          message: 'Email or password is incorrect',
-        });
-      }
+      // Always verify password to prevent timing attacks
+      // Use user's hash if user found, otherwise use dummy hash
+      const hashToVerify = user?.passwordHash || DUMMY_HASH;
+      const isValid = await verifyPassword(password, hashToVerify);
 
-      // Verify password
-      const isValid = await verifyPassword(password, user.passwordHash);
-      if (!isValid) {
-        request.log.warn({ ...logContext, email }, 'Admin login failed: Incorrect password');
+      if (!user || !isValid) {
+        request.log.warn({ ...logContext, email }, 'Admin login failed: Invalid credentials');
         return reply.status(401).send({
           error: 'Invalid credentials',
           message: 'Email or password is incorrect',
@@ -142,14 +138,11 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
   // ==========================================
   fastify.post('/auth/logout', async (request, reply) => {
     request.log.info('Logout request received');
-    // Set cookie to expire immediately
-    reply.setCookie('token', '', {
+    reply.clearCookie('token', {
       path: '/',
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 0,
-      expires: new Date('Thu, 01 Jan 1970 00:00:00 GMT'),
     });
     return { success: true, message: 'Logged out successfully' };
   });
@@ -179,7 +172,6 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
       request.log.info(
         {
           ...logContext,
-          headers: request.headers,
           bodyKeys: Object.keys(request.body as object),
         },
         'Received /auth/firebase-verify request'
@@ -221,7 +213,7 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
           { ...logContext, uid, phone: firebasePhone },
           'Firebase ID token verified'
         );
-        const phone = firebasePhone.replace(/\D/g, '').slice(-10);
+        const phone = normalizePhone(firebasePhone);
 
         // 3. Upsert User in Prisma
         // Find user by UID first (highest priority), then by phone to link accounts.

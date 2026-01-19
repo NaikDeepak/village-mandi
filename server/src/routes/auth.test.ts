@@ -146,6 +146,7 @@ describe('Auth Routes', () => {
       const verifyIdTokenMock = vi.fn().mockResolvedValue(mockDecodedToken);
       vi.spyOn(app.firebase, 'auth').mockReturnValue({
         verifyIdToken: verifyIdTokenMock,
+        // biome-ignore lint/suspicious/noExplicitAny: mocking external library
       } as any);
 
       mockPrisma.user.findUnique
@@ -190,6 +191,7 @@ describe('Auth Routes', () => {
 
       vi.spyOn(app.firebase, 'auth').mockReturnValue({
         verifyIdToken: vi.fn().mockResolvedValue(mockDecodedToken),
+        // biome-ignore lint/suspicious/noExplicitAny: mocking external library
       } as any);
 
       mockPrisma.user.findUnique.mockResolvedValue(null);
@@ -208,6 +210,7 @@ describe('Auth Routes', () => {
     it('should return 400 if phone number missing in token', async () => {
       vi.spyOn(app.firebase, 'auth').mockReturnValue({
         verifyIdToken: vi.fn().mockResolvedValue({ uid: 'some-uid' }), // no phone_number
+        // biome-ignore lint/suspicious/noExplicitAny: mocking external library
       } as any);
 
       const response = await app.inject({
