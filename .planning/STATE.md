@@ -4,109 +4,39 @@
 
 ---
 
+## Project Reference
+
+See: .planning/PROJECT.md (updated 2026-01-19)
+
+**Core value:** Farmer-centric experience (Trust & Transparency).
+**Current focus:** Planning next milestone (v1.2).
+
 ## Current Position
 
-**Milestone:** 2 (Production & Enhancements)
-**Phase:** 25 (Security and Reliability Refinement)
-**Plan:** 25-01 (Completed)
-**Status:** Phase complete
-**Last activity:** 2026-01-19 — Phase 25-01 execution complete
+**Milestone:** v1.1 (Production & Auth) - Complete
+**Phase:** 26 (Add testcases for uncovered code) - Complete
+**Plan:** 26-01 - Complete
+**Status:** Milestone Complete
+**Last activity:** 2026-01-19 — v1.1 milestone complete
 
-Progress: █████████▌ 95%
+Progress: ██████████ 100%
 
 ## Recent Progress
 
-### Milestone 2: Production & Enhancements
-
-#### Phase 25 — Security and Reliability Refinement (Completed)
+### Milestone v1.1: Production & Auth (Completed)
 
 **What shipped:**
-- Plan 25-01: Security and Reliability Refinement (Completed)
-  - Hardened AuthProvider with try/finally for stable loading state.
-  - Sanitized security logs to prevent token/header leakage.
-  - Closed timing attack vector in admin login with constant-time check.
-  - Cleaned up tech debt (duplicate comments/headers) and updated todo.md.
+- Production deployment to Vercel (Phase 16).
+- Robust Firebase Phone Auth with App Check (Phases 17-21).
+- Auth flow cleanup and strict typing (Phase 22).
+- Rebranding to Apna Khet and SEO optimization (Phases 23-24).
+- Security hardening and comprehensive testing (Phases 20, 25, 26).
 
-#### Phase 22 — Auth Flow Cleanup (Completed)
-
-**What shipped:**
-- Plan 22-03: Close remaining type safety gaps (Completed)
-  - Aligned phone nullability across frontend layers.
-  - Removed redundant casting in auth components.
-- Plan 22-02: API Client and Auth Type Safety (Completed)
-  - Enforced UserRole in API client.
-  - Removed manual casting in auth components.
-  - Improved hydration UX in AuthProvider.
-- Plan 22-01: Standardize User Type & Centralize Phone Normalization (Completed)
-  - Aligned frontend User interface with backend schema.
-  - Centralized phone normalization in server and web utilities.
-  - Refactored auth and user routes to use the new utilities.
-
-#### Phase 26 — Add testcases for uncovered code (Completed)
+### Milestone v1.0: MVP (Completed)
 
 **What shipped:**
-- Plan 26-01: Add testcases for uncovered code (Completed)
-  - Created server tests for auth, users, and logs routes.
-  - Created web tests for usePhoneAuth hook.
-  - Improved server test helpers and fixed regressions in order tests.
-
-#### Phase 24 — Rebrand and Domain Migration to ApnaKhet.app (Completed)
-
-**What shipped:**
-- Plan 24-03: Rebrand Hardcoded Strings (Completed)
-- Plan 24-02: PWA Manifest & Domain Configuration (Completed)
-- Plan 24-01: Rebrand SEO Assets (Completed)
-
-#### Phase 23 — SEO and AI Bot friendly (Completed)
-
-**What shipped:**
-- Plan 23-01: SEO Assets & Landing Page Metadata (Completed)
-- Plan 23-02: Dynamic SEO & Structured Data (Completed)
-
-#### Phase 21 — App Check Integration (Completed)
-
-**What shipped:**
-- Plan 21-01: App Check Integration (Completed)
-- Plan 21-02: Verification (Completed)
-
-#### Phase 20 — Security Hardening (Completed)
-
-**What shipped:**
-- Plan 20-01: App Check & Security Logging (Completed)
-- Plan 20-02: Rate Limit Tuning (Completed)
-
-#### Phase 19 — Client Auth Integration (Completed)
-
-**What shipped:**
-- Plan 19-01: Client Auth Logic (Completed)
-- Plan 19-02: Client Auth UI (Completed)
-- Plan 19-03: End-to-End Verification (Completed)
-
-#### Phase 18 — Backend Auth Foundation (Completed)
-
-**What shipped:**
-- Plan 18-01: Backend Auth Infrastructure (Completed)
-- Plan 18-02: Security Hardening (Completed)
-
-#### Phase 17 — Firebase Infrastructure (Completed)
-
-**What shipped:**
-- Plan 17-01: Firebase Infrastructure Configuration (Completed)
-- Plan 17-02: Custom Domain Configuration (Completed)
-
-#### Phase 16 — Deployment (Completed)
-
-**What shipped:**
-- Plan 16-01: Production Configuration (Completed)
-- Plan 16-02: Production Deployment (Completed)
-
-### Milestone 1: MVP (Completed 2026-01-15)
-
-**What shipped:**
-- Full batch-based agricultural marketplace.
-- 15 Phases completed and verified.
-- E2E Verified: Setup → Batch → Order → Procurement → Fulfillment → Settlement.
-- Tagged `v1.0` release.
+- Core batch-based marketplace (Phases 1-15).
+- Farmers, Products, Orders, Payments, Logistics.
 
 ---
 
@@ -114,8 +44,8 @@ Progress: █████████▌ 95%
 
 | Decision | Context | Outcome |
 |----------|---------|---------|
-| Enforce \`UserRole\` in API | Roles were treated as generic strings in the API client | Improved type safety and reduced bugs from role mismatch |
-| Optimistic check in \`AuthProvider\` | UI would show "Loading..." or flicker even if user was already authenticated in local storage | Smoother UX during page refreshes and hydration |
+| Enforce `UserRole` in API | Roles were treated as generic strings in the API client | Improved type safety and reduced bugs from role mismatch |
+| Optimistic check in `AuthProvider` | UI would show "Loading..." or flicker even if user was already authenticated in local storage | Smoother UX during page refreshes and hydration |
 | Mock Firebase Admin in server tests | Need to test auth routes without real Firebase connection | Decorated Fastify instance with mock auth provider |
 | Use renderHook for hook testing | Need to test logic in usePhoneAuth without full component mount | Isolated hook logic and mocked Firebase Auth calls |
 | Rebrand to Apna Khet | Transition to a more generic/scalable brand name | Updated SEO assets and metadata to apnakhet.app |
@@ -137,19 +67,17 @@ Progress: █████████▌ 95%
 ## Open Issues
 
 **Security (P0):**
-- [ ] SEC-001: No rate limiting on auth endpoints
-- [ ] SEC-002: OTP stored plaintext
-- [ ] SEC-003: No OTP attempt limiting
-- [ ] SEC-004: Math.random() for OTP generation
+- [ ] SEC-005: No Server-Side Token Revocation (Open)
+- [ ] SEC-008: No Explicit CSRF Protection (Open)
+- [ ] SEC-009: Session Fixation Potential (Open)
 
-**Bugs (P1):**
-- [ ] BUG-001: AuthProvider missing finally block
-- [ ] BUG-002: Phone state lost on page refresh
-
-**Pending Todos (1):**
-- 2026-01-18: Build is failing (tooling)
-
-**Full list:** See `docs/todo.md`
+**UX/Other (P2/P3):**
+- [ ] UX-001: No JWT Refresh Mechanism (Open)
+- [ ] UX-003: Browser confirm() Dialog (Open)
+- [ ] UX-004: Hardcoded Stats Values (Open)
+- [ ] UX-005: No Empty State UI (Open)
+- [ ] UX-006: Minimal Loading States (Open)
+- [ ] INFRA-001: No React Error Boundaries (Open)
 
 ---
 
@@ -158,6 +86,7 @@ Progress: █████████▌ 95%
 **Stack:**
 - Frontend: React 19, Vite, Tailwind, React Router, Zustand, React Hook Form + Zod
 - Backend: Fastify 5, Prisma 7, PostgreSQL, JWT (@fastify/jwt)
+- Auth: Firebase Auth (Phone), App Check (reCAPTCHA v3)
 - Tooling: Biome, Husky, GitHub Actions
 
 **Database Models (defined):**
@@ -169,6 +98,7 @@ Progress: █████████▌ 95%
 
 | Date | Change |
 |------|--------|
+| 2026-01-19 | Completed Milestone v1.1 (Production & Auth) |
 | 2026-01-19 | Phase 26 added: Add testcases for uncovered code |
 | 2026-01-18 | Phase 24 added: Rebrand and Domain Migration to ApnaKhet.app |
 | 2026-01-18 | Phase 23 added: SEO and AI Bot friendly |
@@ -179,7 +109,7 @@ Progress: █████████▌ 95%
 ## Session Continuity
 
 **Last session:** 2026-01-19
-**Stopped at:** Completed 22-02-PLAN.md
+**Stopped at:** Completed Milestone v1.1
 **Resume file:** None
 
 ---

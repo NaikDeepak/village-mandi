@@ -12,14 +12,26 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 
 ### Validated
 
-- ✓ Monorepo structure (web, server, shared workspaces) — existing
-- ✓ React frontend with Vite, Tailwind, TypeScript — existing
-- ✓ Fastify backend with Prisma/PostgreSQL — existing
-- ✓ Database schema with core models (User, Farmer, Product, Batch, Order) — existing
-- ✓ Shared system rules and constants — existing
-- ✓ Vercel deployment configuration — existing
+- ✓ Monorepo structure (web, server, shared workspaces) — v1.0
+- ✓ React frontend with Vite, Tailwind, TypeScript — v1.0
+- ✓ Fastify backend with Prisma/PostgreSQL — v1.0
+- ✓ Database schema with core models (User, Farmer, Product, Batch, Order) — v1.0
+- ✓ Shared system rules and constants — v1.0
+- ✓ Vercel deployment configuration — v1.0
+- ✓ AUTH-01: User can request OTP via SMS for a given phone number (Firebase SDK) — v1.1
+- ✓ AUTH-02: User can verify 6-digit OTP code (Firebase SDK) — v1.1
+- ✓ AUTH-03: User is verified via Invisible reCAPTCHA to prevent bots (with visible fallback) — v1.1
+- ✓ AUTH-04: Client exchanges Firebase ID Token for internal Backend Session JWT (`POST /auth/firebase-verify`) — v1.1
+- ✓ AUTH-05: Backend automatically creates Postgres User record if phone number is new (Sync-on-Login) — v1.1
+- ✓ AUTH-06: UI enforces 60-second cooldown before "Resend OTP" is enabled — v1.1
+- ✓ SEC-01: Developer/Reviewer phone numbers are whitelisted in Firebase Console (Bypass SMS/Cost) — v1.1
+- ✓ SEC-02: Firebase App Check is enabled on Web client to prevent unauthorized API usage — v1.1
+- ✓ SEC-03: Backend Rate Limiting is active on `/auth/firebase-verify` (e.g., 5 attempts per IP/hour) — v1.1
+- ✓ SEC-04: Custom Auth Domain `auth.apnakhet.app` is configured for Safari/iOS compatibility — v1.1
+- ✓ CMP-01: DLT Registration completed for Indian SMS delivery (Sender ID & Templates) — v1.1
 
-### Completed
+<details>
+<summary>Legacy v1.0 Requirements</summary>
 
 **EPIC 0: System Foundation** ✅
 - [x] Repository structure with clear frontend/backend separation
@@ -87,10 +99,11 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 - [x] WhatsApp click-to-chat integration
 - [x] Event-driven message triggers
 - [x] Comprehensive event logging
+</details>
 
 ### Active
 
-**(None - Milestone 1 Complete)**
+**(None - Milestone v1.1 Complete)**
 
 ### Out of Scope
 
@@ -102,6 +115,9 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 - Multi-language — English/primary local as default
 - Automatic farmer payouts — manual for accountability
 - Direct buyer-farmer chat — admin-mediated
+- Email Login for Buyers — Phone-first audience, simpler flow
+- Social Login (Google/FB) — Not relevant for target rural/semi-urban buyer demographic
+- Custom SMS Provider — Using Firebase default pipeline for V1 complexity reduction
 
 ## Context
 
@@ -119,12 +135,15 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 - State: TanStack Query + Zustand (installed, not yet used)
 - Forms: React Hook Form + Zod
 - Observability: Pino logging (configured, not integrated)
+- Auth: Firebase Auth (Phone), App Check (reCAPTCHA v3)
 
 **Current State**:
-- **Milestone 1 (MVP) Complete** (v1.0)
+- **Milestone v1.1 (Production & Auth) Complete** (v1.1)
 - Core marketplace operational (Farmers, Batches, Ordering, Payments, Logistics)
+- Production Auth: Firebase Phone Auth, App Check, Rate Limiting
+- Branding: Apna Khet (apnakhet.app)
 - E2E Verified: Setup → Batch → Order → Procurement → Fulfillment → Settlement
-- Ready for production deployment / pilot run
+- Ready for next functional enhancements (v1.2)
 
 ## Constraints
 
@@ -132,6 +151,7 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 - **Deployment**: Vercel (frontend + serverless), managed PostgreSQL
 - **UI Framework**: shadcn/ui with Radix + Tailwind, zero animation policy
 - **Payments**: Manual UPI only, no payment gateway integration
+- **Auth Provider**: Firebase Auth (Phone) + App Check
 
 ## Key Decisions
 
@@ -143,6 +163,23 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 | No farmer login | Farmers are managed, not self-service for V1 | ✅ Maintained (Admin managed) |
 | Pickup as default fulfilment | Reduces delivery complexity, buyers come to collection point | ✅ Implemented in Phase 10 |
 | Refine PRD before execution | Fill gaps in EPICs to ensure clear execution | ✅ Completed |
+| Enforce `UserRole` in API | Roles were treated as generic strings in the API client | ✅ Improved type safety |
+| Optimistic check in `AuthProvider` | UI would show "Loading..." or flicker even if user was already authenticated | ✅ Smoother UX |
+| Mock Firebase Admin in server tests | Need to test auth routes without real Firebase connection | ✅ Reliable CI tests |
+| Use renderHook for hook testing | Need to test logic in usePhoneAuth without full component mount | ✅ Isolated hook logic |
+| Rebrand to Apna Khet | Transition to a more generic/scalable brand name | ✅ Updated SEO assets/metadata |
+| ReCaptcha V3 for App Check | Standard provider for web apps | ✅ Initialized in firebase.ts |
+| Global App Check Header | Ensure all API calls are verified | ✅ Attached getToken() results |
+| Conditional App Check Enforcement | Allow monitoring vs blocking | ✅ Use APP_CHECK_ENFORCED env var |
+| Structured Security Metadata | Need for forensic/audit trail | ✅ Log IP, UserAgent, and Path |
+| Items replacement strategy for order editing | Simplify API behavior and avoid complex merge logic | ✅ PATCH /orders/:id replaces all |
+| Metadata typing for event logs | Prisma InputJsonValue type incompatibility | ✅ Build metadata object dynamically |
+| Strict state machine for batches | Business integrity depends on predictable batch lifecycle | ✅ VALID_TRANSITIONS constant |
+| EventLog for batch transitions | Accountability and audit trail required | ✅ Every state change creates EventLog |
+| Cutoff validation at DRAFT→OPEN | Prevent opening batches past their cutoff window | ✅ Check cutoffAt > now |
+| Update restrictions on batches | Prevent changing rules mid-batch | ✅ Only DRAFT batches can update |
+| Soft delete for farmers/products | Preserve historical data for past batches | ✅ isActive flag, not hard delete |
+| JWT in httpOnly cookies | Prevent XSS token theft | ✅ Secure, sameSite: lax |
 
 ---
-*Last updated: 2026-01-15 (Milestone 1 Complete)*
+*Last updated: 2026-01-19 after v1.1 milestone*
