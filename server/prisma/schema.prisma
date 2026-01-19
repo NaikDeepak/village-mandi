@@ -16,6 +16,12 @@ enum UserRole {
   BUYER
 }
 
+enum RegistrationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 enum RelationshipLevel {
   SELF
   FAMILY
@@ -75,10 +81,12 @@ enum DeliveryStatus {
 //////////////////////
 
 model User {
-  id           String    @id @default(uuid())
-  role         UserRole
-  name         String
-  phone        String    @unique
+  id              String             @id @default(uuid())
+  role            UserRole
+  status          RegistrationStatus @default(PENDING)
+  rejectionReason String?
+  name            String
+  phone           String             @unique
   email        String?   @unique
   firebaseUid  String?   @unique
   passwordHash String?   // Only for ADMIN users
