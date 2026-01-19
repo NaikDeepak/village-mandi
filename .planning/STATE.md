@@ -10,8 +10,8 @@
 **Phase:** 26 (Add testcases for uncovered code)
 **Plan:** 26-01 (Completed)
 **Status:** Phase complete
-**Next Phase:** Phase 27 (TBD)
-**Last activity:** 2026-01-19 — Phase 26 Plan 01 complete (Add testcases for uncovered code)
+**Next Phase:** Phase 22 (Auth Flow Cleanup)
+**Last activity:** 2026-01-19 — Phase 26 execution complete
 
 Progress: █████████░ 91%
 
@@ -20,6 +20,7 @@ Progress: █████████░ 91%
 ### Milestone 2: Production & Enhancements
 
 #### Phase 26 — Add testcases for uncovered code (Completed)
+
 **What shipped:**
 - Plan 26-01: Add testcases for uncovered code (Completed)
   - Created server tests for auth, users, and logs routes.

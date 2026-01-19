@@ -163,6 +163,15 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 **Depends on**: Phase 24
 **Status**: Pending
 
+#### Phase 26: Add testcases for uncovered code
+**Goal**: Add comprehensive test cases for currently uncovered critical paths in server and web.
+**Depends on**: Phase 25
+**Plans**: 1 plan
+**Status**: Complete
+
+Plans:
+- [x] 26-01: Add tests for Auth, User, Log routes & Phone Auth hook
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -176,3 +185,4 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 | 22. Auth Flow Cleanup | v1.1 | 0/TBD | Pending | - |
 | 23. SEO and AI Bot friendly | v1.1 | 2/2 | Complete | 2026-01-18 |
 | 24. Rebrand & Domain | v1.1 | 3/3 | Complete | 2026-01-18 |
+| 26. Add testcases | v1.1 | 1/1 | Complete | 2026-01-19 |
