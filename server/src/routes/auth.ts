@@ -143,14 +143,11 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
   // ==========================================
   fastify.post('/auth/logout', async (request, reply) => {
     request.log.info('Logout request received');
-    // Set cookie to expire immediately
-    reply.setCookie('token', '', {
+    reply.clearCookie('token', {
       path: '/',
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 0,
-      expires: new Date('Thu, 01 Jan 1970 00:00:00 GMT'),
     });
     return { success: true, message: 'Logged out successfully' };
   });

@@ -47,7 +47,7 @@ export function Navbar({ variant = 'home' }: NavbarProps) {
 
   const handleLogout = async () => {
     await authApi.logout();
-    logout();
+    await logout();
     navigate('/');
     setIsOpen(false);
   };

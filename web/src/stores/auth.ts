@@ -1,3 +1,5 @@
+import { auth } from '@/lib/firebase';
+import { signOut } from 'firebase/auth';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -17,7 +19,7 @@ interface AuthState {
   isLoading: boolean;
   setUser: (user: User | null) => void;
   setLoading: (loading: boolean) => void;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -28,8 +30,17 @@ export const useAuthStore = create<AuthState>()(
       isLoading: true,
       setUser: (user) => set({ user, isAuthenticated: !!user, isLoading: false }),
       setLoading: (isLoading) => set({ isLoading }),
-      logout: () => {
+      logout: async () => {
+        try {
+          // 1. Sign out from Firebase
+          await signOut(auth);
+        } catch (err) {
+          console.warn('Firebase signout failed:', err);
+        }
+        // 2. Clear local state
         set({ user: null, isAuthenticated: false, isLoading: false });
+        // 3. Clear storage explicitly to be safe
+        localStorage.removeItem('auth-storage');
       },
     }),
     {

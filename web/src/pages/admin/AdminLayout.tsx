@@ -10,7 +10,7 @@ export function AdminLayout() {
 
   const handleLogout = async () => {
     await authApi.logout();
-    logout();
+    await logout();
     navigate('/login');
   };
 

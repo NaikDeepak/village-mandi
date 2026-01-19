@@ -164,10 +164,13 @@ Plans:
 **Depends on**: Phase 23
 **Status**: Complete
 
-#### Phase 25: Future Phase
-**Goal**: TBD
+#### Phase 25: Security & Reliability Refinement
+**Goal**: Address remaining P0 security issues (logging, enumeration) and P1 bugs (AuthProvider stability). Clean up outdated todos.
 **Depends on**: Phase 24
 **Status**: Pending
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 25 to break down)
 
 #### Phase 26: Add testcases for uncovered code
 **Goal**: Add comprehensive test cases for currently uncovered critical paths in server and web.
