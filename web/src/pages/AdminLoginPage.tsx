@@ -53,7 +53,7 @@ export function AdminLoginPage() {
     if (result.data?.user) {
       setUser({
         id: result.data.user.id,
-        role: result.data.user.role as 'ADMIN' | 'BUYER',
+        role: result.data.user.role,
         name: result.data.user.name,
         email: result.data.user.email,
         phone: result.data.user.phone ?? null,
