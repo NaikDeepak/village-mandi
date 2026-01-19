@@ -22,6 +22,8 @@ import { OrderDetailPage } from './pages/admin/OrderDetailPage';
 import { OrdersPage } from './pages/admin/OrdersPage';
 import { ProductFormPage } from './pages/admin/ProductFormPage';
 import { ProductsPage } from './pages/admin/ProductsPage';
+import { RejectedPage } from './pages/auth/RejectedPage';
+import { WaitlistPage } from './pages/auth/WaitlistPage';
 import { CheckoutPage } from './pages/buyer/CheckoutPage';
 import { EditOrderPage } from './pages/buyer/EditOrderPage';
 import { OrderSuccessPage } from './pages/buyer/OrderSuccessPage';
@@ -40,6 +42,8 @@ function App() {
             <Route path="/rules" element={<RulesPage />} />
             <Route path="/login" element={<AdminLoginPage />} />
             <Route path="/buyer-login" element={<BuyerLoginPage />} />
+            <Route path="/waitlist" element={<WaitlistPage />} />
+            <Route path="/rejected" element={<RejectedPage />} />
 
             {/* Protected admin routes */}
             <Route
