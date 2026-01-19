@@ -37,10 +37,8 @@ export const useAuthStore = create<AuthState>()(
         } catch (err) {
           console.warn('Firebase signout failed:', err);
         }
-        // 2. Clear local state
+        // 2. Clear local state (persist will update storage accordingly)
         set({ user: null, isAuthenticated: false, isLoading: false });
-        // 3. Clear storage explicitly to be safe
-        localStorage.removeItem('auth-storage');
       },
     }),
     {
