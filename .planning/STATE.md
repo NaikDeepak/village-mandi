@@ -8,11 +8,11 @@
 
 **Milestone:** 2 (Production & Enhancements)
 **Phase:** 22 (Auth Flow Cleanup)
-**Plan:** 22-01 (Completed)
+**Plan:** 22-02 (Completed)
 **Status:** In progress
-**Last activity:** 2026-01-19 — Phase 22-01 execution complete
+**Last activity:** 2026-01-19 — Phase 22-02 execution complete
 
-Progress: ████████░░ 87%
+Progress: █████████░ 90%
 
 ## Recent Progress
 
@@ -21,6 +21,10 @@ Progress: ████████░░ 87%
 #### Phase 22 — Auth Flow Cleanup (In progress)
 
 **What shipped:**
+- Plan 22-02: API Client and Auth Type Safety (Completed)
+  - Enforced UserRole in API client.
+  - Removed manual casting in auth components.
+  - Improved hydration UX in AuthProvider.
 - Plan 22-01: Standardize User Type & Centralize Phone Normalization (Completed)
   - Aligned frontend User interface with backend schema.
   - Centralized phone normalization in server and web utilities.
@@ -98,6 +102,8 @@ Progress: ████████░░ 87%
 
 | Decision | Context | Outcome |
 |----------|---------|---------|
+| Enforce \`UserRole\` in API | Roles were treated as generic strings in the API client | Improved type safety and reduced bugs from role mismatch |
+| Optimistic check in \`AuthProvider\` | UI would show "Loading..." or flicker even if user was already authenticated in local storage | Smoother UX during page refreshes and hydration |
 | Mock Firebase Admin in server tests | Need to test auth routes without real Firebase connection | Decorated Fastify instance with mock auth provider |
 | Use renderHook for hook testing | Need to test logic in usePhoneAuth without full component mount | Isolated hook logic and mocked Firebase Auth calls |
 | Rebrand to Apna Khet | Transition to a more generic/scalable brand name | Updated SEO assets and metadata to apnakhet.app |
@@ -161,7 +167,7 @@ Progress: ████████░░ 87%
 ## Session Continuity
 
 **Last session:** 2026-01-19
-**Stopped at:** Completed 26-01-PLAN.md
+**Stopped at:** Completed 22-02-PLAN.md
 **Resume file:** None
 
 ---
