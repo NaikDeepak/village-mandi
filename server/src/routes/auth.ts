@@ -3,6 +3,7 @@ import { verifyAppCheck } from '../middleware/app-check';
 import { authenticate } from '../middleware/auth';
 import { adminLoginSchema, firebaseVerifySchema } from '../schemas/auth';
 import { verifyPassword } from '../utils/password';
+import { normalizePhone } from '../utils/phone';
 
 const authRoutes: FastifyPluginAsync = async (fastify) => {
   const { prisma } = fastify;
@@ -221,7 +222,7 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
           { ...logContext, uid, phone: firebasePhone },
           'Firebase ID token verified'
         );
-        const phone = firebasePhone.replace(/\D/g, '').slice(-10);
+        const phone = normalizePhone(firebasePhone);
 
         // 3. Upsert User in Prisma
         // Find user by UID first (highest priority), then by phone to link accounts.

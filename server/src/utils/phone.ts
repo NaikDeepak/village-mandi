@@ -1,10 +1,3 @@
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-
 /**
  * Normalizes a phone number by removing all non-digits and extracting the last 10 digits.
  * This handles formats like +91, 0, or just the 10-digit number.

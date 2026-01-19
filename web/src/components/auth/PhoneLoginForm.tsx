@@ -4,6 +4,7 @@ import { Label } from '@/components/ui/label';
 import { usePhoneAuth } from '@/hooks/usePhoneAuth';
 import { authApi } from '@/lib/api';
 import { auth } from '@/lib/firebase';
+import { normalizePhone } from '@/lib/utils';
 import { useAuthStore } from '@/stores/auth';
 import { RecaptchaVerifier } from 'firebase/auth';
 import { useEffect, useRef, useState } from 'react';
@@ -183,7 +184,7 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
                 placeholder="9876543210"
                 className="rounded-l-none"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                onChange={(e) => setPhone(normalizePhone(e.target.value))}
                 maxLength={10}
                 required
               />
