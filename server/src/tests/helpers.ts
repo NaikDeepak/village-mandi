@@ -4,15 +4,18 @@ import jwt from '@fastify/jwt';
 import Fastify, { type FastifyInstance } from 'fastify';
 import { vi } from 'vitest';
 
+import authRoutes from '../routes/auth';
 import batchProductRoutes from '../routes/batch-products';
 import batchRoutes from '../routes/batches';
 import farmerRoutes from '../routes/farmers';
 import hubRoutes from '../routes/hubs';
+import logRoutes from '../routes/logs';
 import orderRoutes from '../routes/orders';
 import packingRoutes from '../routes/packing';
 import paymentRoutes from '../routes/payments';
 import payoutRoutes from '../routes/payouts';
 import productRoutes from '../routes/products';
+import userRoutes from '../routes/users';
 
 // Mock Prisma client
 // Mock Prisma client
@@ -25,6 +28,14 @@ export const mockPrisma: any = {
     if (Array.isArray(fn)) return await Promise.all(fn);
     return fn;
   }),
+  user: {
+    findFirst: vi.fn(),
+    findUnique: vi.fn(),
+    findMany: vi.fn(),
+    create: vi.fn(),
+    update: vi.fn(),
+    upsert: vi.fn(),
+  },
   farmer: {
     findMany: vi.fn(),
     findUnique: vi.fn(),
@@ -84,6 +95,7 @@ export const mockPrisma: any = {
   },
   eventLog: {
     create: vi.fn(),
+    findMany: vi.fn(),
   },
 };
 
@@ -122,7 +134,17 @@ export async function buildTestApp(): Promise<FastifyInstance> {
   // biome-ignore lint/suspicious/noExplicitAny: Test mock override
   app.decorate('prisma', mockPrisma as any);
 
+  // Mock Firebase
+  app.decorate('firebase', {
+    auth: () => ({
+      verifyIdToken: vi.fn(),
+    }),
+  });
+
   // Register routes
+  await app.register(authRoutes);
+  await app.register(userRoutes);
+  await app.register(logRoutes);
   await app.register(farmerRoutes);
   await app.register(productRoutes);
   await app.register(hubRoutes);
