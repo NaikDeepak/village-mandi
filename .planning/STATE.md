@@ -7,33 +7,31 @@
 ## Current Position
 
 **Milestone:** 2 (Production & Enhancements)
-**Phase:** 24 (Rebrand and Domain Migration to ApnaKhet.app)
-**Plan:** 24-03 (Completed)
+**Phase:** 26 (Add testcases for uncovered code)
+**Plan:** 26-01 (Completed)
 **Status:** Phase complete
-**Next Phase:** TBD (Reviewing Roadmap)
-**Last activity:** 2026-01-18 — Phase 24 Plan 03 complete (Rebrand Hardcoded Strings)
+**Next Phase:** Phase 27 (TBD)
+**Last activity:** 2026-01-19 — Phase 26 Plan 01 complete (Add testcases for uncovered code)
 
-Progress: ██████████ 100%
+Progress: █████████░ 91%
 
 ## Recent Progress
 
 ### Milestone 2: Production & Enhancements
 
+#### Phase 26 — Add testcases for uncovered code (Completed)
+**What shipped:**
+- Plan 26-01: Add testcases for uncovered code (Completed)
+  - Created server tests for auth, users, and logs routes.
+  - Created web tests for usePhoneAuth hook.
+  - Improved server test helpers and fixed regressions in order tests.
+
 #### Phase 24 — Rebrand and Domain Migration to ApnaKhet.app (Completed)
 
 **What shipped:**
 - Plan 24-03: Rebrand Hardcoded Strings (Completed)
-  - Updated SEO titles across Landing, Shop, and Rules pages.
-  - Rebranded WhatsApp communication templates.
-  - Updated admin receipts and notification fallbacks.
 - Plan 24-02: PWA Manifest & Domain Configuration (Completed)
-  - Created PWA manifest with Apna Khet branding.
-  - Linked manifest in index.html and set theme colors.
-  - User-confirmed domain configuration in Vercel.
 - Plan 24-01: Rebrand SEO Assets (Completed)
-  - Updated SEOHead defaults to "Apna Khet" branding.
-  - Updated robots.txt to point to apnakhet.app sitemap.
-  - Updated sitemap.xml to use apnakhet.app domain.
 
 #### Phase 23 — SEO and AI Bot friendly (Completed)
 
@@ -86,42 +84,14 @@ Progress: ██████████ 100%
 - E2E Verified: Setup → Batch → Order → Procurement → Fulfillment → Settlement.
 - Tagged `v1.0` release.
 
-### Phase 15 — End-to-End Workflow Guide (Completed 2026-01-15)
-
-### Phase 14 — Order Editing (Completed)
-
-### Phase 13 — Communication System (Completed 2026-01-15)
-
-### Phase 12 — Order Status (Completed 2026-01-15)
-
-### Phase 11 — Farmer Payouts (Completed 2026-01-15)
-
-### Phase 10 — Packing & Distribution (Completed 2026-01-15)
-
-### Phase 09 — Aggregation & Procurement (Completed 2026-01-15)
-
-### Phase 08 — Two-Stage Payments (Completed 2026-01-15)
-
-### Phase 07 — Ordering (Completed 2026-01-15)
-
-### Phase 06 — Pricing & Scoping (Completed 2026-01-15)
-
-### Phase 05 — Batch Management (Completed 2026-01-15)
-
-### Phase 04 — Farmers & Products (Completed 2026-01-14)
-
-### Phase 03 — Authentication & Access (Completed 2026-01-14)
-
-### Phase 02 — Branding & Static Pages (Completed 2026-01-14)
-
-### Phase 01 — System Foundation (Completed prior)
-
 ---
 
 ## Key Decisions
 
 | Decision | Context | Outcome |
 |----------|---------|---------|
+| Mock Firebase Admin in server tests | Need to test auth routes without real Firebase connection | Decorated Fastify instance with mock auth provider |
+| Use renderHook for hook testing | Need to test logic in usePhoneAuth without full component mount | Isolated hook logic and mocked Firebase Auth calls |
 | Rebrand to Apna Khet | Transition to a more generic/scalable brand name | Updated SEO assets and metadata to apnakhet.app |
 | ReCaptcha V3 for App Check | Standard provider for web apps | Initialized ReCaptchaV3Provider in firebase.ts |
 | Global App Check Header | Ensure all API calls are verified | Attached getToken() results to X-Firebase-AppCheck in request wrapper |
@@ -173,6 +143,7 @@ Progress: ██████████ 100%
 
 | Date | Change |
 |------|--------|
+| 2026-01-19 | Phase 26 added: Add testcases for uncovered code |
 | 2026-01-18 | Phase 24 added: Rebrand and Domain Migration to ApnaKhet.app |
 | 2026-01-18 | Phase 23 added: SEO and AI Bot friendly |
 | 2026-01-17 | Updated for Milestone 2 (Auth & Production) |
@@ -181,9 +152,9 @@ Progress: ██████████ 100%
 
 ## Session Continuity
 
-**Last session:** 2026-01-18
-**Stopped at:** Completed 24-01-PLAN.md
+**Last session:** 2026-01-19
+**Stopped at:** Completed 26-01-PLAN.md
 **Resume file:** None
 
 ---
-*Last updated: 2026-01-18*
+*Last updated: 2026-01-19*
