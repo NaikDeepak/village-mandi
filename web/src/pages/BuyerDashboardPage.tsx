@@ -64,8 +64,11 @@ export function BuyerDashboardPage() {
   };
 
   const handleLogout = async () => {
-    await authApi.logout();
-    await logout();
+    try {
+      await authApi.logout();
+    } finally {
+      await logout();
+    }
     navigate('/buyer-login');
   };
 

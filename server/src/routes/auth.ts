@@ -11,7 +11,9 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
   // ==========================================
   // ADMIN LOGIN (Email + Password)
   // ==========================================
-  const DUMMY_HASH = '$2b$12$6P7z2Y.P2k6Z0qR8vE9oDu7zB9K5V4m3S2H1G0F/E.D/C.B.A.9.8'; // Generic dummy hash
+  // Precomputed bcrypt hash for a non-secret dummy password.
+  // Must be a valid bcrypt hash to avoid `bcrypt.compare()` throwing and leaking behavior differences.
+  const DUMMY_HASH = '$2b$12$KbQi0d8EwWbF6V2VymxJ5O9O4o6Zx0l7T8L2M2oWfQZ0hYtVJ8i3a';
 
   fastify.post(
     '/auth/admin/login',

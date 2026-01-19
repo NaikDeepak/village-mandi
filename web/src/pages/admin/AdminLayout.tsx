@@ -9,8 +9,11 @@ export function AdminLayout() {
   const { user, logout } = useAuthStore();
 
   const handleLogout = async () => {
-    await authApi.logout();
-    await logout();
+    try {
+      await authApi.logout();
+    } finally {
+      await logout();
+    }
     navigate('/login');
   };
 
