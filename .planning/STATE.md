@@ -7,16 +7,25 @@
 ## Current Position
 
 **Milestone:** 2 (Production & Enhancements)
-**Phase:** 22 (Auth Flow Cleanup)
-**Plan:** 22-03 (Completed)
+**Phase:** 25 (Security and Reliability Refinement)
+**Plan:** 25-01 (Completed)
 **Status:** Phase complete
-**Last activity:** 2026-01-19 — Phase 22-03 execution complete
+**Last activity:** 2026-01-19 — Phase 25-01 execution complete
 
-Progress: ██████████ 100%
+Progress: █████████▌ 95%
 
 ## Recent Progress
 
 ### Milestone 2: Production & Enhancements
+
+#### Phase 25 — Security and Reliability Refinement (Completed)
+
+**What shipped:**
+- Plan 25-01: Security and Reliability Refinement (Completed)
+  - Hardened AuthProvider with try/finally for stable loading state.
+  - Sanitized security logs to prevent token/header leakage.
+  - Closed timing attack vector in admin login with constant-time check.
+  - Cleaned up tech debt (duplicate comments/headers) and updated todo.md.
 
 #### Phase 22 — Auth Flow Cleanup (Completed)
 
