@@ -10,8 +10,9 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
 
   // ==========================================
   // ADMIN LOGIN (Email + Password)
-  // TODO: Harden security later for admin login
   // ==========================================
+  const DUMMY_HASH = '$2b$12$6P7z2Y.P2k6Z0qR8vE9oDu7zB9K5V4m3S2H1G0F/E.D/C.B.A.9.8'; // Generic dummy hash
+
   fastify.post(
     '/auth/admin/login',
     {
@@ -53,21 +54,13 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
         },
       });
 
-      if (!user || !user.passwordHash) {
-        request.log.warn(
-          { ...logContext, email },
-          'Admin login failed: Invalid credentials or inactive'
-        );
-        return reply.status(401).send({
-          error: 'Invalid credentials',
-          message: 'Email or password is incorrect',
-        });
-      }
+      // Always verify password to prevent timing attacks
+      // Use user's hash if user found, otherwise use dummy hash
+      const hashToVerify = user?.passwordHash || DUMMY_HASH;
+      const isValid = await verifyPassword(password, hashToVerify);
 
-      // Verify password
-      const isValid = await verifyPassword(password, user.passwordHash);
-      if (!isValid) {
-        request.log.warn({ ...logContext, email }, 'Admin login failed: Incorrect password');
+      if (!user || !isValid) {
+        request.log.warn({ ...logContext, email }, 'Admin login failed: Invalid credentials');
         return reply.status(401).send({
           error: 'Invalid credentials',
           message: 'Email or password is incorrect',
@@ -177,7 +170,6 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
       request.log.info(
         {
           ...logContext,
-          headers: request.headers,
           bodyKeys: Object.keys(request.body as object),
         },
         'Received /auth/firebase-verify request'
