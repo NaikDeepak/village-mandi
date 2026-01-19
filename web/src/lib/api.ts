@@ -73,23 +73,23 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
 export const authApi = {
   // Admin login
   adminLogin: (email: string, password: string) =>
-    request<{ success: boolean; user: { id: string; role: string; name: string; email: string } }>(
-      '/auth/admin/login',
-      {
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
-      }
-    ),
+    request<{
+      success: boolean;
+      user: { id: string; role: string; name: string; email: string; phone?: string | null };
+    }>('/auth/admin/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    }),
 
   // Firebase Token Verification
   verifyFirebaseToken: (idToken: string) =>
-    request<{ success: boolean; user: { id: string; role: string; name: string; phone: string } }>(
-      '/auth/firebase-verify',
-      {
-        method: 'POST',
-        body: JSON.stringify({ idToken }),
-      }
-    ),
+    request<{
+      success: boolean;
+      user: { id: string; role: string; name: string; phone: string; email?: string | null };
+    }>('/auth/firebase-verify', {
+      method: 'POST',
+      body: JSON.stringify({ idToken }),
+    }),
 
   // Get current user
   me: () =>

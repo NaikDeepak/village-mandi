@@ -56,7 +56,7 @@ export function AdminLoginPage() {
         role: result.data.user.role as 'ADMIN' | 'BUYER',
         name: result.data.user.name,
         email: result.data.user.email,
-        phone: null,
+        phone: result.data.user.phone ?? null,
       });
       navigate('/admin');
     }

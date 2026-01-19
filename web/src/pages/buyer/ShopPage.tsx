@@ -219,35 +219,38 @@ export function ShopPage() {
   const cartItemsCount = getTotalItems();
 
   // JSON-LD for products
-  const productJsonLd = currentBatch
-    ? {
-        '@context': 'https://schema.org',
-        '@type': 'ItemList',
-        name: `Products in ${currentBatch.name}`,
-        description: `Fresh produce available for delivery on ${new Date(currentBatch.deliveryDate).toLocaleDateString()}`,
-        numberOfItems: products.length,
-        itemListElement: products.map((bp, index) => ({
-          '@type': 'ListItem',
-          position: index + 1,
-          item: {
-            '@type': 'Product',
-            name: bp.product.name,
-            description: bp.product.description,
-            image: bp.product.imageUrl, // Assuming imageUrl exists or will exist
-            offers: {
-              '@type': 'Offer',
-              price: bp.pricePerUnit,
-              priceCurrency: 'INR',
-              availability: 'https://schema.org/InStock',
-            },
-            brand: {
-              '@type': 'Brand',
-              name: bp.product.farmer?.name || 'Apna Khet Farmer',
-            },
+  const productJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `Products in ${currentBatch.name}`,
+    description: `Fresh produce available for delivery on ${new Date(currentBatch.deliveryDate).toLocaleDateString()}`,
+    numberOfItems: products.length,
+    itemListElement: products.map((bp, index) => {
+      const description = bp.product.description ?? undefined;
+      const image = bp.product.imageUrl ?? undefined;
+
+      return {
+        '@type': 'ListItem',
+        position: index + 1,
+        item: {
+          '@type': 'Product',
+          name: bp.product.name,
+          ...(description ? { description } : {}),
+          ...(image ? { image: [image] } : {}),
+          offers: {
+            '@type': 'Offer',
+            price: bp.pricePerUnit,
+            priceCurrency: 'INR',
+            availability: 'https://schema.org/InStock',
           },
-        })),
-      }
-    : undefined;
+          brand: {
+            '@type': 'Brand',
+            name: bp.product.farmer?.name || 'Apna Khet Farmer',
+          },
+        },
+      };
+    }),
+  };
 
   // Group products by farmer
   const productsByFarmer = products.reduce(
@@ -286,8 +289,8 @@ export function ShopPage() {
   return (
     <>
       <SEOHead
-        title={`${currentBatch?.name || 'Shop'} | Apna Khet`}
-        description={`Order fresh farm produce from ${currentBatch?.hub?.name || 'local'} hub. Delivery on ${currentBatch ? new Date(currentBatch.deliveryDate).toLocaleDateString() : 'scheduled date'}.`}
+        title={`${currentBatch.name} | Apna Khet`}
+        description={`Order fresh farm produce from ${currentBatch.hub?.name || 'local'} hub. Delivery on ${new Date(currentBatch.deliveryDate).toLocaleDateString()}.`}
         jsonLd={productJsonLd}
       />
       <Navbar variant="internal" />

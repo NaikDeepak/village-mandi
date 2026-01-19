@@ -101,14 +101,15 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
       console.error('handleSendOtp: Error caught', err);
       // Do not clear the verifier locally on error to allow retries without full re-initialization.
 
-      // biome-ignore lint/suspicious/noExplicitAny: Firebase error type is not exported clean
-      const error = err as any; // Cast to access code property
-      let message = error.message || 'Failed to send OTP';
+      const errorObj =
+        typeof err === 'object' && err !== null ? (err as Record<string, unknown>) : null;
 
-      if (error.code === 'auth/invalid-app-credential') {
+      let message = typeof errorObj?.message === 'string' ? errorObj.message : 'Failed to send OTP';
+
+      if (errorObj?.code === 'auth/invalid-app-credential') {
         message =
           'Configuration Error: Domain not authorized or App Check failed. Please add this domain/IP to Firebase Console > Auth > Settings > Authorized Domains.';
-      } else if (error.code === 'auth/captcha-check-failed') {
+      } else if (errorObj?.code === 'auth/captcha-check-failed') {
         message =
           'reCAPTCHA check failed. Please refresh and try again. Ensure your site key is correct.';
       }
@@ -144,7 +145,7 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
             role: result.data.user.role as 'ADMIN' | 'BUYER',
             name: result.data.user.name,
             phone: result.data.user.phone,
-            email: null,
+            email: result.data.user.email ?? null,
           });
           navigate('/buyer-dashboard');
         }

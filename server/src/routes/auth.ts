@@ -97,6 +97,7 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
           role: user.role,
           name: user.name,
           email: user.email,
+          phone: user.phone,
         },
       };
     }
@@ -284,6 +285,7 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
             role: user.role,
             name: user.name,
             phone: user.phone,
+            email: user.email,
           },
         };
       } catch (error) {

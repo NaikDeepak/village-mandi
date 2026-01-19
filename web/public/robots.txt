@@ -4,23 +4,35 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 
-# Explicitly allow AI bots
+# Explicitly allow AI bots (but still block admin/api)
 User-agent: GPTBot
 Allow: /
+Disallow: /admin/
+Disallow: /api/
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /admin/
+Disallow: /api/
 
 User-agent: Google-Extended
 Allow: /
+Disallow: /admin/
+Disallow: /api/
 
 User-agent: CCBot
 Allow: /
+Disallow: /admin/
+Disallow: /api/
 
 User-agent: Anthropic-AI
 Allow: /
+Disallow: /admin/
+Disallow: /api/
 
 User-agent: Claude-Web
 Allow: /
+Disallow: /admin/
+Disallow: /api/
 
 Sitemap: https://apnakhet.app/sitemap.xml
