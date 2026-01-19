@@ -135,11 +135,13 @@ export async function buildTestApp(): Promise<FastifyInstance> {
   app.decorate('prisma', mockPrisma as any);
 
   // Mock Firebase
-  app.decorate('firebase', {
+  // biome-ignore lint/suspicious/noExplicitAny: Mocking firebase for tests
+  const mockFirebase: any = {
     auth: () => ({
       verifyIdToken: vi.fn(),
     }),
-  });
+  };
+  app.decorate('firebase', mockFirebase);
 
   // Register routes
   await app.register(authRoutes);
