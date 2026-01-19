@@ -15,11 +15,11 @@ See: .planning/PROJECT.md (updated 2026-01-19)
 
 **Milestone:** v1.2 (User Onboarding) - Initializing
 **Phase:** 27 (Identity & Security Foundation)
-**Plan:** 27-01 (Completed)
+**Plan:** 27-02 (Completed)
 **Status:** In Progress
-**Last activity:** 2026-01-19 — Completed 27-01: Identity Foundation
+**Last activity:** 2026-01-19 — Completed 27-02: Firebase Blocking Function
 
-Progress: [█████████████████░░░] 86%
+Progress: [██████████████████░░] 88%
 
 ## Performance Metrics
 - **Requirement Coverage:** 9/9 (100% mapped)
@@ -31,6 +31,7 @@ Progress: [█████████████████░░░] 86%
 ### Milestone v1.2: User Onboarding (In Progress)
 
 **What shipped:**
+- **Phase 27-02**: Firebase Blocking Function implemented to enforce registration status at the edge.
 - **Phase 27-01**: RegistrationStatus enum and User status fields implemented with zero downtime for existing users.
 
 ### Milestone v1.1: Production & Auth (Completed)
@@ -94,8 +95,8 @@ Progress: [█████████████████░░░] 86%
 ## Session Continuity
 
 **Last session:** 2026-01-19
-**Stopped at:** Completed 27-01-PLAN.md
-**Resume file:** .planning/phases/27-identity-security-foundation/27-02-PLAN.md
+**Stopped at:** Completed 27-02-PLAN.md
+**Resume file:** .planning/phases/27-identity-security-foundation/27-03-PLAN.md
 
 ---
 *Last updated: 2026-01-19*
