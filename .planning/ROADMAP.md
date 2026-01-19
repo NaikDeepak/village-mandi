@@ -53,9 +53,9 @@
 
 **Plans:** 3 plans
 Plans:
-- [ ] 27-01-PLAN.md — Update Prisma schema for registration status
-- [ ] 27-02-PLAN.md — Implement Firebase Blocking Functions
-- [ ] 27-03-PLAN.md — Frontend handling for blocked users
+- [x] 27-01-PLAN.md — Update Prisma schema for registration status
+- [x] 27-02-PLAN.md — Implement Firebase Blocking Functions
+- [x] 27-03-PLAN.md — Frontend handling for blocked users
 
 - **Requirements:**
   - ONBOARD-02: Blocking Gate UI for unapproved users

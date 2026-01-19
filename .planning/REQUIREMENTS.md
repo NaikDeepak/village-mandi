@@ -48,20 +48,20 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ONBOARD-01 | - | Pending |
-| ONBOARD-02 | - | Pending |
-| ONBOARD-03 | - | Pending |
-| ONBOARD-04 | - | Pending |
-| ADMIN-01 | - | Pending |
-| ADMIN-02 | - | Pending |
-| ADMIN-03 | - | Pending |
-| ADMIN-04 | - | Pending |
-| NOTIF-01 | - | Pending |
+| ONBOARD-01 | Phase 28 | Pending |
+| ONBOARD-02 | Phase 27 | Complete |
+| ONBOARD-03 | Phase 27 | Complete |
+| ONBOARD-04 | Phase 28 | Pending |
+| ADMIN-01 | Phase 29 | Pending |
+| ADMIN-02 | Phase 29 | Pending |
+| ADMIN-03 | Phase 29 | Pending |
+| ADMIN-04 | Phase 29 | Pending |
+| NOTIF-01 | Phase 30 | Pending |
 
 **Coverage:**
 - v1.2 requirements: 9 total
-- Mapped to phases: 0
-- Unmapped: 9 ⚠️
+- Mapped to phases: 9
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-01-19*
