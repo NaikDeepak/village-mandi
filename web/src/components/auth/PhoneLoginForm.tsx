@@ -143,7 +143,7 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
         if (result.data?.user) {
           setUser({
             id: result.data.user.id,
-            role: result.data.user.role as 'ADMIN' | 'BUYER',
+            role: result.data.user.role,
             name: result.data.user.name,
             phone: result.data.user.phone,
             email: result.data.user.email ?? null,
