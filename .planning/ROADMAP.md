@@ -146,12 +146,13 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 **Depends on**: Phase 21
 **Requirements**: AUTH-06
 **Gap Closure**: Closes redundant flow gap and cleans up tech debt
-**Plans**: 2 plans
-**Status**: Pending
+**Plans**: 3 plans
+**Status**: Complete
 
 Plans:
-- [ ] 22-01: Standardize User Type & Phone Normalization
-- [ ] 22-02: Refactor API client & AuthProvider for strict types
+- [x] 22-01: Standardize User Type & Phone Normalization
+- [x] 22-02: Refactor API client & AuthProvider for strict types
+- [x] 22-03: Close remaining type safety gaps
 
 #### Phase 23: SEO and AI Bot friendly
 **Goal**: Optimize application for SEO and AI Bot discoverability
@@ -187,7 +188,7 @@ Plans:
 | 19. Client Auth | v1.1 | 3/3 | Complete | 2026-01-17 |
 | 20. Security | v1.1 | 2/2 | Complete | 2026-01-17 |
 | 21. App Check & Security | v1.1 | 2/2 | Complete | 2026-01-17 |
-| 22. Auth Flow Cleanup | v1.1 | 0/TBD | Pending | - |
+| 22. Auth Flow Cleanup | v1.1 | 3/3 | Complete | 2026-01-19 |
 | 23. SEO and AI Bot friendly | v1.1 | 2/2 | Complete | 2026-01-18 |
 | 24. Rebrand & Domain | v1.1 | 3/3 | Complete | 2026-01-18 |
 | 26. Add testcases | v1.1 | 1/1 | Complete | 2026-01-19 |

@@ -56,7 +56,7 @@ Which phases cover which requirements. Updated by create-roadmap.
 | AUTH-03 | Phase 19 | Pending |
 | AUTH-04 | Phase 18 | Complete |
 | AUTH-05 | Phase 18 | Complete |
-| AUTH-06 | Phase 19 | Pending |
+| AUTH-06 | Phase 19 | Complete |
 | SEC-01 | Phase 17 | Complete |
 | SEC-02 | Phase 20 | Complete |
 | SEC-03 | Phase 18 | Complete |
