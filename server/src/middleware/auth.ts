@@ -4,6 +4,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 export async function authenticate(request: FastifyRequest, reply: FastifyReply) {
   try {
     await request.jwtVerify();
+    // biome-ignore lint/suspicious/noExplicitAny: userId might not be in the strict type definition but is expected
     request.log.info({ userId: (request.user as any).userId }, 'Auth check successful');
   } catch (_err) {
     request.log.info({ err: _err }, 'Auth check failed');

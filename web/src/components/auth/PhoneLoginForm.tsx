@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label';
 import { usePhoneAuth } from '@/hooks/usePhoneAuth';
 import { authApi } from '@/lib/api';
 import { auth } from '@/lib/firebase';
-import { normalizePhone } from '@/lib/utils';
+import { isValidPhone, normalizePhone } from '@/lib/utils';
 import { useAuthStore } from '@/stores/auth';
 import { RecaptchaVerifier } from 'firebase/auth';
 import { useEffect, useRef, useState } from 'react';
@@ -85,8 +85,8 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
     e?.preventDefault();
     setLocalError(null);
 
-    if (!phone || phone.length !== 10) {
-      setLocalError('Please enter a valid 10-digit phone number');
+    if (!isValidPhone(phone)) {
+      setLocalError('Please enter a valid 10-digit mobile number');
       return;
     }
 

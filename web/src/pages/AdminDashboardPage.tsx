@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { brand } from '@/config/brand';
 import { usersApi } from '@/lib/api';
-import { normalizePhone } from '@/lib/utils';
+import { isValidPhone, normalizePhone } from '@/lib/utils';
 import { useState } from 'react';
 
 export function AdminDashboardPage() {
@@ -20,8 +20,8 @@ export function AdminDashboardPage() {
     setInviteStatus({ type: null, message: '' });
     setIsInviting(true);
 
-    if (invitePhone.length !== 10) {
-      setInviteStatus({ type: 'error', message: 'Phone number must be 10 digits' });
+    if (!isValidPhone(invitePhone)) {
+      setInviteStatus({ type: 'error', message: 'Please enter a valid 10-digit mobile number' });
       setIsInviting(false);
       return;
     }
