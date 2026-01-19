@@ -76,7 +76,13 @@ export const authApi = {
   adminLogin: (email: string, password: string) =>
     request<{
       success: boolean;
-      user: { id: string; role: UserRole; name: string; email: string; phone?: string | null };
+      user: {
+        id: string;
+        role: UserRole;
+        name: string;
+        email: string;
+        phone: string | null;
+      };
     }>('/auth/admin/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
@@ -86,7 +92,13 @@ export const authApi = {
   verifyFirebaseToken: (idToken: string) =>
     request<{
       success: boolean;
-      user: { id: string; role: UserRole; name: string; phone: string; email?: string | null };
+      user: {
+        id: string;
+        role: UserRole;
+        name: string;
+        phone: string;
+        email: string | null;
+      };
     }>('/auth/firebase-verify', {
       method: 'POST',
       body: JSON.stringify({ idToken }),
@@ -94,9 +106,15 @@ export const authApi = {
 
   // Get current user
   me: () =>
-    request<{ user: { id: string; role: UserRole; name: string; email?: string; phone?: string } }>(
-      '/auth/me'
-    ),
+    request<{
+      user: {
+        id: string;
+        role: UserRole;
+        name: string;
+        email: string | null;
+        phone: string | null;
+      };
+    }>('/auth/me'),
 
   // Logout
   logout: () =>

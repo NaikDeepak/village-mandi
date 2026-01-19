@@ -56,7 +56,7 @@ export function AdminLoginPage() {
         role: result.data.user.role,
         name: result.data.user.name,
         email: result.data.user.email,
-        phone: result.data.user.phone ?? null,
+        phone: result.data.user.phone,
       });
       navigate('/admin');
     }
