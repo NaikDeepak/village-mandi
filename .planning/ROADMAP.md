@@ -148,6 +148,30 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 **Gap Closure**: Closes redundant flow gap and cleans up tech debt
 **Status**: Pending
 
+#### Phase 23: SEO and AI Bot friendly
+**Goal**: Optimize application for SEO and AI Bot discoverability
+**Depends on**: Phase 22
+**Status**: Complete
+
+#### Phase 24: Rebrand and Domain Migration to ApnaKhet.app
+**Goal**: Update branding to ApnaKhet and migrate domain to apnakhet.app
+**Depends on**: Phase 23
+**Status**: Complete
+
+#### Phase 25: Future Phase
+**Goal**: TBD
+**Depends on**: Phase 24
+**Status**: Pending
+
+#### Phase 26: Add testcases for uncovered code
+**Goal**: Add comprehensive test cases for currently uncovered critical paths in server and web.
+**Depends on**: Phase 25
+**Plans**: 1 plan
+**Status**: Complete
+
+Plans:
+- [x] 26-01: Add tests for Auth, User, Log routes & Phone Auth hook
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -159,3 +183,6 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 | 20. Security | v1.1 | 2/2 | Complete | 2026-01-17 |
 | 21. App Check & Security | v1.1 | 2/2 | Complete | 2026-01-17 |
 | 22. Auth Flow Cleanup | v1.1 | 0/TBD | Pending | - |
+| 23. SEO and AI Bot friendly | v1.1 | 2/2 | Complete | 2026-01-18 |
+| 24. Rebrand & Domain | v1.1 | 3/3 | Complete | 2026-01-18 |
+| 26. Add testcases | v1.1 | 1/1 | Complete | 2026-01-19 |

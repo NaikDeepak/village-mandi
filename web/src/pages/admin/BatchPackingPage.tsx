@@ -293,7 +293,7 @@ export function BatchPackingPage() {
               </div>
               <div className="bg-gray-50 p-2 text-center border-t border-gray-100 hidden print:block">
                 <p className="text-[10px] text-mandi-muted italic">
-                  Thank you for supporting your local farmers! - Village Mandi
+                  Thank you for supporting your local farmers! - Apna Khet
                 </p>
               </div>
             </div>

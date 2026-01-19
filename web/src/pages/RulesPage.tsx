@@ -1,5 +1,6 @@
 import { Footer } from '@/components/layout/Footer';
 import { Navbar } from '@/components/layout/Navbar';
+import { SEOHead } from '@/components/seo/SEOHead';
 import { Button } from '@/components/ui/button';
 import { brand } from '@/config/brand';
 import { BATCH_STATUS, SYSTEM_RULES } from '@shared/constants';
@@ -19,8 +20,44 @@ const batchStates = [
 ];
 
 export function RulesPage() {
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What is a Batch in Apna Khet?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Apna Khet operates in cycles called "Batches." Each batch moves from Draft to Open (for orders), then Closed (at cutoff), followed by Collection, Delivery, and finally Settlement.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Can I edit my order after the cutoff?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'No. Once a batch reaches its cutoff time, it is permanently locked. No new orders or edits to existing orders are allowed.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'How does the two-stage payment system work?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Payments are split: 10% Commitment Advance is paid when placing the order via UPI, and the remaining 90% Final Settlement is paid after procurement is complete but before pickup/delivery.',
+        },
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead
+        title="Commitment Rules & FAQ | Apna Khet"
+        description="Learn about our batch cycles, two-stage payment system, cutoff enforcement, and fulfilment options. Essential reading for all Apna Khet buyers."
+        jsonLd={faqJsonLd}
+      />
       <Navbar variant="internal" />
       <main className="pt-20">
         {/* Page Header */}

@@ -11,3 +11,5 @@ out
 test-results
 /playwright
 /playwright-report
+/public
+web/coverage

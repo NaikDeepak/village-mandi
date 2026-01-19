@@ -32,10 +32,22 @@ export function Features() {
     <div id="philosophy" className="py-24 bg-mandi-cream relative overflow-hidden">
       {/* Subtle Background Pattern */}
       <div className="absolute inset-0 opacity-5 pointer-events-none">
-        <svg className="h-full w-full" width="100%" height="100%">
+        <svg
+          className="h-full w-full"
+          width="100%"
+          height="100%"
+          aria-labelledby="grid-pattern-title"
+        >
+          <title id="grid-pattern-title">Background Grid Pattern</title>
           <defs>
             <pattern id="grid-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M0 40L40 0H20L0 20M40 40V20L20 40" stroke="currentColor" strokeWidth="1" fill="none" className="text-mandi-earth" />
+              <path
+                d="M0 40L40 0H20L0 20M40 40V20L20 40"
+                stroke="currentColor"
+                strokeWidth="1"
+                fill="none"
+                className="text-mandi-earth"
+              />
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#grid-pattern)" />
@@ -63,14 +75,13 @@ export function Features() {
                 <div className="absolute -inset-0.5 bg-gradient-to-b from-mandi-earth-light/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition duration-500 blur-sm" />
                 <div className="relative h-full bg-white rounded-2xl p-8 shadow-sm ring-1 ring-gray-900/5 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                   <div className="inline-flex items-center justify-center p-3 bg-mandi-green/5 rounded-xl mb-6 group-hover:bg-mandi-green group-hover:text-white transition-colors duration-300">
-                    <feature.icon className="h-6 w-6 text-mandi-green group-hover:text-white transition-colors duration-300" aria-hidden="true" />
+                    <feature.icon
+                      className="h-6 w-6 text-mandi-green group-hover:text-white transition-colors duration-300"
+                      aria-hidden="true"
+                    />
                   </div>
-                  <h3 className="text-lg font-bold text-mandi-dark mb-3">
-                    {feature.name}
-                  </h3>
-                  <p className="text-sm text-mandi-muted leading-relaxed">
-                    {feature.description}
-                  </p>
+                  <h3 className="text-lg font-bold text-mandi-dark mb-3">{feature.name}</h3>
+                  <p className="text-sm text-mandi-muted leading-relaxed">{feature.description}</p>
                 </div>
               </div>
             ))}

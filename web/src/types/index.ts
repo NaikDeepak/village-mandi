@@ -18,6 +18,7 @@ export interface Product {
   farmerId: string;
   name: string;
   unit: string;
+  imageUrl?: string | null;
   description?: string | null;
   seasonStart?: string | null;
   seasonEnd?: string | null;

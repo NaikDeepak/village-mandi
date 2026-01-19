@@ -1,0 +1,14 @@
+build/
+node_modules/
+node_modules/
+playwright-report/
+test-results/
+web/.next/
+web/dist/
+web/build/
+node_modules/
+playwright-report/
+test-results/
+web/.next/
+web/dist/
+web/build/

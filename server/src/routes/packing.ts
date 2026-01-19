@@ -1,4 +1,4 @@
-import { OrderStatus } from '@prisma/client';
+import { OrderStatus, type Prisma } from '@prisma/client';
 import type { FastifyPluginAsync } from 'fastify';
 import { requireAdmin } from '../middleware/auth';
 import { updateOrderPackingSchema } from '../schemas/orders';
@@ -101,7 +101,7 @@ const packingRoutes: FastifyPluginAsync = async (fastify) => {
       }
     }
 
-    const updatedOrder = await prisma.$transaction(async (tx: any) => {
+    const updatedOrder = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       // 1. Update order status
       const updated = await tx.order.update({
         where: { id },

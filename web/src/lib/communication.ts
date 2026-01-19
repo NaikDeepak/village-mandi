@@ -16,7 +16,7 @@ export const getWhatsAppLink = (phone: string, message: string) => {
 
 export const templates = {
   batchOpen: (batchName: string, deliveryDate: string) =>
-    `Namaste! A new batch *${batchName}* is now open at Village Mandi. Place your orders by tomorrow for fresh delivery on ${deliveryDate}. Visit: ${window.location.origin}/shop`,
+    `Namaste! A new batch *${batchName}* is now open at Apna Khet. Place your orders by tomorrow for fresh delivery on ${deliveryDate}. Visit: ${window.location.origin}/shop`,
 
   paymentRequest: (amount: number, stage: 'advance' | 'final', batchName: string) =>
     `Payment Request: Please pay ₹${amount.toFixed(2)} as ${stage} payment for your order in *${batchName}*. You can pay via UPI to the hub manager.`,
@@ -28,5 +28,5 @@ export const templates = {
     `Farmer Payout: We have processed your payment of ₹${amount.toFixed(2)} for *${batchName}*. Ref: ${ref}. Thank you for your produce!`,
 
   supportRequest: (userName: string) =>
-    `Hi Hub Manager, I am ${userName}. I need help with my Village Mandi order.`,
+    `Hi Hub Manager, I am ${userName}. I need help with my Apna Khet order.`,
 };

@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { ReCaptchaV3Provider, initializeAppCheck } from 'firebase/app-check';
+import type { AppCheck } from 'firebase/app-check';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -16,11 +17,7 @@ export const auth = getAuth(app);
 // Note: In development, you can use a debug token by setting:
 // self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
 // before initializing App Check.
-// Initialize App Check
-// Note: In development, you can use a debug token by setting:
-// self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
-// before initializing App Check.
-export let appCheck: any = null;
+export let appCheck: AppCheck | null = null;
 
 if (import.meta.env.VITE_RECAPTCHA_SITE_KEY) {
   try {
