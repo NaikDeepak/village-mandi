@@ -1,4 +1,5 @@
 import { getToken } from 'firebase/app-check';
+import type { UserRole } from '../stores/auth';
 import { appCheck } from './firebase';
 
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -75,7 +76,7 @@ export const authApi = {
   adminLogin: (email: string, password: string) =>
     request<{
       success: boolean;
-      user: { id: string; role: string; name: string; email: string; phone?: string | null };
+      user: { id: string; role: UserRole; name: string; email: string; phone?: string | null };
     }>('/auth/admin/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
@@ -85,7 +86,7 @@ export const authApi = {
   verifyFirebaseToken: (idToken: string) =>
     request<{
       success: boolean;
-      user: { id: string; role: string; name: string; phone: string; email?: string | null };
+      user: { id: string; role: UserRole; name: string; phone: string; email?: string | null };
     }>('/auth/firebase-verify', {
       method: 'POST',
       body: JSON.stringify({ idToken }),
@@ -93,7 +94,7 @@ export const authApi = {
 
   // Get current user
   me: () =>
-    request<{ user: { id: string; role: string; name: string; email?: string; phone?: string } }>(
+    request<{ user: { id: string; role: UserRole; name: string; email?: string; phone?: string } }>(
       '/auth/me'
     ),
 
