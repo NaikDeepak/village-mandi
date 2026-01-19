@@ -167,10 +167,10 @@ Plans:
 #### Phase 25: Security & Reliability Refinement
 **Goal**: Address remaining P0 security issues (logging, enumeration) and P1 bugs (AuthProvider stability). Clean up outdated todos.
 **Depends on**: Phase 24
-**Status**: Pending
+**Status**: Complete
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 25 to break down)
+- [x] 25-01: Security & Reliability Refinement
 
 #### Phase 26: Add testcases for uncovered code
 **Goal**: Add comprehensive test cases for currently uncovered critical paths in server and web.
@@ -194,4 +194,5 @@ Plans:
 | 22. Auth Flow Cleanup | v1.1 | 3/3 | Complete | 2026-01-19 |
 | 23. SEO and AI Bot friendly | v1.1 | 2/2 | Complete | 2026-01-18 |
 | 24. Rebrand & Domain | v1.1 | 3/3 | Complete | 2026-01-18 |
+| 25. Security Refinement | v1.1 | 1/1 | Complete | 2026-01-19 |
 | 26. Add testcases | v1.1 | 1/1 | Complete | 2026-01-19 |
