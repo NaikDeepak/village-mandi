@@ -4,7 +4,17 @@ import { useAuthStore } from '@/stores/auth';
 import { Link, Navigate } from 'react-router-dom';
 
 export function BuyerLoginPage() {
-  const { isAuthenticated, user, isLoading } = useAuthStore();
+  const { isAuthenticated, user, isLoading, registrationStatus } = useAuthStore();
+
+  // Redirect if pending or rejected
+  if (!isLoading) {
+    if (registrationStatus === 'PENDING') {
+      return <Navigate to="/waitlist" replace />;
+    }
+    if (registrationStatus === 'REJECTED') {
+      return <Navigate to="/rejected" replace />;
+    }
+  }
 
   // Redirect if already authenticated
   if (!isLoading && isAuthenticated) {

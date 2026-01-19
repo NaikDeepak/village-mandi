@@ -16,7 +16,7 @@ interface PhoneLoginFormProps {
 
 export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
   const navigate = useNavigate();
-  const { setUser } = useAuthStore();
+  const { setUser, setRegistrationStatus } = useAuthStore();
   const {
     requestOtp,
     verifyOtp,
@@ -154,6 +154,22 @@ export function PhoneLoginForm({ initialPhone = '' }: PhoneLoginFormProps) {
     } catch (err) {
       console.error('handleVerifyOtp: Error caught', err);
       const error = err as Error;
+
+      if (error.message === 'ACCOUNT_PENDING') {
+        setRegistrationStatus('PENDING');
+        navigate('/waitlist');
+        return;
+      }
+
+      if (error.message === 'ACCOUNT_REJECTED') {
+        const reason =
+          (error as Error & { reason?: string }).reason ||
+          'Your application was not approved at this time.';
+        setRegistrationStatus('REJECTED', reason);
+        navigate('/rejected', { state: { reason } });
+        return;
+      }
+
       setLocalError(error.message || 'Invalid OTP');
     }
   };
