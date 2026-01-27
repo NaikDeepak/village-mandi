@@ -115,6 +115,8 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
       select: {
         id: true,
         role: true,
+        status: true,
+        rejectionReason: true,
         name: true,
         phone: true,
         email: true,
@@ -127,6 +129,21 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
       return reply.status(404).send({
         error: 'Not Found',
         message: 'User not found',
+      });
+    }
+
+    if (user.status === 'REJECTED') {
+      return reply.status(403).send({
+        error: 'Forbidden',
+        message: 'ACCOUNT_REJECTED',
+        reason: user.rejectionReason,
+      });
+    }
+
+    if (user.status === 'PENDING') {
+      return reply.status(403).send({
+        error: 'Forbidden',
+        message: 'ACCOUNT_PENDING',
       });
     }
 
@@ -236,6 +253,23 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
           return reply.status(403).send({
             error: 'Access Denied',
             message: 'You have not been invited. Please contact admin.',
+          });
+        }
+
+        if (user.status === 'REJECTED') {
+          request.log.warn({ ...logContext, userId: user.id }, 'Login denied: User is REJECTED');
+          return reply.status(403).send({
+            error: 'Forbidden',
+            message: 'ACCOUNT_REJECTED',
+            reason: user.rejectionReason,
+          });
+        }
+
+        if (user.status === 'PENDING') {
+          request.log.warn({ ...logContext, userId: user.id }, 'Login denied: User is PENDING');
+          return reply.status(403).send({
+            error: 'Forbidden',
+            message: 'ACCOUNT_PENDING',
           });
         }
 

@@ -4,6 +4,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export type UserRole = 'ADMIN' | 'BUYER';
+export type RegistrationStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 
 export interface User {
   id: string;
@@ -17,7 +18,10 @@ interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  registrationStatus: RegistrationStatus | null;
+  rejectionReason: string | null;
   setUser: (user: User | null) => void;
+  setRegistrationStatus: (status: RegistrationStatus | null, reason?: string | null) => void;
   setLoading: (loading: boolean) => void;
   logout: () => Promise<void>;
 }
@@ -28,7 +32,22 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       isAuthenticated: false,
       isLoading: true,
-      setUser: (user) => set({ user, isAuthenticated: !!user, isLoading: false }),
+      registrationStatus: null,
+      rejectionReason: null,
+      setUser: (user) =>
+        set({
+          user,
+          isAuthenticated: !!user,
+          isLoading: false,
+          registrationStatus: user ? 'APPROVED' : null,
+        }),
+      setRegistrationStatus: (status, reason = null) =>
+        set({
+          registrationStatus: status,
+          rejectionReason: reason,
+          isAuthenticated: false,
+          user: null,
+        }),
       setLoading: (isLoading) => set({ isLoading }),
       logout: async () => {
         try {
@@ -38,7 +57,13 @@ export const useAuthStore = create<AuthState>()(
           console.warn('Firebase signout failed:', err);
         }
         // 2. Clear local state (persist will update storage accordingly)
-        set({ user: null, isAuthenticated: false, isLoading: false });
+        set({
+          user: null,
+          isAuthenticated: false,
+          isLoading: false,
+          registrationStatus: null,
+          rejectionReason: null,
+        });
       },
     }),
     {

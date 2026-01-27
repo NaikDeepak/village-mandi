@@ -21,6 +21,12 @@ export enum BATCH_STATUS {
   SETTLED = 'SETTLED', // Changed from FULFILLED
 }
 
+export enum REGISTRATION_STATUS {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+}
+
 export const PAYMENT_STAGES = {
   COMMITMENT: 'COMMITMENT', // 10%
   SETTLEMENT: 'SETTLEMENT', // Final balance

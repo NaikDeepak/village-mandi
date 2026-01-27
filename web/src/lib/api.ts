@@ -9,6 +9,7 @@ interface ApiResponse<T> {
   data?: T;
   error?: string;
   message?: string;
+  reason?: string;
 }
 
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
@@ -58,6 +59,7 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
       return {
         error: (data?.error as string) || (data?.message as string) || response.statusText,
         message: data?.message as string | undefined,
+        reason: data?.reason as string | undefined,
       };
     }
 

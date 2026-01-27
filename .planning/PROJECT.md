@@ -8,6 +8,16 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 
 **Farmer-centric experience** — every product tells a farmer's story. Trust and transparency through visible farmer identity, locality, and relationship level. This drives buyer confidence and farmer dignity.
 
+## Current Milestone: v1.2 User Onboarding
+
+**Goal:** Implement controlled access via "Register Interest" flow and admin approval.
+
+**Target features:**
+- User registration of interest (Name, Phone, Pincode).
+- Admin dashboard for manual approval of requests.
+- User status check (login attempt reveals pending/approved state).
+- Pincode-based location capture for serviceability planning.
+
 ## Requirements
 
 ### Validated
@@ -103,7 +113,7 @@ A batch-based, trust-driven agricultural marketplace connecting farmers directly
 
 ### Active
 
-**(None - Milestone v1.1 Complete)**
+**(New Requirements for v1.2 will be defined in REQUIREMENTS.md)**
 
 ### Out of Scope
 

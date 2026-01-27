@@ -1,68 +1,64 @@
-# Feature Landscape: Firebase Phone Auth Integration
+# Feature Landscape: User Onboarding & Waitlist System
 
-**Domain:** Authentication / SMS OTP
-**Researched:** 2026-01-17
-**Confidence:** HIGH
+**Domain:** Hyperlocal Marketplace / Invite-only Community
+**Researched:** 2026-01-19
+**Overall Confidence:** HIGH
 
-## Overview
-This document outlines the specific features and configurations required for a reliable and low-friction Phone+OTP login experience for Village Mandi buyers in India.
+## Table Stakes
 
-## 1. Core Phone Auth Features (Table Stakes)
+Features users and admins expect for a functional waitlist and approval flow.
 
-| Feature | Description | Implementation Detail |
-|---------|-------------|-----------------------|
-| **Phone OTP** | User enters phone, receives 6-digit code. | Firebase Client SDK (`signInWithPhoneNumber`). |
-| **Invisible reCAPTCHA** | Risk-based bot protection without visible challenges. | `RecaptchaVerifier` with `size: 'invisible'`. |
-| **Test Whitelisting** | Bypass real SMS for dev/testing/review. | Firebase Console > Auth > Test phone numbers. |
-| **Token Exchange** | Swap Firebase ID Token for Backend JWT. | Custom Fastify `/auth/exchange` route. |
+| Feature | Why Expected | Complexity | Notes |
+|---------|--------------|------------|-------|
+| **Verified Interest Form** | Primary entry point. | Low | Captures Name, Phone (Firebase Auth), and Pincode. |
+| **Blocking Gate UI** | Feedback for unapproved users. | Low | Shown when Firebase Blocking Function denies token (or backend returns 403). |
+| **Admin Waitlist Dashboard** | Management for user leads. | Medium | TanStack Table view in Admin panel showing PENDING users. |
+| **Manual Approval Toggle** | The gatekeeping mechanism. | Low | Update `status` to `APPROVED` in Postgres via Prisma. |
+| **Pincode Validation** | Data integrity. | Low | Zod regex validation for 6-digit India pincodes. |
 
-## 2. Configuration Deep-Dive
+## Differentiators
 
-### A. Invisible reCAPTCHA
-To ensure a seamless buyer experience, we use the invisible mode. This minimizes friction by only showing a challenge if the user's risk score is high.
+Features that improve operational efficiency or user trust.
 
-**Implementation Pattern:**
-```javascript
-const auth = getAuth();
-window.recaptchaVerifier = new RecaptchaVerifier(auth, 'login-button-id', {
-  'size': 'invisible',
-  'callback': (token) => {
-    // Proceed to send OTP
-  }
-});
+| Feature | Value Proposition | Complexity | Notes |
+|---------|-------------------|------------|-------|
+| **Automated Area Approval** | Operational efficiency. | Medium | Auto-approve users if Pincode matches a "ServiceableArea" table. |
+| **Approval Notifications** | User engagement. | Medium | SMS via Firebase Cloud Functions on status transition to `APPROVED`. |
+| **Pincode Lookup** | User UX. | Low | Auto-fill District/State using `postalpincode.in` API. |
+| **Admin Bulk Actions** | Scalability. | Low | Approve all users in a specific Pincode. |
+
+## Anti-Features
+
+Features to explicitly NOT build for v1.2.
+
+| Anti-Feature | Why Avoid | What to Do Instead |
+|--------------|-----------|-------------------|
+| **Social Login** | Contact data quality. | Stick to Phone Auth to ensure valid contact numbers for delivery. |
+| **Waitlist Leaderboard** | Unnecessary complexity. | Simple "We'll notify you" message is sufficient for MVP. |
+| **Self-Service Deletion** | Compliance/Retention risks. | Admin-only deactivation for v1.2. |
+
+## Feature Dependencies
+
+```mermaid
+graph TD
+    A[Firebase Phone Auth] --> B[Interest Registration Form]
+    B --> C{Firebase Blocking Function}
+    C -->|Status != APPROVED| D[Access Denied / Pending UI]
+    C -->|Status == APPROVED| E[Full App Access]
+
+    F[Admin Dashboard] --> G[Approval Action]
+    G -->|Update Postgres| C
 ```
 
-### B. Test Phone Numbers (Limit: 10)
-Mandatory for bypassing SMS quotas during development and ensuring Apple/Google App Store reviewers can login without a physical Indian SIM.
+## MVP Recommendation (v1.2)
 
-- **Format:** E.164 (e.g., `+919876543210`).
-- **Fixed Code:** e.g., `123456`.
-- **Note:** These numbers do not count against SMS quotas but are limited to 10 per project.
-
-### C. India-Specific Delivery (DLT)
-Indian regulations (TRAI) require DLT registration for transactional SMS.
-- **Default:** Firebase uses international routes (best effort).
-- **High Reliability:** For the "Mandi" scale, we may need to upgrade to **Identity Platform** to use custom Sender IDs (Headers) and register templates on DLT portals (e.g., Vilpower).
-
-## 3. Quotas and Pricing (2026 Estimates)
-
-| Tier | Limit | Cost (India) |
-|------|-------|--------------|
-| **Free Tier** | 50 SMS / day | $0 |
-| **Blaze Plan** | First 50/day free | ~$0.01 - $0.06 per SMS after |
-| **Identity Platform** | 50,000 MAU (non-SMS) | SMS always billed per msg after daily free tier |
-
-## 4. Anti-Features (What We Are NOT Doing)
-- **Visible Captcha:** Avoid unless invisible verification fails repeatedly.
-- **Firebase User Profiles:** We do not store names/photos in Firebase; Postgres is the source of truth.
-- **Long OTP Expiry:** OTPs should expire in 5 minutes; UI should have a 60s cooldown for resending.
-
-## 5. Integration Strategy (Downstream Requirements)
-- **UID Mapping:** The `firebase_uid` must be stored in the Postgres `users` table.
-- **Auto-Registration:** If the UID doesn't exist in Postgres after a successful OTP, the backend must create the user record automatically.
+For v1.2, prioritize:
+1. **Single User Table**: Add `status` (PENDING, APPROVED, REJECTED) to existing `User` model.
+2. **Blocking Function**: Implement `beforeSignIn` to check Postgres status.
+3. **Interest Form**: Minimal React form with Zod validation.
+4. **Admin Table**: Simple TanStack Table for status management.
 
 ## Sources
-- [Firebase Phone Auth Documentation](https://firebase.google.com/docs/auth/web/phone-auth) (HIGH)
-- [Firebase Pricing 2026](https://firebase.google.com/pricing) (HIGH)
-- [Google Cloud Identity Platform - SMS](https://cloud.google.com/identity-platform/docs/web/phone-auth) (HIGH)
-- [TRAI DLT Guidelines](https://www.trai.gov.in/) (MEDIUM)
+- [Firebase Auth Blocking Functions](https://firebase.google.com/docs/auth/extend-with-blocking-functions)
+- [Growth Design: Onboarding Best Practices](https://www.growth.design/case-studies)
+- [TanStack Table Documentation](https://tanstack.com/table/v8)

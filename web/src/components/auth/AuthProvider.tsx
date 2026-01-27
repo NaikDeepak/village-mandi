@@ -7,7 +7,7 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const { setUser, setLoading } = useAuthStore();
+  const { setUser, setLoading, setRegistrationStatus } = useAuthStore();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -27,6 +27,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
             email: result.data.user.email,
             phone: result.data.user.phone,
           });
+        } else if (result.error === 'ACCOUNT_PENDING' || result.message === 'ACCOUNT_PENDING') {
+          setRegistrationStatus('PENDING');
+        } else if (result.error === 'ACCOUNT_REJECTED' || result.message === 'ACCOUNT_REJECTED') {
+          setRegistrationStatus('REJECTED', result.reason);
         } else {
           setUser(null);
         }
@@ -39,7 +43,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     };
 
     checkAuth();
-  }, [setUser, setLoading]);
+  }, [setUser, setLoading, setRegistrationStatus]);
 
   return <>{children}</>;
 }
